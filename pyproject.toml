@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools==75.8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kv-cache-scaling"
+version = "0.1.0"
+description = "A reproducible scaffold for predicting and profiling LLM context memory"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+kvcache = "kv_cache_scaling.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

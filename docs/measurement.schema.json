@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KV-cache probe result starter schema v1",
+  "description": "B2 must extend and test before GPU use. Start/recovery events have a separate contract.",
+  "type": "object",
+  "required": ["schema_version", "record_type", "probe_id", "protocol_hash", "environment_fingerprint", "request", "status", "started_at_utc", "finished_at_utc", "metrics"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "record_type": {"const": "probe_result"},
+    "probe_id": {"type": "string", "minLength": 1},
+    "protocol_hash": {"type": "string", "minLength": 1},
+    "environment_fingerprint": {"type": "string", "minLength": 1},
+    "started_at_utc": {"type": "string", "format": "date-time"},
+    "finished_at_utc": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["ok", "cuda_oom", "unsupported", "timeout", "interrupted", "error"]},
+    "request": {
+      "type": "object",
+      "required": ["length", "batch_size", "mode", "cache_type", "allocator", "repeat", "seed", "deliberate_oom"],
+      "properties": {
+        "length": {"type": "integer", "minimum": 1},
+        "batch_size": {"type": "integer", "minimum": 1},
+        "mode": {"enum": ["single_prefill", "chunked_prefill"]},
+        "cache_type": {"enum": ["DynamicCache", "StaticCache"]},
+        "allocator": {"enum": ["default", "expandable"]},
+        "repeat": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0},
+        "deliberate_oom": {"type": "boolean"}
+      }
+    },
+    "metrics": {
+      "type": ["object", "null"],
+      "properties": {
+        "peak_allocated_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "peak_reserved_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "cache_logical_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "cache_storage_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "snapshots": {
+          "type": "object",
+          "properties": {
+            "context": {"$ref": "#/$defs/snapshot"},
+            "post_load": {"$ref": "#/$defs/snapshot"},
+            "after_forward": {"$ref": "#/$defs/snapshot"},
+            "retained": {"$ref": "#/$defs/snapshot"},
+            "released": {"$ref": "#/$defs/snapshot"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "snapshot": {
+      "type": "object",
+      "required": ["monotonic_start_ns", "monotonic_end_ns", "allocated_bytes", "reserved_bytes", "cuda_free_bytes", "cuda_total_bytes"],
+      "properties": {
+        "monotonic_start_ns": {"type": "integer", "minimum": 0},
+        "monotonic_end_ns": {"type": "integer", "minimum": 0},
+        "allocated_bytes": {"type": "integer", "minimum": 0},
+        "reserved_bytes": {"type": "integer", "minimum": 0},
+        "cuda_free_bytes": {"type": "integer", "minimum": 0},
+        "cuda_total_bytes": {"type": "integer", "minimum": 1},
+        "nvml_used_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "nvml_free_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "nvml_total_bytes": {"type": ["integer", "null"], "minimum": 1},
+        "inactive_split_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}

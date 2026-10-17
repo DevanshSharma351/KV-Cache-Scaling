@@ -1,0 +1,13 @@
+{
+  "status": "INCOMPLETE_TEMPLATE_NOT_A_RECEIPT",
+  "prediction_path": null,
+  "prediction_commit_sha": null,
+  "remote_commit_url": null,
+  "remote_receipt_evidence_url": null,
+  "remote_receipt_observed_at_utc": null,
+  "protocol_sha256": null,
+  "config_sha256": null,
+  "reviewers": [],
+  "first_model_measurement_at_utc": null,
+  "note": "Fill from real pushed prediction evidence before model measurements. Preserve original prediction."
+}

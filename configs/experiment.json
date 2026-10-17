@@ -1,0 +1,32 @@
+{
+  "protocol_version": "prefill-v1",
+  "model_id": "Qwen/Qwen2.5-1.5B",
+  "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+  "config_path": "configs/models/qwen2.5-1.5b.json",
+  "dtype": "float16",
+  "batch_size": 1,
+  "mode": "single_prefill",
+  "attention_implementation": "sdpa",
+  "sdpa_backend": "EFFICIENT_ATTENTION",
+  "cache_type": "DynamicCache",
+  "logits_to_keep": 1,
+  "seed": 42,
+  "warmup": false,
+  "allocator_backend": "native",
+  "allocator_variants": ["default", "expandable"],
+  "required_lengths": [512, 1024, 2048, 4096, 8192],
+  "candidate_lengths": [16384, 32768, 65536, 98304, 131072],
+  "quality_context_limit": 32768,
+  "memory_stress_limit": 131072,
+  "repeats": 3,
+  "boundary_resolution_tokens": 256,
+  "safe_budget_fraction": 0.9,
+  "deliberate_oom_attempt_budget": 1,
+  "per_probe_timeout_seconds": 1200,
+  "diagnostics": {
+    "chunked_prefill": {"chunk_size": 512, "lengths": [512, 2048, 8192, 32768]},
+    "static_cache": {"lengths": [512, 2048, 8192], "capacity_equals_length": true},
+    "eager_attention": false,
+    "full_logits": false
+  }
+}
