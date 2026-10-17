@@ -90,6 +90,15 @@ No GitHub username was supplied for the teammate; ownership is written by role
 instead of guessing an assignee. No separate chats, agent tasks or GitHub issues
 are required to use this plan.
 
+The delivery target is **seven consecutive days and 80 active hours**: Devansh
+52 h, teammate 28 h. [TASK_ALLOCATION.md](TASK_ALLOCATION.md) defines daily hours,
+task-level estimates and end-of-day handoffs. Push the formal prediction on day 1,
+smoke-test the harness by day 3 and finish its safety gates before day-4 bulk runs,
+lock data by day 5, complete the report draft/reproduction by day 6 and package
+the reviewed result on day 7. Both
+diagnostic grids remain required. Start published-source discovery and report
+structure early; day 7 provides protected recovery time without removing scope.
+
 After this scaffold: A1 and B1 can start together. B2 can implement persistence
 using synthetic **test fixtures** clearly separated from measured data while A2
 implements the worker. Do not run GPU forwards until the A1 preregistration gate

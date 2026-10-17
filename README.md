@@ -28,7 +28,14 @@ no GPU measurements, OOM tests or formal preregistration have been performed.
 | Isolation | New OS process for every point and repeat |
 | Primary memory metric | `max_memory_allocated()` after a synchronized peak reset |
 | Prediction | Function of usable VRAM with a declared assumption range |
-| Team | Devansh 31.2 h (65%); teammate 16.8 h (35%); two-week target |
+| Team | One intensive week: Devansh 52 h (65%); teammate 28 h (35%); 80 active hours total |
+
+The seven-day schedule preserves all project requirements and includes both
+chunked and static-cache diagnostics, independent reproduction and the final PDF.
+See [daily hours and handoffs](TASK_ALLOCATION.md). Reserve GPU windows on days
+3–5; download/run waiting time is separate from active work and can overlap CPU
+analysis. Day 7 includes five hours of protected integration/recovery time for
+Devansh and final reproduction/review time for the teammate.
 
 These decisions become frozen only when the formal prediction is reviewed and
 pushed. See [sources and corrections](docs/SOURCES.md).

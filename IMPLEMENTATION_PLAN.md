@@ -1,8 +1,13 @@
 # Implementation plan: KV-cache scaling
 
-Version: proposed `prefill-v1`, 17 October 2026. Scope: two people, two weeks,
-48 active person-hours. GPU waiting time is additional. Execution starts after
-formal preregistration; this scaffold commit is not that preregistration.
+Version: proposed `prefill-v1`, updated 17 October 2026. Scope: two people,
+**one intensive week, 80 active person-hours**: Devansh 52 h (65%), teammate 28 h
+(35%). GPU waiting time is additional and overlaps independent CPU work where
+possible. The seven-day target retains every project requirement and both
+diagnostic grids; completion is judged by evidence, not the calendar alone.
+Model measurements start after formal preregistration; the scaffold commit is
+not that preregistration. This schedule revision preserves the primary measurement
+definition and its acceptance tolerances.
 
 ## 1. Research question and operational definition
 
@@ -171,7 +176,7 @@ Fresh-process isolation deliberately removes fragmentation inherited from earlie
 points. This comparison therefore estimates allocator behavior **within a cold
 probe**, not benefits in a long-lived serving workload. A small or zero effect is
 a valid finding. A separate repeated-size stress workload would need its own
-protocol and is outside the 48-hour core scope.
+protocol and is outside this project's agreed research scope.
 
 Write a durable start event before launch and a result/error event after each
 worker. Append JSONL with flush+fsync to a persistent mounted path; use one writer
@@ -182,7 +187,8 @@ orphan start as interrupted; do not treat it as measured success.
 
 Coarse ladder: required points first, then 16384,32768,65536,98304,131072 only as
 admitted by the safety gate. Three independent repeats at required points and
-selected boundary points; optional diagnostic grid is small (see config).
+selected boundary points. Complete both diagnostic grids from the config with
+three independent repeats per point; keep them separate from the primary fit.
 
 Safety gate: a candidate's conservative estimated budget must be below 90% of
 the current context-adjusted available budget. Start from the preregistered upper
@@ -214,18 +220,21 @@ requirement deviation. Both members approve the frozen resolution. A partial
 success/one failure bracket is not an exact threshold and cannot establish an
 exact allocator improvement. Report a safe-limit delta and estimated intervals.
 
-## 6. Experiments and scope control
+## 6. Complete experiment scope
 
 | Experiment | Purpose | Scope |
 | --- | --- | --- |
 | Primary single prefill, dynamic, efficient SDPA | Prompt-admission peak and retained cache | B=1, required grid + safe escalation, both allocators |
-| Chunked prefill, dynamic, chunks of 512 | Cache growth/copy diagnostic | 512,2048,8192,32768; default allocator only; optional if time-constrained |
-| Single prefill, static capacity=L | Cache policy sensitivity | 512,2048,8192; default; include preallocation in peak window |
+| Chunked prefill, dynamic, chunks of 512 | Cache growth/copy diagnostic | Required: 512,2048,8192,32768; default allocator; three fresh-process repeats per point |
+| Single prefill, static capacity=L | Cache policy sensitivity | Required: 512,2048,8192; default; three fresh-process repeats; include preallocation in peak window |
 | Eager or full logits | Conceptual activation comparison | Analytical only; no extra OOM exposure |
 
-Primary retained-cache inspection already validates KV, so chunking is not
-required to pretend its peak is pure KV. Three core plots and discrepancy
-accounting take priority over optional diagnostics. No training, quantization,
+Primary retained-cache inspection validates KV independently; the chunked and
+static diagnostics explain how execution/cache policy changes the peak. Complete
+both as part of the one-week delivery. Prepare all five figure families:
+peak-vs-L with preregistered bands, retained-cache slope, same-time allocator
+slack, allocator safe-limit intervals and discrepancy accounting. Include a
+dynamic/chunked/static comparison table. No training, quantization,
 offloading, device_map auto placement, compilation, serving engine or batch-size
 sweep in the primary project. Any changed B is a separate versioned extension.
 
@@ -303,17 +312,42 @@ unrelated generation throughput benchmark.
 
 ## 9. Delivery order and gates
 
-| Days | Milestone | Gate |
-| --- | --- | --- |
-| 1 | Environment inventory, verify config, inspect scaffold | No model forward; shared scope agreed |
-| 2–3 | Derive and push formal prediction; record receipt | Preregistration gates all model memory measurements |
-| 4–6 | Implement probe, journaling, coordinator; CPU fault injection | Crash/resume and global OOM-token tests pass |
-| 7–9 | GPU kernel preflight; paired safe sweeps; one final OOM attempt if justified | Same GPU identity, raw data durable; stop on errors |
-| 10–11 | Regression, accounting, plots | Required tolerances and explicit unaccounted row |
-| 12 | Four transfer predictions and external comparison | Source and assumption compatibility documented |
-| 13–14 | Independent reproduction, report, buffer | Definition of done in docs/REQUIREMENTS.md |
+Day 1 is the team's chosen start day; the schedule covers seven consecutive
+workdays. Full task/hour ownership is in
+[TASK_ALLOCATION.md](TASK_ALLOCATION.md). Book the primary GPU window and a backup
+Colab/Kaggle option on day 1. Reserve roughly 10–16 GPU wall-clock hours across
+days 3–5 as an initial scheduling allowance; actual time depends on the admitted
+grid, reloads and long-context kernels. It is separate from the 80 active hours.
 
-Detailed ownership, effort and handoffs are in [TASK_ALLOCATION.md](TASK_ALLOCATION.md).
+| Day | Milestone | Gate |
+| --- | --- | --- |
+| 1 | Finalize config/derivation, environment-only inventory, VRAM scenarios; review and push prediction/receipt; begin worker design | Formal preregistration completed before any model memory measurement |
+| 2 | Implement worker/telemetry and journal; freeze analysis columns; start external-source search | Peak lifecycle, backend/cache checks and persistence contract ready for integration |
+| 3 | Finish worker, integrate coordinator/journal, run CPU fault tests and post-preregistration GPU smoke checks; build plot templates | Backend/support check and crash/resume/OOM-ledger tests pass before bulk sweeps |
+| 4 | Finish safety/boundary integration; collect paired primary sweeps; begin retained-cache regression and report methods | Same GPU UUID; durable raw records; admitted required grid collected or explicit stop reason |
+| 5 | Complete both diagnostic grids and boundary repeats; one final OOM attempt if justified; analyze discrepancy; regenerate figures | Measurements locked by end of day; same-metric closure/coverage and deviations reviewed |
+| 6 | Finish four transfer predictions/external comparison; complete report draft; teammate reproduces tables/figures from clean setup | Every required result, source, figure and limitation in the draft; reproduction issues listed |
+| 7 | Protected recovery/integration block, final reproduction, PDF visual review, repository cleanup and release | Full definition of done reviewed; unresolved failures remain explicitly open |
+
+Critical path: day-1 preregistration -> day-3 smoke-tested harness -> days-4/5 locked
+data -> day-6 complete draft -> day-7 reproduced final delivery. B2 persistence,
+B3 fixture-based plots, report structure and published-source discovery proceed
+alongside the worker implementation. Start the source search on day 2 rather
+than waiting for measurements; finalize comparable calculations on day 6.
+
+Use a brief start/end-of-day handoff: task IDs, completed evidence, blockers and
+the next shared interface. Only one coordinator owns a GPU at a time. If day-3
+integration slips, use day 7's protected block and move independent documentation,
+plot templates and config-only work earlier. If GPU access fails, use the backup
+provider and a new manifest when hardware changes; never merge unmatched
+allocator pairs. Preserve the single global OOM-attempt ledger across providers.
+
+Do not drop diagnostics, repeats, external verification or acceptance checks to
+meet the date. If an external constraint remains after recovery, mark the affected
+deliverable incomplete and record a concrete recovery plan; do not claim the
+project is fully finished. Unsupported hardware or domain censoring can be valid
+documented outcomes under the existing protocol, not fabricated measurements.
+
 Final report structure: setup; derivation/preregistration; method; measured
 curves/cache slope; allocator comparison; discrepancy; generalization;
 limitations/deviations; reproduction instructions. Export a PDF only after results

@@ -4,6 +4,12 @@ The PDFs provide project requirements and suggestions. The user's current
 feedback and this revised protocol resolve conflicts. Status below describes
 acceptance for the future implementation, not results already obtained.
 
+Delivery target: one intensive week, 80 active hours, with the 65/35 contribution
+split in `TASK_ALLOCATION.md`. The shorter calendar does not reduce scope,
+repetitions, scientific acceptance thresholds or reproduction requirements.
+Both chunked-dynamic and static-cache diagnostic grids are required, with three
+independent repeats per point and a comparison table separate from primary fits.
+
 ## Functional requirements
 
 | ID | Requirement | Acceptance evidence | Owner |
@@ -53,7 +59,7 @@ the incompatibility between repeated failure bisection and this OOM budget.
 | NFR1 | Reproducibility | Model/code/config hashes, Python + full runtime dependency lock, CUDA/driver/GPU UUID, actual kernel, seed, cache/mode/logits/allocator in manifests |
 | NFR2 | Persistence and recovery | fsync + persistent mirror; single writer; tested torn-line/timeout/restart; global OOM ledger survives a simulated crash |
 | NFR3 | Honest reporting | Drafts vs frozen predictions vs calibrated fits separated; missing/unsupported/censored outcomes retained; uncertainty/sampling limits labelled |
-| NFR4 | Practical resource use | B=1 primary; weights cached on disk; no extra 7B/8B measured model; worker timeout; trim diagnostic grids before core requirements |
+| NFR4 | Practical resource use | B=1 primary; weights cached on disk; no extra 7B/8B measured model; worker timeout; GPU windows booked early; all primary/diagnostic work retained in seven-day schedule |
 | NFR5 | Independent use | Teammate reproduces CPU tools and regenerates all tables/figures from preserved data using documented commands |
 
 ## Definition of done
@@ -63,12 +69,14 @@ the incompatibility between repeated failure bisection and this OOM budget.
 - [ ] CPU tests plus worker/journal fault-injection checks pass.
 - [ ] Actual GPU preflight verifies efficient SDPA, versions and allocator support.
 - [ ] Default and expandable raw records/manifests preserved with complete statuses.
+- [ ] Both diagnostic grids completed with three independent repeats per point; dynamic/chunked/static comparison table included.
 - [ ] Peak curves, direct-cache slope, residual fractions and allocator slack plotted.
 - [ ] Safe limit and observed/predicted boundary intervals correctly distinguished.
 - [ ] One deliberate OOM observed, or the exact unmet target/deviation documented.
 - [ ] Fixed-L discrepancy tables meet closure/coverage, or failure is reported explicitly.
 - [ ] Four transfer predictions and compatible published verification completed.
 - [ ] Clean reproduction transcript, input hashes, final report PDF and limitations reviewed.
+- [ ] Seven-day delivery review maps every requirement to evidence; any unresolved criterion is explicitly open rather than waived for the deadline.
 
 **Scaffold delivery is complete independently of these experiment milestones.**
 Only the CPU math/prediction/plan preview exists as working implementation today.
