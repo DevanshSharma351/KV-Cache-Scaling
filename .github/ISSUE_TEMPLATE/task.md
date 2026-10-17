@@ -6,8 +6,8 @@ labels: ''
 assignees: ''
 ---
 
-Owner: Devansh / Teammate
-Estimate:
+Owner: Person 1 / Person 2
+Project share (%):
 Dependencies:
 
 ## Deliverable

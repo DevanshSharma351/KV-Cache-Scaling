@@ -1,4 +1,4 @@
-"""A2 / Devansh: synchronized snapshots and sampled driver telemetry adapter.
+"""A2 / Person 1: synchronized snapshots and sampled driver telemetry adapter.
 
 Implement allocated/reserved/free, inactive_split_bytes, CUDA/NVML identity,
 monotonic timestamps, peak counters and storage-deduplicated tensor bytes.

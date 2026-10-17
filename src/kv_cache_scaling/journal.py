@@ -1,4 +1,4 @@
-"""B2 / Teammate: append-only persistence and global deliberate-attempt ledger.
+"""B2 / Person 2: append-only persistence and global deliberate-attempt ledger.
 
 Implement the docs/DATA_CONTRACT.md lifecycle, file lock, flush/fsync, durable
 mirroring, torn-line recovery and point-key resume. Use CPU synthetic workers for

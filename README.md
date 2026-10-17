@@ -11,7 +11,7 @@ no GPU measurements, OOM tests or formal preregistration have been performed.
 
 1. Read [the implementation plan](IMPLEMENTATION_PLAN.md).
 2. Follow [the project flow and scaffold decisions](PROJECT_FLOW.md).
-3. Pick work from [the 65/35 task allocation](TASK_ALLOCATION.md).
+3. Pick work from [the 55/45 task allocation](TASK_ALLOCATION.md).
 4. Review [the measurement protocol](docs/MEASUREMENT_PROTOCOL.md) and
    [acceptance criteria](docs/REQUIREMENTS.md) before implementing the harness.
 
@@ -28,14 +28,13 @@ no GPU measurements, OOM tests or formal preregistration have been performed.
 | Isolation | New OS process for every point and repeat |
 | Primary memory metric | `max_memory_allocated()` after a synchronized peak reset |
 | Prediction | Function of usable VRAM with a declared assumption range |
-| Team | One intensive week: Devansh 52 h (65%); teammate 28 h (35%); 80 active hours total |
+| Team | One intensive week: Person 1 handles 55% of the work; Person 2 handles 45% |
 
 The seven-day schedule preserves all project requirements and includes both
 chunked and static-cache diagnostics, independent reproduction and the final PDF.
-See [daily hours and handoffs](TASK_ALLOCATION.md). Reserve GPU windows on days
-3–5; download/run waiting time is separate from active work and can overlap CPU
-analysis. Day 7 includes five hours of protected integration/recovery time for
-Devansh and final reproduction/review time for the teammate.
+See [daily responsibilities and handoffs](TASK_ALLOCATION.md). Reserve GPU windows
+on days 3–5 and use independent CPU tasks while probes run. Day 7 is protected
+for recovery, integration, final reproduction and review.
 
 These decisions become frozen only when the formal prediction is reviewed and
 pushed. See [sources and corrections](docs/SOURCES.md).
@@ -72,7 +71,7 @@ python -m pip install -e .
 
 Restart the runtime after changing installed torch/transformers. Validate the
 driver, wheel and efficient SDPA support on the actual T4 after preregistration.
-Direct pins are provided; the teammate must capture a successful Linux runtime's
+Direct pins are provided; Person 2 must capture a successful Linux runtime's
 full `pip freeze`, driver/CUDA versions and platform in the run manifest. No GPU
 compatibility claim is made by the CPU CI checks.
 

@@ -1,4 +1,4 @@
-"""A3 / Devansh: CPU coordinator; never import torch in this process.
+"""A3 / Person 1: CPU coordinator; never import torch in this process.
 
 Launch sys.executable -m ...probe in a new subprocess per point/repeat. Supply
 allocator env before process start; enforce prereg receipt, lock, fsync journal,

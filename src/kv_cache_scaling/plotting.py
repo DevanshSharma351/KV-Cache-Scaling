@@ -1,4 +1,4 @@
-"""B3 / Teammate: regenerate figures from validated processed data.
+"""B3 / Person 2: regenerate figures from validated processed data.
 
 Create peak-vs-L with prereg band, retained cache slope, same-time allocator
 slack, allocator boundary intervals, and discrepancy waterfall. Label units.

@@ -1,7 +1,8 @@
 # Data and resume contract
 
 Schema version: 1. B2 owns validation/persistence; A2/A3 own scientific fields and
-status classification. The JSON Schema is a starter for result events; expand it
+status classification; B4 implements diagnostic-path fields against that contract.
+The JSON Schema is a starter for result events; expand it
 with tests before actual measurements. It does not validate start/receipt events.
 
 ## Run files

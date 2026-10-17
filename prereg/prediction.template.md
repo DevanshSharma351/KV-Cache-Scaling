@@ -62,9 +62,9 @@ starting points, not automatically frozen facts.
 
 ## Review sign-off
 
-Devansh:
+Person 1:
 
-Teammate:
+Person 2:
 
 Remote push evidence is recorded in the later receipt before any model-memory
 measurement. Commit author dates alone are insufficient external evidence.

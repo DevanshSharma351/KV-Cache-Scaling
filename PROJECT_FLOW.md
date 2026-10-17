@@ -28,7 +28,7 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 ├── README.md                    Entry point, scope and working commands
 ├── IMPLEMENTATION_PLAN.md       Scientific design, milestones and limitations
 ├── PROJECT_FLOW.md              This file: flow, layout and decisions
-├── TASK_ALLOCATION.md           65/35 effort, ownership, handoffs
+├── TASK_ALLOCATION.md           55/45 effort, ownership, handoffs
 ├── pyproject.toml               Installable CPU-safe package and CLI
 ├── requirements-gpu.txt         Direct GPU-analysis dependency pins
 ├── configs/
@@ -82,17 +82,17 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 
 ## Working together
 
-Devansh owns the model, scientific contracts, GPU worker/coordinator, analysis and
-integration. The teammate owns journal/schema validation, environment support,
-plots, scheduled run execution and reproduction. Work on short branches, use
-one task ID per PR, and review each other's modules at the explicit handoffs.
-No GitHub username was supplied for the teammate; ownership is written by role
-instead of guessing an assignee. No separate chats, agent tasks or GitHub issues
-are required to use this plan.
+Person 1 handles **55%**: model derivation, primary GPU probe/telemetry,
+coordinator, scientific analysis, transfer calculations and technical review.
+Person 2 handles **45%**: environment, journal/schema, diagnostic execution
+paths, run operation, figures, source/config preparation, report assembly and
+independent reproduction. Work on short branches, use one task ID per PR and
+review each other's modules at explicit handoffs. The shared `probe.py` has
+function-level ownership defined in the task allocation.
 
-The delivery target is **seven consecutive days and 80 active hours**: Devansh
-52 h, teammate 28 h. [TASK_ALLOCATION.md](TASK_ALLOCATION.md) defines daily hours,
-task-level estimates and end-of-day handoffs. Push the formal prediction on day 1,
+The delivery target is **seven consecutive days**.
+[TASK_ALLOCATION.md](TASK_ALLOCATION.md) defines project-share percentages,
+daily responsibilities and end-of-day handoffs. Push the formal prediction on day 1,
 smoke-test the harness by day 3 and finish its safety gates before day-4 bulk runs,
 lock data by day 5, complete the report draft/reproduction by day 6 and package
 the reviewed result on day 7. Both

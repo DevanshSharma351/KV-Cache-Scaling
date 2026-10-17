@@ -4,8 +4,8 @@ The PDFs provide project requirements and suggestions. The user's current
 feedback and this revised protocol resolve conflicts. Status below describes
 acceptance for the future implementation, not results already obtained.
 
-Delivery target: one intensive week, 80 active hours, with the 65/35 contribution
-split in `TASK_ALLOCATION.md`. The shorter calendar does not reduce scope,
+Delivery target: one intensive week, with Person 1 handling 55% and Person 2
+handling 45% as defined in `TASK_ALLOCATION.md`. The shorter calendar does not reduce scope,
 repetitions, scientific acceptance thresholds or reproduction requirements.
 Both chunked-dynamic and static-cache diagnostic grids are required, with three
 independent repeats per point and a comparison table separate from primary fits.
@@ -21,7 +21,7 @@ independent repeats per point and a comparison table separate from primary fits.
 | FR5 | Separate retained cache slope and residual | >=5 lengths; direct cache bytes within 1% of formula; slope error <=3%; retained residual fraction, intercept and R² shown; peak fit separately labelled | A4 |
 | FR6 | Compare allocator variants | Same GPU UUID/stack and policy; env set before CUDA; capability/warnings checked; same-time slack vs L; paired safe-limit delta with uncertainty; unsupported is an explicit outcome | A3/B4 |
 | FR7 | Explain committed-prediction error | Same metric at fixed L; signed rows close within max(1 MiB, 0.1% measured); >=90% supported attribution for gaps >=10 MiB; explicit unaccounted row; separate budget table | A4 |
-| FR8 | Generalize to two unrun models and two unrun GPUs | Four config-derived cells, usable-budget/activation ranges; >=1 compatible published quantity with cited assumptions and percentage error, or explicitly unmet validation | A5 |
+| FR8 | Generalize to two unrun models and two unrun GPUs | Four config-derived cells, usable-budget/activation ranges; >=1 compatible published quantity with cited assumptions and percentage error, or explicitly unmet validation | A5/B6 |
 
 FR4's boundary deliverable is an honest safe/observed/predicted interval, not an
 unjustified exact maximum. Target <=256 tokens for the safe-budget bracket if
@@ -60,7 +60,7 @@ the incompatibility between repeated failure bisection and this OOM budget.
 | NFR2 | Persistence and recovery | fsync + persistent mirror; single writer; tested torn-line/timeout/restart; global OOM ledger survives a simulated crash |
 | NFR3 | Honest reporting | Drafts vs frozen predictions vs calibrated fits separated; missing/unsupported/censored outcomes retained; uncertainty/sampling limits labelled |
 | NFR4 | Practical resource use | B=1 primary; weights cached on disk; no extra 7B/8B measured model; worker timeout; GPU windows booked early; all primary/diagnostic work retained in seven-day schedule |
-| NFR5 | Independent use | Teammate reproduces CPU tools and regenerates all tables/figures from preserved data using documented commands |
+| NFR5 | Independent use | Person 2 reproduces CPU tools and regenerates all tables/figures from preserved data using documented commands |
 
 ## Definition of done
 

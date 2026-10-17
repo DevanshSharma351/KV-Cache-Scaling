@@ -1,4 +1,4 @@
-"""A4 / Devansh: analyze immutable measured journals, never generated fixtures.
+"""A4 / Person 1: analyze immutable measured journals, never generated fixtures.
 
 Fit retained cache bytes and corrected retained allocation vs L independently.
 Keep peak fit separate. Enforce signed discrepancy closure and absolute 90%

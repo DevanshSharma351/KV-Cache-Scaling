@@ -1,9 +1,9 @@
 # Implementation plan: KV-cache scaling
 
 Version: proposed `prefill-v1`, updated 17 October 2026. Scope: two people,
-**one intensive week, 80 active person-hours**: Devansh 52 h (65%), teammate 28 h
-(35%). GPU waiting time is additional and overlaps independent CPU work where
-possible. The seven-day target retains every project requirement and both
+**one intensive week**. **Person 1 handles 55% of the project work; Person 2
+handles 45%.** Independent CPU tasks proceed while GPU probes run.
+The seven-day target retains every project requirement and both
 diagnostic grids; completion is judged by evidence, not the calendar alone.
 Model measurements start after formal preregistration; the scaffold commit is
 not that preregistration. This schedule revision preserves the primary measurement
@@ -313,11 +313,11 @@ unrelated generation throughput benchmark.
 ## 9. Delivery order and gates
 
 Day 1 is the team's chosen start day; the schedule covers seven consecutive
-workdays. Full task/hour ownership is in
+workdays. Task ownership and percentage shares are in
 [TASK_ALLOCATION.md](TASK_ALLOCATION.md). Book the primary GPU window and a backup
-Colab/Kaggle option on day 1. Reserve roughly 10–16 GPU wall-clock hours across
-days 3–5 as an initial scheduling allowance; actual time depends on the admitted
-grid, reloads and long-context kernels. It is separate from the 80 active hours.
+Colab/Kaggle option on day 1. Reserve GPU access across days 3–5 and keep durable
+capture automated. Adjust run ordering to the admitted grid, reloads and
+long-context kernels while independent analysis and documentation proceed.
 
 | Day | Milestone | Gate |
 | --- | --- | --- |
@@ -326,7 +326,7 @@ grid, reloads and long-context kernels. It is separate from the 80 active hours.
 | 3 | Finish worker, integrate coordinator/journal, run CPU fault tests and post-preregistration GPU smoke checks; build plot templates | Backend/support check and crash/resume/OOM-ledger tests pass before bulk sweeps |
 | 4 | Finish safety/boundary integration; collect paired primary sweeps; begin retained-cache regression and report methods | Same GPU UUID; durable raw records; admitted required grid collected or explicit stop reason |
 | 5 | Complete both diagnostic grids and boundary repeats; one final OOM attempt if justified; analyze discrepancy; regenerate figures | Measurements locked by end of day; same-metric closure/coverage and deviations reviewed |
-| 6 | Finish four transfer predictions/external comparison; complete report draft; teammate reproduces tables/figures from clean setup | Every required result, source, figure and limitation in the draft; reproduction issues listed |
+| 6 | Person 1 finishes transfer predictions/comparison and scientific conclusions; Person 2 completes report assembly and clean reproduction | Every required result, source, figure and limitation in the draft; reproduction issues listed |
 | 7 | Protected recovery/integration block, final reproduction, PDF visual review, repository cleanup and release | Full definition of done reviewed; unresolved failures remain explicitly open |
 
 Critical path: day-1 preregistration -> day-3 smoke-tested harness -> days-4/5 locked
