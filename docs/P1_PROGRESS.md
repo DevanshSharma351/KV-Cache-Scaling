@@ -6,7 +6,7 @@ used in the allocation.
 
 | Phase | Status | Evidence / remaining gate |
 | --- | --- | --- |
-| 1 — Analytical foundation | CPU deliverables complete; formal preregistration pending | Tested math/generator and committed draft; actual B1 inventory and B6 review still required |
+| 1 — Analytical foundation | CPU deliverables complete; context snapshot received; runtime reconciliation and formal preregistration pending | Tested math/draft, user-reported T4 budget and auditable notebook; runtime mismatch, B6 review and receipt still open |
 | 2 — Primary probe/telemetry | Planned | No CUDA model measurements performed |
 | 3 — Coordinator/safety | Planned | Journal integration and receipt enforcement remain implementation work |
 | 4 — Empirical analysis | Planned | No measured dataset exists |
@@ -62,14 +62,28 @@ compatibility information, not the installed PyTorch runtime. The source's time
 zone was not supplied, so its timestamp is preserved without conversion.
 
 The displayed 0 MiB usage does not establish a CUDA-initialized usable budget.
-UUID, installed versions, allocator env, context-only exact free/total bytes and
-the no-prior-model confirmation remain missing. No numerical prediction or
-preregistration receipt was altered using this partial evidence.
+At that point UUID, versions and the context-only budget were missing. The later
+[context snapshot](../prereg/environment/t4-context-2026-10-18.user.json) supplies
+those fields: usable free bytes are 15527116800 (14.46075439453125 GiB), and the
+reported process list contains only the collector PID. The fresh-runtime
+collector had no model calls; no independent remote execution is claimed here.
 
-1. **B1 / Person 2:** supply the allocated GPU's identity/UUID, driver, Python,
-   torch/CUDA/transformers versions, allocator configuration and a context-only
-   free/total-memory snapshot before model load/forward. Record other users or
-   unknown external usage. Derive usable VRAM without double-counting context.
+The installed Python 3.13 / torch 2.11+cu130 / Transformers 5.18 differs from the
+proposal. The [runtime reconciliation record](COLAB_RUNTIME_RECONCILIATION.md)
+documents the source-level GQA/backend concern and
+[conditional original-scenario calculation](../prereg/environment/t4-context-2026-10-18.conditional-prediction.json).
+No formal prediction or receipt was frozen from mismatched runtime evidence.
+
+An [auditable Colab notebook](../notebooks/02_p1_phase1_colab.ipynb) is prepared
+with explicit commands, logs and evidence export; saved cells remain unexecuted.
+Local validation now passes 36 tests, including environment rejection/mismatch
+checks, exact-byte budget calculations and command-trail success/failure/timeout
+checks. Chrome permission/access and the actual notebook URL are still pending.
+
+1. **B1 / Person 2:** the user-reported inventory is received. Resolve the
+   observed/proposed runtime mismatch, preserve full package/API metadata in the
+   notebook, confirm no prior model execution and refresh the context inventory
+   after any stack change/restart. Do not double-count context or merge GPU runs.
 2. **B6 / Person 2:** independently review the derivation, tensor-lifetime
    assumptions, numerical tables, quality/config domain distinction and frozen
    execution/acceptance policy. Actual GPU/backend/expandable support is untested.
@@ -80,7 +94,8 @@ preregistration receipt was altered using this partial evidence.
 
 Until these are complete, the package status is
 `DRAFT_THEORY_ONLY_NOT_PREREGISTERED` and GPU measurement authorization is false.
-No reviewer, remote receipt or hardware observation has been filled in speculatively.
+No reviewer or remote receipt has been filled in speculatively. Hardware data is
+explicitly labelled user-reported until a separately recorded collection occurs.
 
 ## Commit boundaries
 

@@ -33,3 +33,11 @@ The new tests exercise component counts, input-integrity failures, numerical
 budget limits, draft status, repeat generation, hashes and overwrite protection.
 CI now includes the preparation CLI. These remain CPU checks; no GPU execution
 or formal preregistration has been completed. See [the current progress record](P1_PROGRESS.md).
+
+### Auditable Colab preparation update
+
+The local suite now passes **36 tests**. New checks cover exact-byte context
+budgets, invalid inventories, visible runtime mismatches, closed authorization,
+notebook syntax/unexecuted outputs, successful/failed/timed-out command journaling
+and the notebook's conditional prediction script. These tests run on CPU; the
+Colab inventory/API cells and GPU execution have not been run by this agent.

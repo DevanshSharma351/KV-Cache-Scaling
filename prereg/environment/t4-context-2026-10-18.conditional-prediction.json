@@ -1,0 +1,76 @@
+{
+  "status": "CONDITIONAL_THEORY_NOT_PREREGISTERED",
+  "gpu_measurements_authorized": false,
+  "evidence_origin": "caller-supplied context inventory; not independently authenticated",
+  "gpu_uuid": "GPU-68cbea81-a683-22be-800d-74ff2d51155e",
+  "gpu_name": "Tesla T4",
+  "driver_version": "580.82.07",
+  "snapshot_timestamp": "2026-10-18T12:14:03.473613+00:00",
+  "usable_vram_bytes": 15527116800,
+  "usable_vram_gib": 14.46075439453125,
+  "cuda_total_bytes": 15637086208,
+  "cuda_total_minus_free_bytes": 109969408,
+  "budget_policy": "use observed free bytes directly; context is already deducted",
+  "other_gpu_pids_observed": [],
+  "observed_runtime": {
+    "python_minor": "3.13",
+    "torch": "2.11.0",
+    "torch_cuda_runtime": "13.0",
+    "transformers": "5.18.0"
+  },
+  "proposed_runtime": {
+    "python_minor": "3.11",
+    "torch": "2.6.0",
+    "torch_cuda_runtime": "12.4",
+    "transformers": "4.51.3"
+  },
+  "runtime_matches_proposal": false,
+  "runtime_differences": {
+    "python_minor": {
+      "proposed": "3.11",
+      "observed": "3.13"
+    },
+    "torch": {
+      "proposed": "2.6.0",
+      "observed": "2.11.0"
+    },
+    "torch_cuda_runtime": {
+      "proposed": "12.4",
+      "observed": "13.0"
+    },
+    "transformers": {
+      "proposed": "4.51.3",
+      "observed": "5.18.0"
+    }
+  },
+  "scenario_limits": [
+    {
+      "scenario": "optimistic",
+      "uncapped_limit_tokens": 146740,
+      "config_capped_limit_tokens": 131072,
+      "quality_domain_limit_tokens": 32768
+    },
+    {
+      "scenario": "central",
+      "uncapped_limit_tokens": 111232,
+      "config_capped_limit_tokens": 111232,
+      "quality_domain_limit_tokens": 32768
+    },
+    {
+      "scenario": "conservative",
+      "uncapped_limit_tokens": 76024,
+      "config_capped_limit_tokens": 76024,
+      "quality_domain_limit_tokens": 32768
+    }
+  ],
+  "interpretation": "Original analytical assumptions applied to exact free bytes; not validation of a changed runtime.",
+  "remaining_gates": [
+    "runtime/API/backend reconciliation",
+    "independent derivation review",
+    "formal prediction push",
+    "subsequent remote receipt"
+  ],
+  "snapshot_sha256": "0bf99ad96f30a18f4e6dbf221bcc53161db2df50a1c215bd3ce21f6048d62f7d",
+  "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+  "calculation_execution": "local CPU calculation from user-reported snapshot; not a remote Colab execution"
+}

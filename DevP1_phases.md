@@ -237,5 +237,8 @@ handoffs. A scaffold or passing CPU test does not establish GPU correctness.
 
 **Current status (18 October 2026):** Phase 1's CPU implementation and draft
 package are complete and tested. Phase 1 as a whole remains open until the actual
-GPU inventory, independent review, formal prediction freeze and subsequent remote
-receipt exist. Later phases are planned. See [progress evidence](docs/P1_PROGRESS.md).
+runtime is reconciled, the GPU inventory is confirmed, and independent review,
+formal prediction freeze and subsequent remote receipt exist. A user-reported
+context snapshot has now been received; an auditable preparation notebook is
+ready, with remote execution still pending. Later phases are planned.
+See [progress evidence](docs/P1_PROGRESS.md).

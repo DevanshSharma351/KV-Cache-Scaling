@@ -1,0 +1,106 @@
+# Colab inventory, runtime reconciliation and execution trail
+
+Updated 18 October 2026. This is a compatibility/preparation record, not a formal
+prediction freeze or a successful GPU execution report.
+
+## Evidence received
+
+The [user-reported context snapshot](../prereg/environment/t4-context-2026-10-18.user.json)
+contains Tesla T4 UUID `GPU-68cbea81-a683-22be-800d-74ff2d51155e`, driver
+580.82.07, zero live allocated/reserved tensor bytes and only its own Python PID
+in the reported process list. Its timestamp is 2026-10-18T12:14:03.473613+00:00.
+This is caller-supplied evidence, not an independently authenticated observation.
+
+| Quantity | Value |
+| --- | ---: |
+| Context-initialized CUDA free bytes | 15527116800 |
+| Same-observation CUDA total bytes | 15637086208 |
+| Usable budget expressed in GiB | 14.46075439453125 |
+| CUDA total minus free bytes | 109969408 |
+
+Use free bytes directly; context is already deducted. The total-minus-free value
+is a same-observation driver difference, not proof of a pure context allocation.
+The earlier `nvidia-smi` total was 15360 MiB; do not replace the newer CUDA free
+reading with that older total or force equality between different API/time views.
+
+Applying the **original hypothetical shape scenarios**, without validating them
+on this runtime, gives:
+
+| Scenario | Uncapped memory estimate L | Config-capped L |
+| --- | ---: | ---: |
+| Optimistic | 146740 | 131072 |
+| Central | 111232 | 111232 |
+| Conservative | 76024 | 76024 |
+
+These are conditional theory, not measured context limits or a registered
+GPU-specific prediction. The [machine-readable calculation](../prereg/environment/t4-context-2026-10-18.conditional-prediction.json)
+includes source/config hashes, runtime differences and the closed experiment gate.
+Its calculation was run locally on CPU. The original Phase 1 draft is unchanged.
+
+## Runtime mismatch and source review
+
+| Setting | Original proposal | Observed |
+| --- | --- | --- |
+| Python minor version | 3.11 | 3.13 |
+| PyTorch | 2.6.0 | 2.11.0+cu130 |
+| torch CUDA runtime | 12.4 | 13.0 |
+| Transformers | 4.51.3 | 5.18.0 |
+
+This commit does not silently replace the original direct pins. Inspect the
+installed stack, choose a defensible runtime/adapter policy, document any changes,
+obtain independent review and collect a new context baseline after any restart.
+Never reuse an old stack's baseline as a new stack's measured budget.
+
+Source review identifies a specific compatibility concern: the
+[Transformers 5.18 adapter](https://github.com/huggingface/transformers/blob/v5.18.0/src/transformers/integrations/sdpa_attention.py)
+can request native GQA for an unmasked prefill, whereas our
+[4.51.3 adapter reference](https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/integrations/sdpa_attention.py)
+expands K/V heads before SDPA. [PyTorch 2.11's SDPA documentation](https://docs.pytorch.org/docs/2.11/generated/torch.nn.functional.scaled_dot_product_attention.html)
+lists native CUDA GQA support for flash/math paths. This raises a conflict with
+the forced efficient-backend policy; it is not a successful T4 kernel test.
+
+Cache/forward signatures have also changed: inspect the actual installed
+[Qwen2 implementation](https://github.com/huggingface/transformers/blob/v5.18.0/src/transformers/models/qwen2/modeling_qwen2.py)
+and [cache implementation](https://github.com/huggingface/transformers/blob/v5.18.0/src/transformers/cache_utils.py)
+before implementing legacy attribute/position assumptions. In PyTorch 2.11,
+[`PYTORCH_ALLOC_CONF` is the primary allocator variable](https://docs.pytorch.org/docs/2.11/notes/cuda.html#optimizing-memory-usage-with-pytorch-alloc-conf)
+and the older CUDA-named variable is an alias; record both and reject conflicts.
+
+No source review authorizes an unregistered model measurement or a math-backend
+fallback. A runtime change must be represented in the reviewed scientific inputs.
+
+## Auditable notebook
+
+Use [02_p1_phase1_colab.ipynb](../notebooks/02_p1_phase1_colab.ipynb). It contains:
+
+1. Run directory and append-only command journal with fsync.
+2. Explicit Git clone/ref resolution/detached checkout; exact source SHA recorded.
+3. CPU tests, full package inventory and driver observation.
+4. Context-only inventory in a fresh child process; no parent-owned CUDA context.
+5. Installed API signatures/source hashes; no model instantiation or attention run.
+6. Exact-byte conditional predictions with mismatch reporting and a closed gate.
+7. Generic theoretical draft regeneration into a new directory.
+8. Evidence manifest, ZIP export and download. Save the executed notebook too.
+
+Every worker/shell command appears in a cell and is logged with its arguments,
+timestamps, return status and full output files. Child Python source is visible
+in the same cell. Failed and timed-out commands remain recorded; labels/output
+files cannot be silently reused. The ZIP omits the checkout but records its SHA.
+Use that SHA instead of `main` for an exact replay.
+
+The notebook does not install/downgrade GPU packages, load weights, run a model,
+test an attention kernel, attempt OOM or push from Colab. No Colab execution
+counts or outputs have been manufactured. Relevant future package/model/sweep
+commands must be added as explicit cells before execution, not run off-notebook.
+
+## Access and commit policy
+
+Direct Chrome access was denied by computer-use permissions; a later retry timed
+out. The user said they would enable access and provide the notebook URL. Until
+the actual notebook can be read and operated, remote execution is pending.
+
+Group changes by working capability: this environment validator, tested notebook,
+inventory, conditional report and documentation form one coherent commit. Record
+later compatibility decisions or validated runtime executions in substantive
+commits with evidence. Avoid a separate commit for every status message or command;
+preserve existing research artifacts and published history.

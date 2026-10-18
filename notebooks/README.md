@@ -3,6 +3,19 @@
 The starter notebook is a CPU-only orientation/preview; GPU execution is pending
 A2/A3. It intentionally does not contain a hidden sweep or an OOM cell.
 
+Use [02_p1_phase1_colab.ipynb](02_p1_phase1_colab.ipynb) for the auditable Phase 1
+workflow. It records every worker command and output, source commit, context-only
+inventory, installed API metadata, conditional calculations and an exportable ZIP.
+It starts unexecuted; restart the runtime before running so the parent notebook
+owns no CUDA context. Save the executed `.ipynb` and ZIP together.
+
+[Open the preparation notebook in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/02_p1_phase1_colab.ipynb).
+
+The latest reported runtime differs from the original pins. Follow
+[the reconciliation note](../docs/COLAB_RUNTIME_RECONCILIATION.md) before any
+GPU-package change or formal prediction. The notebook performs no automatic
+GPU-stack installation and contains no model forward or OOM command.
+
 1. Clone this repository and change into its root. Use a Linux GPU runtime for
    the later measurements; inspect the actual GPU, driver and Python version.
 2. Install the exact target versions using the README commands. Restart the

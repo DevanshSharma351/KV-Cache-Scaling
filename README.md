@@ -17,6 +17,9 @@ preregistration have been performed. See [Person 1 progress](docs/P1_PROGRESS.md
 4. Review [the measurement protocol](docs/MEASUREMENT_PROTOCOL.md) and
    [acceptance criteria](docs/REQUIREMENTS.md) before implementing the harness.
 5. Follow [Person 1's five-phase plan](DevP1_phases.md) for the 55% contribution.
+6. Use [the auditable Phase 1 Colab notebook](notebooks/02_p1_phase1_colab.ipynb)
+   for recorded commands and evidence export. Check the
+   [runtime reconciliation note](docs/COLAB_RUNTIME_RECONCILIATION.md) first.
 
 ## Frozen design proposal
 
