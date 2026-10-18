@@ -6,7 +6,7 @@ used in the allocation.
 
 | Phase | Status | Evidence / remaining gate |
 | --- | --- | --- |
-| 1 — Analytical foundation | CPU deliverables complete; context snapshot received; runtime reconciliation and formal preregistration pending | Tested math/draft, user-reported T4 budget and auditable notebook; runtime mismatch, B6 review and receipt still open |
+| 1 — Analytical foundation | CPU deliverables and remote preparation complete; exports, runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot verified; notebook/ZIP export, runtime decision, B6 review and receipt still open |
 | 2 — Primary probe/telemetry | Planned | No CUDA model measurements performed |
 | 3 — Coordinator/safety | Planned | Journal integration and receipt enforcement remain implementation work |
 | 4 — Empirical analysis | Planned | No measured dataset exists |
@@ -66,7 +66,7 @@ At that point UUID, versions and the context-only budget were missing. The later
 [context snapshot](../prereg/environment/t4-context-2026-10-18.user.json) supplies
 those fields: usable free bytes are 15527116800 (14.46075439453125 GiB), and the
 reported process list contains only the collector PID. The fresh-runtime
-collector had no model calls; no independent remote execution is claimed here.
+collector had no model calls. A later directly operated Colab collection is recorded below.
 
 The installed Python 3.13 / torch 2.11+cu130 / Transformers 5.18 differs from the
 proposal. The [runtime reconciliation record](COLAB_RUNTIME_RECONCILIATION.md)
@@ -76,9 +76,19 @@ No formal prediction or receipt was frozen from mismatched runtime evidence.
 
 An [auditable Colab notebook](../notebooks/02_p1_phase1_colab.ipynb) is prepared
 with explicit commands, logs and evidence export; saved cells remain unexecuted.
-Local validation now passes 36 tests, including environment rejection/mismatch
+Local validation passes 36 tests, including environment rejection/mismatch
 checks, exact-byte budget calculations and command-trail success/failure/timeout
-checks. Chrome permission/access and the actual notebook URL are still pending.
+checks. The supplied notebook was subsequently operated directly through Chrome:
+all 36 tests also passed there. A fresh isolated context worker collected the
+same 15527116800 free bytes, with zero live allocated/reserved tensors and no
+other GPU PIDs. The [run record and checksum-verified mirrored snapshot](../prereg/environment/colab-20261018T123226Z-ad6f415d/README.md)
+preserve provenance separately from the original user snapshot. Installed API
+inspection and both draft calculations completed; no model execution occurred.
+
+An evidence ZIP was created in Colab. Browser control failed during download,
+so the ZIP and executed notebook are **not yet retrieved or committed**. Complete
+that export after reconnecting browser control; preserve the failed checkout and
+all original command logs. The repository template itself remains unexecuted.
 
 1. **B1 / Person 2:** the user-reported inventory is received. Resolve the
    observed/proposed runtime mismatch, preserve full package/API metadata in the
@@ -94,8 +104,8 @@ checks. Chrome permission/access and the actual notebook URL are still pending.
 
 Until these are complete, the package status is
 `DRAFT_THEORY_ONLY_NOT_PREREGISTERED` and GPU measurement authorization is false.
-No reviewer or remote receipt has been filled in speculatively. Hardware data is
-explicitly labelled user-reported until a separately recorded collection occurs.
+No reviewer or remote receipt has been filled in speculatively. The original inventory remains labelled user-reported; the later directly
+observed collection is kept separately and is not a model-memory measurement.
 
 ## Commit boundaries
 

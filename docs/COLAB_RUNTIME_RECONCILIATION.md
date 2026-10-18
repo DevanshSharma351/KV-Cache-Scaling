@@ -1,7 +1,7 @@
 # Colab inventory, runtime reconciliation and execution trail
 
 Updated 18 October 2026. This is a compatibility/preparation record, not a formal
-prediction freeze or a successful GPU execution report.
+prediction freeze or a successful model-memory measurement report.
 
 ## Evidence received
 
@@ -95,9 +95,23 @@ commands must be added as explicit cells before execution, not run off-notebook.
 
 ## Access and commit policy
 
-Direct Chrome access was denied by computer-use permissions; a later retry timed
-out. The user said they would enable access and provide the notebook URL. Until
-the actual notebook can be read and operated, remote execution is pending.
+Direct Chrome access subsequently succeeded for the supplied notebook. The
+repository was made public by the user, and the retry cloned and resolved
+`cf50e692ac52cbdc85824fe39252507f0f0e73c5` successfully. The earlier private-clone
+failure remains recorded. The [observed execution record](../prereg/environment/colab-20261018T123226Z-ad6f415d/README.md)
+reports actual preparation counts/results, 36 passing CPU tests and a fresh
+isolated context snapshot. The mirrored snapshot matches the SHA-256 printed
+by Colab; its usable budget equals the earlier user-supplied value.
+
+The installed API inspection succeeded, but its decorated forward source hash
+refers to `generic.py`, not the full Qwen implementation. Backend execution and
+allocator intervention are still untested. No package versions were changed.
+
+The notebook created a checksummed evidence ZIP. Browser control failed during
+export (`Debugger unattached` after a download timeout); the ZIP and executed
+notebook have not yet been retrieved locally. They remain in the notebook/runtime
+and must be exported before session loss. No downloaded artifact or verified
+archive is claimed. Browser reconnection is needed to complete that export.
 
 Group changes by working capability: this environment validator, tested notebook,
 inventory, conditional report and documentation form one coherent commit. Record
