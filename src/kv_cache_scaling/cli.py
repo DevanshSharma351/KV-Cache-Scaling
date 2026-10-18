@@ -41,14 +41,21 @@ def main(argv=None):
     sweep.add_argument("--deliberate-length", type=int)
     sweep.add_argument("--acceptance-only", action="store_true",
                        help="Only paired L=512 repeats and a separate kernel trace; no boundary search")
+    sweep.add_argument("--diagnostics-only", action="store_true",
+                       help="Separate registered chunked/static grids, workspace control and kernel trace")
     sweep.add_argument("--checkpoint-each-probe", action="store_true",
-                       help="Acceptance only: return after each new probe for an external persistence barrier")
+                       help="Return after each new probe; persist the full checkpoint externally before resuming")
     probe = sub.add_parser("probe", help="Internal receipt/launch-gated worker; prefer sweep")
     for name in ("request", "receipt", "output", "run-id"):
         probe.add_argument("--" + name, required=True)
     probe.add_argument("--root", default=".")
-    for name in ("analyze", "generalize"):
-        sub.add_parser(name, help="Reserved implementation entry point")
+    analyze = sub.add_parser("analyze", help="Validate immutable capsules and write empirical tables; CPU only")
+    analyze.add_argument("--capsule", action="append", required=True)
+    analyze.add_argument("--run-id", action="append")
+    analyze.add_argument("--output", required=True)
+    analyze.add_argument("--figures", action="store_true")
+    generalize = sub.add_parser("generalize", help="Pinned config-only cross-model/GPU predictions")
+    generalize.add_argument("--output", required=True)
     args = parser.parse_args(argv)
     if args.command == "predict":
         try:
@@ -124,7 +131,7 @@ def main(argv=None):
                 from .sweep import run_sweep
                 result = run_sweep(verified, args.local_root, run_id=args.run_id,
                                    deliberate_length=args.deliberate_length, acceptance_only=args.acceptance_only,
-                                   checkpoint_each_probe=args.checkpoint_each_probe)
+                                   checkpoint_each_probe=args.checkpoint_each_probe, diagnostics_only=args.diagnostics_only)
         except (OSError, ValueError, KeyError, RuntimeError) as error:
             parser.error(str(error))
         print(json.dumps(result, indent=2, allow_nan=False))
@@ -133,7 +140,23 @@ def main(argv=None):
         from .worker import main as worker_main
         return worker_main(["--root", args.root, "--receipt", args.receipt, "--run-id", args.run_id,
                             "--request", args.request, "--output", args.output])
-    else:
-        parser.error(f"'{args.command}' is scaffolded only. Follow TASK_ALLOCATION.md; "
-                     "complete preregistration before any GPU probe.")
+    elif args.command == "analyze":
+        from .analysis import write_analysis
+        try:
+            result = write_analysis(args.capsule, args.output, args.run_id)
+            if args.figures:
+                from .plotting import build_figures
+                build_figures(result, Path(args.output)/"figures")
+        except (OSError, ValueError, KeyError) as error:
+            parser.error(str(error))
+        print(json.dumps({"status": "ANALYZED_SAVED_OBSERVATIONS", "output": args.output,
+                          "acceptance": result["acceptance"], "executes_gpu_work": False}, indent=2))
+    elif args.command == "generalize":
+        from .generalize import write_transfer
+        try:
+            result = write_transfer(args.output)
+        except (OSError, ValueError, KeyError) as error:
+            parser.error(str(error))
+        print(json.dumps({"status": "UNRUN_CONFIG_DERIVED_TRANSFERS", "output": args.output,
+                          "prediction_count": len(result["predictions"]), "executes_gpu_work": False}, indent=2))
     return 0

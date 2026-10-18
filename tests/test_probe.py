@@ -128,6 +128,22 @@ def fake_runtime(failure=None):
 
 
 class ContractTests(unittest.TestCase):
+    def test_diagnostic_grids_and_policies_are_distinct(self):
+        for mode, length in (("chunked_dynamic", 32768), ("static_cache", 8192), ("workspace_control", 512)):
+            point = request(measurement=mode, length=length)
+            self.assertNotEqual(probe.execution_policy(point), probe.POLICY)
+            with self.assertRaises(ValueError):
+                request(measurement=mode, length=length, attempt_kind="deliberate")
+        for mode, length in (("chunked_dynamic",1024),("static_cache",32768),("workspace_control",2048)):
+            with self.assertRaises(ValueError): request(measurement=mode,length=length)
+        self.assertEqual(probe.execution_policy(request()), probe.POLICY)
+
+    def test_workspace_intervention_is_child_only(self):
+        from kv_cache_scaling.processes import worker_env
+        with patch.dict("os.environ", {"CUBLAS_WORKSPACE_CONFIG": ":16:8"}):
+            self.assertNotIn("CUBLAS_WORKSPACE_CONFIG", worker_env("default", ROOT))
+            self.assertEqual(worker_env("default", ROOT,"workspace_control")["CUBLAS_WORKSPACE_CONFIG"],":0:0")
+
     def test_diagnostic_scope_cannot_escalate_or_use_deliberate_intent(self):
         self.assertEqual(request(measurement="kernel_trace").length, 512)
         for changes in ({"measurement": "unknown"}, {"measurement": "kernel_trace", "length": 1024},

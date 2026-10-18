@@ -36,6 +36,17 @@ POLICY = {"protocol_version": "prefill-v1", "model_id": MODEL_ID,
 _USED = False
 
 
+def execution_policy(request):
+    policy = dict(POLICY)
+    if request.measurement == "chunked_dynamic":
+        policy.update(mode="chunked_prefill", chunk_size=512)
+    elif request.measurement == "static_cache":
+        policy.update(mode="static_prefill", cache_type="StaticCache", capacity=request.length)
+    elif request.measurement == "workspace_control":
+        policy.update(diagnostic="workspace_control", cublas_workspace_config=":0:0")
+    return policy
+
+
 class PreregistrationRequired(RuntimeError):
     pass
 
@@ -69,10 +80,14 @@ class ProbeRequest:
     measurement: str = "primary"
 
     def __post_init__(self):
-        if self.measurement not in ("primary", "kernel_trace"):
+        if self.measurement not in ("primary", "kernel_trace", "chunked_dynamic", "static_cache", "workspace_control"):
             raise ValueError("Unknown measurement scope")
-        if self.measurement == "kernel_trace" and (self.length != 512 or self.attempt_kind != "safe"):
+        if self.measurement in ("kernel_trace", "workspace_control") and (self.length != 512 or self.attempt_kind != "safe"):
             raise ValueError("Kernel diagnostics are restricted to safe L=512")
+        if self.measurement == "chunked_dynamic" and (self.length not in (512,2048,8192,32768) or self.attempt_kind != "safe"):
+            raise ValueError("Chunked diagnostic differs from its registered grid")
+        if self.measurement == "static_cache" and (self.length not in (512,2048,8192) or self.attempt_kind != "safe"):
+            raise ValueError("Static diagnostic differs from its registered grid")
         if not isinstance(self.probe_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", self.probe_id):
             raise ValueError("Invalid probe_id")
         if positive_int(self.length, "length") > 131072:
@@ -196,6 +211,7 @@ def _import_runtime():
         sources[name] = {"filename": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
     return SimpleNamespace(torch=torch, transformers=transformers, nvml=pynvml,
                            cache_class=transformers.DynamicCache, source_hashes=sources,
+                           static_cache_class=transformers.StaticCache,
                            efficient_context=lambda: sdpa_kernel(SDPBackend.EFFICIENT_ATTENTION))
 
 
@@ -234,7 +250,7 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
     global _USED
     result = {"schema_version": "primary-probe-v1", "probe_id": request.probe_id,
               "length": request.length, "repeat": request.repeat, "allocator": request.allocator,
-              "execution_policy": dict(POLICY),
+              "execution_policy": execution_policy(request),
               "context_domain": "within_model_card_limit" if request.length <= 32768 else "synthetic_stress_above_model_card_limit",
               "protocol_sha256": request.protocol_sha256, "config_sha256": request.config_sha256,
               "status": "incomplete", "stage": "preflight", "snapshots": {},
@@ -255,6 +271,9 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
             _USED = True
             arch = validate_inputs(request, root)
             result["allocator_env"] = validate_allocator(request, os.environ)
+            expected_workspace = ":0:0" if request.measurement == "workspace_control" else None
+            if os.environ.get("CUBLAS_WORKSPACE_CONFIG") != expected_workspace:
+                raise ValueError("cuBLAS workspace environment differs from measurement scope")
             rt = runtime or _import_runtime()
             torch, cuda = rt.torch, rt.torch.cuda
             if cuda.is_initialized():
@@ -263,6 +282,7 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
                                  "torch": torch.__version__, "cuda": torch.version.cuda,
                                  "transformers": rt.transformers.__version__,
                                  "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+                                 "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG"),
                                  "source_files": getattr(rt, "source_hashes", {}),
                                  "package_versions": {dist.metadata["Name"]: dist.version for dist in distributions()
                                                       if dist.metadata["Name"]}}
@@ -325,16 +345,33 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
                 generator = torch.Generator(device="cpu").manual_seed(42)
                 ids = torch.randint(0, arch.vocab, (1, request.length), generator=generator).to("cuda:0")
                 positions = torch.arange(request.length, device="cuda:0")
-                cache = rt.cache_class()
+                cache = (rt.static_cache_class(config=model.config,max_batch_size=1,max_cache_len=request.length,
+                                              device="cuda:0",dtype=torch.float16)
+                         if request.measurement == "static_cache" else rt.cache_class())
                 result["input_logical_bytes"] = int(ids.numel() * ids.element_size() + positions.numel() * positions.element_size())
                 result["stage"] = "forward"
                 profile = (torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
                                                              torch.profiler.ProfilerActivity.CUDA])
                            if request.measurement == "kernel_trace" else nullcontext())
                 with profile as trace, rt.efficient_context():
-                    out = model(input_ids=ids, cache_position=positions, past_key_values=cache,
-                                use_cache=True, logits_to_keep=1, output_attentions=False,
-                                output_hidden_states=False, return_dict=True)
+                    if request.measurement == "chunked_dynamic":
+                        for start in range(0,request.length,512):
+                            end = min(start+512,request.length)
+                            # Explicit absolute-position causal bias for a chunk with a past cache.
+                            bias = torch.full((end-start,end),torch.finfo(torch.float16).min,
+                                              device="cuda:0",dtype=torch.float16)
+                            bias.masked_fill_(positions[:end].unsqueeze(0) <= positions[start:end].unsqueeze(1),0)
+                            out = model(input_ids=ids[:,start:end],cache_position=positions[start:end],
+                                        attention_mask=bias.unsqueeze(0).unsqueeze(0),past_key_values=cache,
+                                        use_cache=True,logits_to_keep=1,output_attentions=False,
+                                        output_hidden_states=False,return_dict=True)
+                            del bias
+                            if end < request.length:
+                                del out
+                    else:
+                        out = model(input_ids=ids, cache_position=positions, past_key_values=cache,
+                                    use_cache=True, logits_to_keep=1, output_attentions=False,
+                                    output_hidden_states=False, return_dict=True)
                 cuda.synchronize(0)
                 result["peak_allocated_bytes"] = int(cuda.max_memory_allocated(0))
                 result["peak_reserved_bytes"] = int(cuda.max_memory_reserved(0))

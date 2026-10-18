@@ -17,7 +17,7 @@ from uuid import uuid4
 from kv_cache_scaling import gate
 from kv_cache_scaling.coordinator_store import AttemptLedger, RunStore, file_lock
 from kv_cache_scaling.model_math import Architecture, prefill_scenarios, predict_limit, peak_budget_bytes
-from kv_cache_scaling.probe import EXPECTED_RUNTIME, POLICY, ProbeRequest
+from kv_cache_scaling.probe import EXPECTED_RUNTIME, POLICY, ProbeRequest, execution_policy
 from kv_cache_scaling.processes import launch_worker, worker_env
 from kv_cache_scaling.sweep import admission, next_bisection, point_key, run_sweep
 
@@ -241,7 +241,7 @@ class SyntheticRunner:
         snap = {"allocated_bytes": 1, "reserved_bytes": 2, "cuda_free_bytes": 10, "cuda_total_bytes": 20}
         arch = Architecture.from_config(json.loads((Path(kwargs["cwd"])/INPUTS[2]).read_text()))
         result = {"schema_version": "primary-probe-v1", **asdict(request), "status": self.status,
-                  "execution_policy": POLICY, "runtime": {"torch": "2.6.0+cu124", "cuda": "12.4", "transformers": "4.51.3"},
+                  "execution_policy": execution_policy(request), "runtime": {"torch": "2.6.0+cu124", "cuda": "12.4", "transformers": "4.51.3"},
                   "code_sha256": {name: gate.digest((Path(kwargs["cwd"])/"src/kv_cache_scaling"/name).read_bytes()) for name in ("probe.py", "telemetry.py")},
                   "oom_classification": "accidental", "error": {"type": "OutOfMemoryError"},
                   "snapshots": {key: snap for key in ("context_only", "post_load", "after_forward", "retained", "released")},
@@ -308,6 +308,29 @@ class SweepTests(unittest.TestCase):
         result = self.run_fake(runner, run_id=run_id, acceptance_only=True, checkpoint_each_probe=True)
         self.assertEqual(result["status"], "complete", result)
         self.assertEqual(len(runner.calls), 7)
+
+    def test_bulk_checkpoint_barrier_preserves_completed_keys(self):
+        runner=SyntheticRunner();rid=str(uuid4())
+        first=self.run_fake(runner,run_id=rid,checkpoint_each_probe=True)
+        self.assertEqual(first['status'],'awaiting_external_checkpoint')
+        self.assertEqual(len(runner.calls),1)
+        second=self.run_fake(runner,run_id=rid,checkpoint_each_probe=True)
+        self.assertEqual(second['completed_probes'],2)
+        self.assertEqual(len(runner.calls),2)
+        self.assertEqual([r.repeat for r in runner.calls],[1,2])
+        self.assertFalse(AttemptLedger(self.verified.state_root,self.verified.experiment_id).path.exists())
+
+    def test_diagnostic_grids_have_distinct_scope_and_no_deliberate_token(self):
+        runner=SyntheticRunner()
+        result=self.run_fake(runner,diagnostics_only=True)
+        self.assertEqual(result['status'],'complete',result)
+        self.assertEqual(len(runner.calls),25)
+        self.assertEqual(sum(r.measurement=='chunked_dynamic' for r in runner.calls),12)
+        self.assertEqual(sum(r.measurement=='static_cache' for r in runner.calls),9)
+        self.assertEqual(sum(r.measurement=='workspace_control' for r in runner.calls),3)
+        self.assertTrue(all(r.attempt_kind=='safe' and r.allocator=='default' for r in runner.calls))
+        self.assertFalse(AttemptLedger(self.verified.state_root,self.verified.experiment_id).path.exists())
+        with self.assertRaises(ValueError):self.run_fake(runner,diagnostics_only=True,acceptance_only=True)
 
     def test_accidental_oom_stops_escalation_and_blocks_global_attempt(self):
         runner = SyntheticRunner("cuda_oom")

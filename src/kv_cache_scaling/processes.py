@@ -9,7 +9,7 @@ import threading
 import time
 
 
-def worker_env(allocator, root):
+def worker_env(allocator, root, measurement="primary"):
     env = dict(os.environ)
     for key in ("PYTORCH_CUDA_ALLOC_CONF", "PYTORCH_ALLOC_CONF"):
         env.pop(key, None)
@@ -22,6 +22,9 @@ def worker_env(allocator, root):
     # Keep Transformers from importing unrelated installed GPU frameworks.
     env["USE_TF"] = "0"
     env["USE_FLAX"] = "0"
+    env.pop("CUBLAS_WORKSPACE_CONFIG", None)
+    if measurement == "workspace_control":
+        env["CUBLAS_WORKSPACE_CONFIG"] = ":0:0"
     return env
 
 

@@ -82,6 +82,7 @@ def snapshot(device=0, *, torch_module=None, nvml_device=None):
             "allocator_slack_bytes": reserved - allocated,
             "cuda_free_bytes": int(free), "cuda_total_bytes": int(total),
             "inactive_split_bytes": stats.get("inactive_split_bytes.all.current"),
+            "requested_bytes": stats.get("requested_bytes.all.current"),
             "nvml": driver,
             "nvml_minus_reserved_bytes": None if driver is None else driver["used_bytes"] - reserved,
             "driver_residual_attribution": "combined context/external/non-PyTorch; not pure framework overhead"}

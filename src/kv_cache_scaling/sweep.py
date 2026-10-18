@@ -10,7 +10,7 @@ from uuid import uuid4
 from .coordinator_store import AttemptLedger, RunStore, file_lock, now
 from .gate import digest, json_bytes, verify_receipt
 from .model_math import Architecture, peak_budget_bytes, prefill_scenarios
-from .probe import EXPECTED_RUNTIME, POLICY, ProbeRequest, RuntimeMismatch
+from .probe import EXPECTED_RUNTIME, POLICY, ProbeRequest, RuntimeMismatch, execution_policy
 from .processes import launch_worker, worker_env
 
 RESULT_LIMIT = 16 * 1024**2
@@ -78,7 +78,7 @@ def validate_result(result, request, arch, root):
         if result.get("oom_classification") != intent or result.get("error", {}).get("type") != "OutOfMemoryError":
             raise ValueError("OOM status lacks the matching typed exception/intent")
     if result["status"] == "success":
-        if result.get("execution_policy") != POLICY:
+        if result.get("execution_policy") != execution_policy(request):
             raise ValueError("Execution policy mismatch")
         runtime = result.get("runtime", {})
         if (runtime.get("torch", "").split("+")[0] != EXPECTED_RUNTIME["torch"]
@@ -150,14 +150,14 @@ def collect_process(store, request, command, env, root, timeout, runner=launch_w
 
 
 def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acceptance_only=False,
-              checkpoint_each_probe=False,
+              checkpoint_each_probe=False, diagnostics_only=False,
               _runner=launch_worker, _observer=None):
     """verified must come from verify_receipt in production; injected doubles are tests only."""
     run_id = run_id or str(uuid4())
     if acceptance_only and deliberate_length is not None:
         raise ValueError("Acceptance mode cannot consume a deliberate attempt")
-    if checkpoint_each_probe and not acceptance_only:
-        raise ValueError("External checkpoint stepping is restricted to acceptance mode")
+    if diagnostics_only and (acceptance_only or deliberate_length is not None):
+        raise ValueError("Diagnostic scope cannot mix acceptance or deliberate intent")
     root = verified.root
     protocol = json.loads((root / "configs/experiment.json").read_text())
     arch = Architecture.from_config(json.loads((root / "configs/models/qwen2.5-1.5b.json").read_text()))
@@ -169,7 +169,7 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                 "gpu_uuid": verified.gpu_uuid, "usable_bytes": verified.usable_bytes,
                 "protocol_sha256": verified.protocol_sha256, "config_sha256": verified.config_sha256,
                 "experiment_id": verified.experiment_id, "deliberate_length": deliberate_length,
-                "execution_scope": "acceptance_l512" if acceptance_only else "primary_sweep",
+                "execution_scope": "diagnostics" if diagnostics_only else ("acceptance_l512" if acceptance_only else "primary_sweep"),
                 "checkpoint_each_probe": checkpoint_each_probe,
                 "expected_runtime": EXPECTED_RUNTIME, "expected_driver": verified.driver_version,
                 "expected_cuda_total_bytes": verified.total_bytes,
@@ -225,7 +225,7 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                         "--request", str(store.local / "requests" / (request.probe_id + ".json")),
                         "--output", str(output)]
             try:
-                record = collect_process(store, request, command, worker_env(allocator, root), root,
+                record = collect_process(store, request, command, worker_env(allocator, root, measurement), root,
                                          protocol["per_probe_timeout_seconds"], _runner)
             except BaseException:
                 store.append("probe_interrupted", probe_id=request.probe_id, point_key=key,
@@ -260,6 +260,19 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                 safe = safe and peak + prefill_scenarios(arch)[2].fixed_headroom_bytes <= verified.usable_bytes * 9 // 10
             return safe
         try:
+            if diagnostics_only:
+                for measurement, grid in (("chunked_dynamic",protocol["diagnostics"]["chunked_prefill"]["lengths"]),
+                                          ("static_cache",protocol["diagnostics"]["static_cache"]["lengths"]),
+                                          ("workspace_control",[512])):
+                    for length in grid:
+                        if not admission(arch,length,verified.usable_bytes)["admitted"]:
+                            raise RuntimeError("Diagnostic fails analytical admission")
+                        for repeat in range(1,protocol["repeats"]+1):
+                            perform(length,"default",repeat,measurement=measurement)
+                perform(512,"default",1,measurement="kernel_trace")
+                boundaries={"interpretation":"Separate diagnostic grids; never primary boundary observations"}
+                store.append("run_finished",boundaries=boundaries)
+                return {"run_id":run_id,"status":"complete","boundaries":boundaries}
             if acceptance_only:
                 if not admission(arch, 512, verified.usable_bytes)["admitted"]:
                     raise RuntimeError("L=512 fails analytical admission")
