@@ -54,6 +54,18 @@ post-load measurements.
 
 ## Open Phase 1 handoffs
 
+Received a user-pasted T4 `nvidia-smi` snapshot on 18 October 2026. The
+[partial inventory](../prereg/environment/t4-inventory-2026-10-18.partial.json)
+records Tesla T4, driver 580.82.07, displayed total 15360 MiB and no running
+processes reported at that snapshot. Its displayed CUDA 13.0 is driver
+compatibility information, not the installed PyTorch runtime. The source's time
+zone was not supplied, so its timestamp is preserved without conversion.
+
+The displayed 0 MiB usage does not establish a CUDA-initialized usable budget.
+UUID, installed versions, allocator env, context-only exact free/total bytes and
+the no-prior-model confirmation remain missing. No numerical prediction or
+preregistration receipt was altered using this partial evidence.
+
 1. **B1 / Person 2:** supply the allocated GPU's identity/UUID, driver, Python,
    torch/CUDA/transformers versions, allocator configuration and a context-only
    free/total-memory snapshot before model load/forward. Record other users or
