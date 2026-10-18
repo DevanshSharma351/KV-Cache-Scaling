@@ -10,7 +10,10 @@ flowchart TD
     D --> E[Record remote receipt and freeze protocol]
     E --> F[Implement and validate fresh-process probe]
     F --> G[Safe paired sweeps and durable journals]
-    G --> H[One justified OOM attempt or censored result]
+    G --> G2[Freeze prospective controls and held-out validation]
+    G2 --> G3[Run separate diagnostics and validation with checkpoints]
+    G3 --> G4[Consume durable local external dispatch claim]
+    G4 --> H[One final OOM attempt or documented censoring]
     H --> I[KV validation and discrepancy accounting]
     I --> J[Plots and four transfer predictions]
     J --> K[Independent reproduction and final report]
@@ -50,11 +53,13 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 │   ├── probe.py                 A2: isolated CUDA worker
 │   ├── telemetry.py             A2: counters, storage inspection and NVML
 │   ├── sweep.py                 A3: safety, child processes and boundary intervals
-│   ├── journal.py               B2: persistence/resume and one-attempt ledger
+│   ├── journal.py               B2 integration interface
+│   ├── coordinator_store.py     Tested POSIX reference journal/locks/ledger
 │   ├── analysis.py              A4: regressions and discrepancy accounting
 │   ├── generalize.py            A5: config-only transfer prediction
-│   └── plotting.py              B3: figures from validated processed data
-├── scripts/                     Small entry-point helpers
+│   ├── plotting.py              Figures from validated processed data
+│   └── reporting.py             Evidence-linked Markdown/PDF report
+├── scripts/                     Reproduction, report and external-claim helpers
 ├── notebooks/                   Colab instructions + CPU-only starter notebook
 ├── tests/                       CPU analytical tests; future fault-injection tests
 ├── data/raw/                    Generated append-only records (ignored)
@@ -78,6 +83,8 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 | Unique storage inspection | Cache views and tied weights must not be counted twice |
 | Raw vs processed data | Analysis can change without rewriting measurements |
 | Source vs frozen prediction vs calibrated fit | Prevents measured information from being presented as advance prediction |
+| External one-use dispatch claim | Keeps the OOM allowance consumed if an ephemeral Colab session is lost during launch |
+| Compatible cohort checks | Combine runs only with matching GPU/budget, runtime/source/package hashes and primary semantics; retain run IDs |
 | Explicit pending methods | Contributors can see remaining work; CLI cannot emit fabricated GPU success |
 | CPU CI only | Tests real available functionality; GPU acceptance is a separate milestone |
 | Generated outputs ignored | Prevents accidental checkpoint/large-data uploads; publish reviewed small evidence deliberately |
@@ -115,3 +122,10 @@ cache, kernel, warmup or allocator policy creates a new protocol version and
 separate results. Pure analysis fixes retain raw-data hashes and document their
 effect. The final report must distinguish planned, implemented, tested and
 observed results; a file's existence is not evidence that its experiment ran.
+
+The user authorized one contributor review, delegated to Codex on behalf of
+Person 1, and required Drive to remain disconnected. This changes the review
+gate and storage operation; it does not invent independent Person 2 work.
+Every GPU point pauses for a verified/fsynced external capsule. The final
+deliberate dispatch additionally requires a durable local one-use claim before
+the browser command is sent. An uncertain dispatch is never retried.

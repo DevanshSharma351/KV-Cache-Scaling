@@ -9,9 +9,9 @@ The reviewed prediction and subsequent receipt were pushed before model work.
 both allocators, plus a separate efficient-SDPA kernel trace. Cache storage
 matched theory exactly. External checkpoint restoration passed; no OOM attempt
 was used. Read the [acceptance evidence](artifacts/acceptance/2026-10-18-t4/README.md)
-and [Person 1 progress](docs/P1_PROGRESS.md). Full context sweeps, discrepancy
-analysis and transfer results remain Phase 4–5 work. Bulk execution needs
-continuous durable persistence; Colab staging alone is ephemeral.
+and [Person 1 progress](docs/P1_PROGRESS.md). Phases 4–5 now have an integrated analysis, plotting, transfer and PDF pipeline;
+the extended GPU sweep is in progress. Per-probe bulk checkpoint barriers are
+implemented. Colab staging alone is ephemeral.
 
 ## Start here
 
@@ -79,7 +79,9 @@ request and its scientific hashes without importing GPU libraries. It never
 authorizes execution. `check-receipt` verifies committed/pushed evidence without
 GPU work. `sweep` and the internal `probe` require a real completed receipt;
 workers also require durable launch evidence. The current template is incomplete
-and cannot authorize a run. `analyze` and `generalize` remain scaffolded.
+and cannot authorize a run. `analyze` validates immutable capsules and writes measured tables; `generalize`
+creates four pinned-config transfer predictions. The complete CPU reproduction
+command is in [Phase 4–5 integration](docs/P4_P5_INTEGRATION.md).
 
 ## GPU setup target
 

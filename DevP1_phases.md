@@ -26,7 +26,7 @@ is gated by the completed, reviewed and pushed prediction plus its receipt.
 
 **Outcome:** a tested, reproducible CPU calculation and a reviewable prediction
 package with explicitly labelled uncertainty. A formal GPU-specific prediction
-is frozen only when the actual environment and both reviewers are available.
+is frozen only when the actual environment and the user-authorized review are available.
 
 ### Work
 
@@ -211,8 +211,8 @@ into Person 2's independently reproduced final delivery.
 
 - `generalize.py`, four transfer predictions, compatible cited comparison.
 - Scientific report sections, limitations/deviation register and technical review.
-- No claim that Person 1 owns or completed Person 2's report assembly,
-  diagnostic implementation, plotting or independent reproduction.
+- Reference integration may exercise reporting, diagnostics and plotting while
+  keeping Person 2's independent work/reproduction attribution explicit.
 - Final handoff includes input/code hashes, precise reproduction commands and
   all open criteria. Report unavailable verification honestly rather than passing it.
 

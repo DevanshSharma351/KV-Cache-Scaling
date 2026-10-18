@@ -6,7 +6,7 @@ import tempfile
 import unittest
 import zipfile
 
-from kv_cache_scaling.analysis import read_capsules, analyze, regression, discrepancy, write_analysis
+from kv_cache_scaling.analysis import read_capsules, analyze, regression, discrepancy, write_analysis, matched_workspace_controls
 from kv_cache_scaling.model_math import Architecture
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -54,6 +54,28 @@ class AnalysisTests(unittest.TestCase):
         fake=copy.deepcopy(self.good)
         fake['analysis_evidence']={'confirmed_cublas_workspace_bytes':8519680}
         self.assertEqual(discrepancy(fake,self.arch)['unaccounted_absolute_bytes'],t['unaccounted_absolute_bytes'])
+
+    def test_workspace_attribution_requires_three_matching_actual_controls(self):
+        # Explicit CPU-only fixtures: never saved as measured evidence.
+        controls=[]
+        for repeat in (1,2,3):
+            c=copy.deepcopy(self.good);c.update(probe_id=f'synthetic-control-{repeat}',repeat=repeat,measurement='workspace_control')
+            c['runtime']['cublas_workspace_config']=':0:0'
+            c['execution_policy'].update(diagnostic='workspace_control',cublas_workspace_config=':0:0')
+            c['snapshots']['released']['allocated_bytes']=c['snapshots']['post_load']['allocated_bytes']
+            controls.append(c)
+        self.assertFalse(matched_workspace_controls([self.good]+controls[:2],self.arch))
+        proof=matched_workspace_controls([self.good]+controls,self.arch)
+        self.assertEqual(proof[self.good['probe_id']]['bytes'],8519680)
+        longer=copy.deepcopy(self.good);longer.update(probe_id='synthetic-longer',length=1024)
+        longer['cache']['logical_bytes']=self.arch.kv_bytes(1024)
+        longer['cache']['unique_storage_bytes']=self.arch.kv_bytes(1024)
+        inferred=matched_workspace_controls([longer]+controls,self.arch)
+        self.assertIn('Source-supported',inferred[longer['probe_id']]['scope'])
+        wrong_gpu=copy.deepcopy(longer);wrong_gpu['gpu_identity']['name']='unverified GPU'
+        self.assertFalse(matched_workspace_controls([wrong_gpu]+controls,self.arch))
+        altered=copy.deepcopy(controls);altered[0]['allocator']='expandable'
+        self.assertFalse(matched_workspace_controls([self.good]+altered,self.arch))
 
     def test_failed_metrics_not_imputed_and_output_never_overwrites(self):
         r=analyze([{'probe_id':'synthetic-failed','status':'timeout','length':512}])

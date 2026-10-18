@@ -136,14 +136,17 @@ def checked_success(record, arch):
 
 def group_identity(r, manifest):
     rt = r.get("runtime", {})
-    return {"run_id": manifest.get("run_id"), "protocol_sha256": r.get("protocol_sha256"), "config_sha256": r.get("config_sha256"),
+    return {"protocol_sha256": r.get("protocol_sha256"), "config_sha256": r.get("config_sha256"),
             "gpu_uuid": r.get("gpu_uuid"), "driver": manifest.get("expected_driver"),
+            "environment_fingerprint":manifest.get("environment_fingerprint"),"usable_bytes":manifest.get("usable_bytes"),
             "torch": rt.get("torch"), "cuda": rt.get("cuda"), "transformers": rt.get("transformers"),
+            "runtime_sources":rt.get("source_files"),
+            "package_inventory_sha256":sha(json.dumps(rt.get("package_versions"),sort_keys=True).encode()),
             "execution_sha256": r.get("code_sha256"), "policy": r.get("execution_policy"),
             "measurement": r.get("measurement", "primary"), "allocator": r.get("allocator")}
 
 
-def discrepancy(r, arch):
+def discrepancy(r, arch, workspace_evidence=None):
     """Signed, closed peak identity with explicit unsupported attribution.
 
     Lifetime deltas establish *when* bytes persist, not that every transient is
@@ -171,10 +174,14 @@ def discrepancy(r, arch):
     persistent_growth = allocated("released")-allocated("post_load")
     # Workspace attribution requires an actual separately matched control; a
     # coincidentally matching byte count alone never enables it.
-    supported_workspace = 0  # Never trust an attribution label supplied inside a raw worker result.
+    # Only the analyzer's independently matched records may supply evidence.
+    # Raw worker-supplied analysis_evidence labels are deliberately ignored.
+    supported_workspace = (workspace_evidence or {}).get("bytes", 0)
     require(type(supported_workspace) is int and 0 <= supported_workspace <= max(0, persistent_growth), "Invalid workspace attribution")
     if supported_workspace:
-        add("controlled_cublas_workspace", supported_workspace, True, "Matched zero-workspace diagnostic plus pinned PyTorch source")
+        add("controlled_cublas_workspace", supported_workspace, True,
+            workspace_evidence["scope"]+"; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: "
+            + ",".join(workspace_evidence["control_probe_ids"]))
     add("unaccounted_postforward_persistent_growth", persistent_growth-supported_workspace, False,
         "Measured released-minus-postload allocation; physical cause unconfirmed")
     add("cache_lifetime_difference", allocated("retained")-allocated("released")-arch.kv_bytes(r["length"]), True,
@@ -203,14 +210,60 @@ def discrepancy(r, arch):
                              "interpretation": "Advance planning allowance; do not subtract unrelated reservation/driver maxima"}}
 
 
+def matched_workspace_controls(records, arch):
+    """Require three successful same-allocator controls and an exact source-size delta.
+
+    L=512 has a directly matched intervention. Other lengths may use explicitly
+    labelled source inference because the pinned T4 workspace size is independent
+    of L, only if the released-minus-load delta is exactly the same source size.
+    The other allocator requires its own three controls.
+    """
+    valid=[]
+    for wrapped in records:
+        r=wrapped.get("record",wrapped)
+        if r.get("status")=="success":
+            checked_success(r,arch);valid.append(r)
+    def identity(r):
+        rt=r.get("runtime",{})
+        policy=dict(r["execution_policy"])
+        policy.pop("diagnostic",None);policy.pop("cublas_workspace_config",None)
+        return json.dumps([r.get("gpu_uuid"),r.get("protocol_sha256"),r.get("config_sha256"),
+                           r.get("allocator"),r.get("code_sha256"),
+                           [rt.get(k) for k in ("torch","cuda","transformers","source_files")],policy,
+                           r["snapshots"]["post_load"]["allocated_bytes"]],sort_keys=True)
+    controls=defaultdict(list)
+    for r in valid:
+        if (r.get("measurement")=="workspace_control" and r.get("length")==512
+                and r.get("runtime",{}).get("cublas_workspace_config")==":0:0"):
+            controls[identity(r)].append(r)
+    evidence={}
+    for r in valid:
+        if r.get("measurement")!="primary":continue
+        if r.get("gpu_identity",{}).get("name")!="Tesla T4" or not r.get("runtime",{}).get("torch","").startswith("2.6.0"):
+            continue
+        peers=controls.get(identity(r),[])
+        if len({p["repeat"] for p in peers})<3:continue
+        growth=lambda p:p["snapshots"]["released"]["allocated_bytes"]-p["snapshots"]["post_load"]["allocated_bytes"]
+        # 4096 KiB * 2 + 16 KiB * 8, pinned non-Hopper PyTorch 2.6 source.
+        if growth(r)==8519680 and all(growth(p)==0 for p in peers):
+            evidence[r["probe_id"]]={"bytes":8519680,"control_probe_ids":sorted(p["probe_id"] for p in peers),
+                                      "scope":"Direct L=512 intervention" if r["length"]==512 else
+                                              "Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length"}
+    return evidence
+
+
 def analyze(records, architecture=None):
     arch = architecture or Architecture.from_config(json.loads((ROOT/"configs/models/qwen2.5-1.5b.json").read_text()))
+    records=list(records)
+    controls=matched_workspace_controls(records,arch)
     groups, normalized, failures, tables, snapshots = defaultdict(list), [], [], [], []
     for wrapped in records:
         r = wrapped["record"] if "record" in wrapped else wrapped
         meta = {**wrapped.get("manifest", {}), "run_id": wrapped.get("run_id")}
         if r.get("status") != "success":
-            failures.append({"probe_id": r.get("probe_id"), "status": r.get("status"), "stage": r.get("stage"), "error": r.get("error")})
+            failures.append({"probe_id": r.get("probe_id"), "status": r.get("status"), "stage": r.get("stage"),
+                             "length":r.get("length"),"allocator":r.get("allocator"),
+                             "attempt_kind":r.get("attempt_kind"),"oom_classification":r.get("oom_classification"),"error": r.get("error")})
             continue
         checked_success(r, arch)
         identity = group_identity(r, meta)
@@ -238,7 +291,7 @@ def analyze(records, architecture=None):
                               "inactive_split_bytes": snap.get("inactive_split_bytes"),
                               "nvml_used_bytes": (snap.get("nvml") or {}).get("used_bytes")})
         if row["measurement"] == "primary":
-            tables.append(discrepancy(r, arch))
+            tables.append(discrepancy(r, arch, controls.get(r["probe_id"])))
     summaries = []
     for key, items in groups.items():
         identity = items[0][0]
@@ -259,6 +312,7 @@ def analyze(records, architecture=None):
                          "peak_spread_fraction": (max(r["peak_allocated_bytes"] for r in rs)-min(r["peak_allocated_bytes"] for r in rs))/median(r["peak_allocated_bytes"] for r in rs)}
                         for n, rs in sorted(by_length.items())]
         summaries.append({"group_id": key, "identity": identity, "coverage": coverage, "fits": fits,
+                          "run_ids":sorted({row["run_id"] for _,row,_ in items if row["run_id"]}),
                           "repeat_statistics": repeat_stats, "slope_relative_error": slope_error,
                           "required_grid_complete": required_covered,
                           "cache_formula_pass": all(r["cache_formula_relative_error"] <= .01 for _,r,_ in items),
@@ -273,8 +327,26 @@ def analyze(records, architecture=None):
     paired = [{"cohort_id": key, "allocators": sorted(groups),
                "required_grid_complete": set(groups) == {"default","expandable"} and all(g["required_grid_complete"] for g in groups.values())}
               for key,groups in cohorts.items()]
+    comparisons=[]
+    def comparable(identity):
+        return {k:v for k,v in identity.items() if k not in ("run_id","measurement","policy")}
+    for diagnostic in summaries:
+        mode=diagnostic["identity"]["measurement"]
+        if mode in ("primary","kernel_trace"):continue
+        peers=[g for g in primary if comparable(g["identity"])==comparable(diagnostic["identity"])]
+        for peer in peers:
+            for length in sorted(set(peer["coverage"])&set(diagnostic["coverage"]),key=int):
+                p=[r for r in normalized if r["group_id"]==peer["group_id"] and r["length"]==int(length)]
+                d=[r for r in normalized if r["group_id"]==diagnostic["group_id"] and r["length"]==int(length)]
+                comparisons.append({"measurement":mode,"allocator":diagnostic["identity"]["allocator"],"length":int(length),
+                                    "primary_repeats":len(p),"diagnostic_repeats":len(d),
+                                    "primary_peak_median_bytes":median(r["peak_allocated_bytes"] for r in p),
+                                    "diagnostic_peak_median_bytes":median(r["peak_allocated_bytes"] for r in d),
+                                    "diagnostic_minus_primary_peak_bytes":median(r["peak_allocated_bytes"] for r in d)-median(r["peak_allocated_bytes"] for r in p),
+                                    "interpretation":"Separate semantics/intervention; not a primary slope or boundary observation"})
     return {"schema_version": SCHEMA, "units": {"memory":"bytes", "length":"tokens"}, "groups": summaries,
             "probes": normalized, "snapshots": snapshots, "failures": failures, "discrepancy_tables": tables,
+            "diagnostic_comparisons":comparisons,
             "paired_cohorts": paired,
             "acceptance": {"five_length_paired_primary_complete": bool(paired) and all(c["required_grid_complete"] for c in paired),
                            "cache_slope_pass": bool(primary) and all(g["cache_slope_pass"] for g in primary),
@@ -315,11 +387,56 @@ def write_analysis(paths, output, run_ids=None):
         require(bool(runs), "Requested runs were not found")
     result = analyze(records)
     result["boundaries"] = boundary_summary(runs)
+    deltas=[]
+    for run_id in runs:
+        pair={b["allocator"]:b for b in result["boundaries"] if b["run_id"]==run_id and b["execution_scope"]=="primary_sweep"}
+        if set(pair)=={"default","expandable"} and all(b["safe_budget_upper_tokens"] is not None for b in pair.values()):
+            d,e=pair["default"],pair["expandable"]
+            deltas.append({"run_id":run_id,"observed_success_delta_tokens":e["largest_observed_success_tokens"]-d["largest_observed_success_tokens"],
+                           "safe_bracket_delta_min_tokens":e["safe_budget_lower_tokens"]-d["safe_budget_upper_tokens"],
+                           "safe_bracket_delta_max_tokens":e["safe_budget_upper_tokens"]-d["safe_budget_lower_tokens"],
+                           "interpretation":"Expandable minus default conservative safe-budget limit, not a measured hardware-context improvement"})
+    result["allocator_boundary_deltas"]=deltas
+    brackets=[]
+    for g in result["groups"]:
+        if g["identity"]["measurement"]!="primary":continue
+        oom=[]
+        for wrapped in records:
+            r=wrapped["record"]
+            if (r.get("status")=="cuda_oom" and r.get("error",{}).get("type")=="OutOfMemoryError"
+                    and r.get("attempt_kind")=="deliberate" and r.get("oom_classification")=="deliberate_request"):
+                identity=group_identity(r,wrapped["manifest"])
+                if identity==g["identity"]:oom.append(r["length"])
+        lower=max(int(n) for n in g["coverage"]);upper=min(oom,default=None)
+        brackets.append({"group_id":g["group_id"],"allocator":g["identity"]["allocator"],
+                         "largest_observed_success_tokens":lower,"smallest_observed_oom_tokens":upper,
+                         "original_prediction_tokens":111232,
+                         "consistent_monotone_bracket":upper is None or upper>lower,
+                         "prediction_error_percent_interval":None if upper is None or upper<=lower else
+                             [100*(111232/(upper-1)-1),100*(111232/lower-1)],
+                         "interpretation":"Under monotone feasibility, successful lower bound <= true limit < failed upper bound; no exact threshold or confidence interval"})
+    result["hardware_brackets"]=brackets
+    held_out=[]
+    for run_id,run in runs.items():
+        meta=run["manifest"]
+        if meta.get("execution_scope")!="calibrated_validation":continue
+        for allocator in ("default","expandable"):
+            points=[p for p in result["probes"] if p["run_id"]==run_id and p["allocator"]==allocator and p["measurement"]=="primary"]
+            if not points:continue
+            length=meta["validation_length"];fit=meta["reference_sweep"]["peak_fits"][allocator]
+            predicted=fit["intercept_bytes"]+fit["slope_bytes_per_token"]*length
+            observed=median(p["peak_allocated_bytes"] for p in points)
+            held_out.append({"run_id":run_id,"reference_run_id":meta["reference_sweep"]["run_id"],
+                             "allocator":allocator,"length":length,"repeats":len(points),
+                             "prospective_fit_peak_bytes":predicted,"observed_peak_median_bytes":observed,
+                             "prospective_fit_error_percent":100*(predicted-observed)/observed,
+                             "interpretation":"Frozen reference fit evaluated on a later held-out length; separate from original advance prediction"})
+    result["held_out_validation"]=held_out
     result["provenance"] = {"created_at_utc": datetime.now(timezone.utc).isoformat(), "sources": sources,
                             "analysis_sha256": sha(Path(__file__).read_bytes()), "run_ids": sorted(runs)}
     output.mkdir(parents=True)
     (output/"analysis.json").write_text(json.dumps(result, indent=2, allow_nan=False)+"\n")
-    for name, rows in (("probes",result["probes"]),("snapshots",result["snapshots"]),("boundaries",result["boundaries"]),("failures",result["failures"])):
+    for name, rows in (("probes",result["probes"]),("snapshots",result["snapshots"]),("boundaries",result["boundaries"]),("failures",result["failures"]),("diagnostic_comparisons",result["diagnostic_comparisons"]),("allocator_boundary_deltas",deltas),("hardware_brackets",brackets),("held_out_validation",held_out)):
         if rows:
             with (output/(name+".csv")).open("w", newline="") as handle:
                 writer = csv.DictWriter(handle, fieldnames=list(rows[0])); writer.writeheader(); writer.writerows(rows)
