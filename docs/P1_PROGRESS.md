@@ -6,7 +6,7 @@ used in the allocation.
 
 | Phase | Status | Evidence / remaining gate |
 | --- | --- | --- |
-| 1 — Analytical foundation | CPU deliverables and remote preparation complete; exports, runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot verified; notebook/ZIP export, runtime decision, B6 review and receipt still open |
+| 1 — Analytical foundation | CPU deliverables and remote preparation archived; runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot and raw ZIP verified; runtime decision, B6 review and receipt still open |
 | 2 — Primary probe/telemetry | Planned | No CUDA model measurements performed |
 | 3 — Coordinator/safety | Planned | Journal integration and receipt enforcement remain implementation work |
 | 4 — Empirical analysis | Planned | No measured dataset exists |
@@ -85,10 +85,14 @@ other GPU PIDs. The [run record and checksum-verified mirrored snapshot](../prer
 preserve provenance separately from the original user snapshot. Installed API
 inspection and both draft calculations completed; no model execution occurred.
 
-An evidence ZIP was created in Colab. Browser control failed during download,
-so the ZIP and executed notebook are **not yet retrieved or committed**. Complete
-that export after reconnecting browser control; preserve the failed checkout and
-all original command logs. The repository template itself remains unexecuted.
+The evidence ZIP was recovered through a visible notebook text-transfer cell
+after browser download failures. The committed original archive matches its
+printed checksum; all 32 manifest entries were verified. It preserves raw
+command logs, package inventory, API signatures, draft and conditional report.
+The executed `.ipynb` remains saved at the Colab link in the run record and has
+not been retrieved as a local file. Later export/transfer cells are visible there;
+the ZIP covers preparation through archive creation. The repository template
+itself remains unexecuted.
 
 1. **B1 / Person 2:** the user-reported inventory is received. Resolve the
    observed/proposed runtime mismatch, preserve full package/API metadata in the

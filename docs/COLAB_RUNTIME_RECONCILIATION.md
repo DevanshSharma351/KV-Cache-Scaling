@@ -107,11 +107,14 @@ The installed API inspection succeeded, but its decorated forward source hash
 refers to `generic.py`, not the full Qwen implementation. Backend execution and
 allocator intervention are still untested. No package versions were changed.
 
-The notebook created a checksummed evidence ZIP. Browser control failed during
-export (`Debugger unattached` after a download timeout); the ZIP and executed
-notebook have not yet been retrieved locally. They remain in the notebook/runtime
-and must be exported before session loss. No downloaded artifact or verified
-archive is claimed. Browser reconnection is needed to complete that export.
+The notebook created a checksummed evidence ZIP. Browser downloads failed;
+a fresh Chrome tab restored page control, and an explicit text-transfer cell
+successfully recovered the original ZIP. The [committed archive](../prereg/environment/colab-20261018T123226Z-ad6f415d/evidence.zip)
+matches its printed SHA-256 and all 32 manifest entries were verified locally.
+It preserves full logs and reports through archive creation, including the
+failed private clone. The later export/transfer cells remain in the saved
+Colab notebook. The executed `.ipynb` has not been retrieved as a local file;
+use the notebook link in the run record for that complete audit trail.
 
 Group changes by working capability: this environment validator, tested notebook,
 inventory, conditional report and documentation form one coherent commit. Record
