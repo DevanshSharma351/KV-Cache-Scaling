@@ -1,7 +1,8 @@
 # Derivation and draft uncertainty model
 
-Status: analytical starting point, **not formal preregistration**. No empirical
-coefficient is claimed. `kvcache predict` implements these formulas on CPU.
+Status: Phase 1 CPU analytical implementation, **not formal preregistration**.
+No empirical coefficient is claimed. `kvcache predict` implements these formulas
+on CPU; `kvcache prepare-prereg` generates a hashed, reviewable draft package.
 
 ## Config-derived weights and KV
 
@@ -24,6 +25,14 @@ Untied output embeddings add VH parameters. The parameter count is architecture
 specific: do not apply it unchanged to every model family. Rotary buffers are not
 parameters. Compare to deduplicated loaded parameter storage, then account for
 buffers/rounding separately.
+
+`Architecture.parameter_breakdown()` reports disjoint components: input
+embedding, untied output embedding (zero here), attention projection weights,
+Q/K/V biases, MLP weights, layer norms and final norm. Summing these gives the
+unique parameter count. `weight_bytes()` and `kv_bytes(L,B)` retain integer-byte
+arithmetic. Config validation rejects malformed dimensions, sliding-window
+execution and unsupported architecture/activation assumptions rather than
+returning a plausible but invalid number.
 
 For this snapshot: P=1543714304, W=3087428608 bytes; s=2 gives k(1)=28672
 bytes/token=28 KiB/token. Using Q instead of K gives 172032 bytes/token: a 6x
@@ -73,6 +82,21 @@ L_config_capped(V) = min(131072, L_uncapped(V))
 L_quality_domain(V) = min(32768, L_uncapped(V))
 ```
 
+For the task's arbitrary positive integer B, the analytical extension is:
+
+```text
+P_tensor_scenario(L,B) = W + B*L*[k(1)+a]
+P_budget_scenario(L,B) = W + B*L*[k(1)+a] + H0
+L_uncapped(V,B) = max(0, floor((V-W-H0) / (B*[k(1)+a])))
+```
+
+Weights stay fixed; KV and the proposed activation slope scale with B. H0 remains
+a scenario assumption, not an experimentally established batch-invariant
+overhead. The original fixed allowances were proposed for B=1; larger batches
+need their own workspace/logit allowance review before any empirical claim.
+The implemented primary experiment and generated preregistration drafts remain
+strictly B=1; `predict --batch-size B` explores theory only.
+
 When V<W+H0, return 0 and label the model infeasible under that scenario. If
 L_uncapped exceeds a ceiling, report censoring, not a measured threshold.
 For a candidate L, the safe coordinator needs an additional conservative
@@ -84,6 +108,27 @@ and capped and uncapped limits. The formal prediction must include both columns
 in its reviewed tables so analysis compares like metrics. Save outputs under a name that
 states DRAFT until A1 is frozen. Do not calibrate these coefficients against GPU
 forwards before preregistration.
+
+### Reproducible draft preparation
+
+From the repository root:
+
+```bash
+kvcache prepare-prereg --output prereg/drafts/prefill-v1-phase1
+```
+
+The default sensitivity budgets are 12, 13, 14 and 14.5 GiB. Override them with
+`--usable-vram-gib 12 13 14 14.5` if needed. Values are hypothetical usable
+budgets, not observations. Existing output directories are rejected to preserve
+prior drafts. Files are deterministic for the same inputs and generator code.
+
+The generator checks the config SHA-256, model revision/identity/provenance URL
+and the proposed primary/diagnostic contract. It records hashes of the protocol,
+config, provenance, this derivation and generator code. `prediction.json` contains
+exact bytes and domain/feasibility flags; `prediction.md` contains review tables;
+`manifest.json` checks local file integrity. None is a review sign-off or remote
+receipt. GPU inventory and independent review must precede a separately named
+formal prediction push and its subsequent receipt.
 
 ### Worked draft preview
 

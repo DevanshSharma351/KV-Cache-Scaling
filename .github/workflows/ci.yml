@@ -15,4 +15,5 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python -m compileall -q src scripts
       - run: kvcache predict --usable-vram-gib 14.5
+      - run: kvcache prepare-prereg --output "${{ runner.temp }}/phase1-prediction-draft"
       - run: kvcache plan --experiment configs/experiment.json
