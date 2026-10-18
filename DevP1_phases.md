@@ -66,12 +66,12 @@ is frozen only when the actual environment and both reviewers are available.
 
 ### Exit criteria
 
-- [ ] Config provenance matches the committed snapshot.
-- [ ] Unique parameters = 1543714304; FP16 weights = 3087428608 bytes.
-- [ ] KV slope = 28672 bytes/token at B=1; naive slope is 6x larger.
-- [ ] Required-length and VRAM-sensitivity predictions regenerate exactly.
-- [ ] Tests cover component accounting, B/L scaling and invalid inputs.
-- [ ] Draft/frozen status and omitted empirical evidence are unambiguous.
+- [x] Config provenance matches the committed snapshot.
+- [x] Unique parameters = 1543714304; FP16 weights = 3087428608 bytes.
+- [x] KV slope = 28672 bytes/token at B=1; naive slope is 6x larger.
+- [x] Required-length and VRAM-sensitivity predictions regenerate exactly.
+- [x] Tests cover component accounting, B/L scaling and invalid inputs.
+- [x] Draft/frozen status and omitted empirical evidence are unambiguous.
 - [ ] Actual GPU identity/usable-budget observation and independent review exist.
 - [ ] Formal prediction is pushed; its later receipt precedes model measurements.
 
@@ -235,5 +235,7 @@ or checkpoint weights, or combine unfinished phases into a misleading “done”
 Maintain `docs/P1_PROGRESS.md` with code checks, real evidence and outstanding
 handoffs. A scaffold or passing CPU test does not establish GPU correctness.
 
-**Initial status:** Phase 1 is starting; later phases are planned. The formal
-GPU inventory, independent review, prediction freeze and receipt remain open.
+**Current status (18 October 2026):** Phase 1's CPU implementation and draft
+package are complete and tested. Phase 1 as a whole remains open until the actual
+GPU inventory, independent review, formal prediction freeze and subsequent remote
+receipt exist. Later phases are planned. See [progress evidence](docs/P1_PROGRESS.md).

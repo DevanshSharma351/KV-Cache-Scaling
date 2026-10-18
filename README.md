@@ -3,9 +3,11 @@
 Predict the context memory limit before measuring it, then explain the error with
 reproducible GPU measurements.
 
-**Status: implementation plan and scaffold.** The CPU math and draft predictor
-work. GPU probes, sweeps, analysis and plots are assigned implementation tasks;
-no GPU measurements, OOM tests or formal preregistration have been performed.
+**Status: Phase 1 CPU foundation implemented.** Config integrity checks,
+component-level weight/KV math, batch-aware sensitivity predictions and the
+prediction-draft generator work. GPU probes, sweeps, empirical analysis and plots
+remain assigned implementation tasks. No GPU measurements, OOM tests or formal
+preregistration have been performed. See [Person 1 progress](docs/P1_PROGRESS.md).
 
 ## Start here
 
@@ -51,10 +53,18 @@ python -m pip install -e .
 python -m unittest discover -s tests -v
 kvcache predict --usable-vram-gib 14.5
 kvcache plan --experiment configs/experiment.json
+kvcache prepare-prereg --output /tmp/kvcache-review-draft
 ```
 
 `predict` outputs hypothetical sensitivity scenarios, explicitly marked DRAFT.
 Its VRAM input is **GiB after context/other-process deductions, before weights**.
+`prepare-prereg` verifies the pinned inputs and emits exact-byte prediction
+tables, component counts, VRAM sensitivity and integrity hashes into a **new**
+directory. It never overwrites existing output or authorizes GPU measurements.
+Review the [committed Phase 1 draft](prereg/drafts/prefill-v1-phase1/prediction.md).
+`predict --batch-size B` explores theoretical batch scaling; the primary draft
+and future measured protocol remain B=1.
+
 `plan` lists candidate points and never touches CUDA. Run these commands from the
 repo root, or supply explicit config paths. Reserved commands (`probe`, `sweep`,
 `analyze`, `generalize`) exit with an explanation until implemented.

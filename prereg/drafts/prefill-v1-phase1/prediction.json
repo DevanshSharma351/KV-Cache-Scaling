@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "status": "DRAFT_THEORY_ONLY_NOT_PREREGISTERED",
+  "gpu_measurements_authorized": false,
+  "missing_evidence": [
+    "actual_gpu_context_only_inventory",
+    "independent_review",
+    "formal_prediction_push",
+    "remote_receipt"
+  ],
+  "units": {
+    "memory": "bytes",
+    "length": "tokens",
+    "GiB": 1073741824,
+    "MiB": 1048576
+  },
+  "usable_vram_definition": "after context/other users, before weights; do not subtract context twice",
+  "uncertainty_type": "shape-inspired assumption sensitivity; not statistical confidence or proven bounds",
+  "input_sha256": {
+    "configs/experiment.json": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+    "configs/models/provenance.json": "f8528701215fef3b0a94a6647d30bde8c449827504fd97622769f3f9119a0a27",
+    "configs/models/qwen2.5-1.5b.json": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+    "docs/DERIVATION.md": "54508b29832dcd4be09cfd9f0902f28921d8cde6731c70d31e053f590968bc5f"
+  },
+  "generator_sha256": {
+    "preregistration.py": "003379da5d8618b3e7a6ce46c3a3d7d9984ed42b85755bc8a10e4cbadc4eaaf0",
+    "model_math.py": "9ab3fa6d5b03128c956f62df0b77ce60598ede2c6dade4fde7c4f9d78cc23c6b"
+  },
+  "protocol": {
+    "protocol_version": "prefill-v1",
+    "model_id": "Qwen/Qwen2.5-1.5B",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "config_path": "configs/models/qwen2.5-1.5b.json",
+    "dtype": "float16",
+    "batch_size": 1,
+    "mode": "single_prefill",
+    "attention_implementation": "sdpa",
+    "sdpa_backend": "EFFICIENT_ATTENTION",
+    "cache_type": "DynamicCache",
+    "logits_to_keep": 1,
+    "seed": 42,
+    "warmup": false,
+    "allocator_backend": "native",
+    "allocator_variants": [
+      "default",
+      "expandable"
+    ],
+    "required_lengths": [
+      512,
+      1024,
+      2048,
+      4096,
+      8192
+    ],
+    "candidate_lengths": [
+      16384,
+      32768,
+      65536,
+      98304,
+      131072
+    ],
+    "quality_context_limit": 32768,
+    "memory_stress_limit": 131072,
+    "repeats": 3,
+    "boundary_resolution_tokens": 256,
+    "safe_budget_fraction": 0.9,
+    "deliberate_oom_attempt_budget": 1,
+    "per_probe_timeout_seconds": 1200,
+    "diagnostics": {
+      "chunked_prefill": {
+        "chunk_size": 512,
+        "lengths": [
+          512,
+          2048,
+          8192,
+          32768
+        ]
+      },
+      "static_cache": {
+        "lengths": [
+          512,
+          2048,
+          8192
+        ],
+        "capacity_equals_length": true
+      },
+      "eager_attention": false,
+      "full_logits": false
+    }
+  },
+  "architecture": {
+    "layers": 28,
+    "hidden": 1536,
+    "intermediate": 8960,
+    "query_heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "vocab": 151936,
+    "tied_embeddings": true,
+    "max_positions": 131072
+  },
+  "parameter_breakdown": {
+    "input_embedding": 233373696,
+    "untied_output_embedding": 0,
+    "attention_projection_weights": 154140672,
+    "attention_qkv_biases": 57344,
+    "mlp_weights": 1156055040,
+    "layer_norm_weights": 86016,
+    "final_norm_weight": 1536
+  },
+  "unique_parameters": 1543714304,
+  "weight_bytes_fp16": 3087428608,
+  "duplicate_tied_embedding_error_bytes": 466747392,
+  "kv_bytes_per_token": 28672,
+  "naive_kv_bytes_per_token": 172032,
+  "gqa_overestimate_factor": 6,
+  "scenarios": [
+    {
+      "name": "optimistic",
+      "activation_bytes_per_token": 54272,
+      "fixed_headroom_bytes": 268435456
+    },
+    {
+      "name": "central",
+      "activation_bytes_per_token": 78336,
+      "fixed_headroom_bytes": 536870912
+    },
+    {
+      "name": "conservative",
+      "activation_bytes_per_token": 120832,
+      "fixed_headroom_bytes": 1073741824
+    }
+  ],
+  "memory_predictions": [
+    {
+      "length_tokens": 512,
+      "kv_bytes": 14680064,
+      "naive_kv_bytes": 88080384,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3129895936,
+          "budget_bytes": 3398331392
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3142216704,
+          "budget_bytes": 3679087616
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3163974656,
+          "budget_bytes": 4237716480
+        }
+      ]
+    },
+    {
+      "length_tokens": 1024,
+      "kv_bytes": 29360128,
+      "naive_kv_bytes": 176160768,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3172363264,
+          "budget_bytes": 3440798720
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3197004800,
+          "budget_bytes": 3733875712
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3240520704,
+          "budget_bytes": 4314262528
+        }
+      ]
+    },
+    {
+      "length_tokens": 2048,
+      "kv_bytes": 58720256,
+      "naive_kv_bytes": 352321536,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3257297920,
+          "budget_bytes": 3525733376
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3306580992,
+          "budget_bytes": 3843451904
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3393612800,
+          "budget_bytes": 4467354624
+        }
+      ]
+    },
+    {
+      "length_tokens": 4096,
+      "kv_bytes": 117440512,
+      "naive_kv_bytes": 704643072,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3427167232,
+          "budget_bytes": 3695602688
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3525733376,
+          "budget_bytes": 4062604288
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3699796992,
+          "budget_bytes": 4773538816
+        }
+      ]
+    },
+    {
+      "length_tokens": 8192,
+      "kv_bytes": 234881024,
+      "naive_kv_bytes": 1409286144,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3766905856,
+          "budget_bytes": 4035341312
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3964038144,
+          "budget_bytes": 4500909056
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 4312165376,
+          "budget_bytes": 5385907200
+        }
+      ]
+    }
+  ],
+  "vram_sensitivity": [
+    {
+      "usable_vram_bytes": 12884901888,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 114885,
+          "config_capped_limit_tokens": 114885,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 86541,
+          "config_capped_limit_tokens": 86541,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 58351,
+          "config_capped_limit_tokens": 58351,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 13958643712,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 127830,
+          "config_capped_limit_tokens": 127830,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 96575,
+          "config_capped_limit_tokens": 96575,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 65533,
+          "config_capped_limit_tokens": 65533,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 15032385536,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 140775,
+          "config_capped_limit_tokens": 131072,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": true,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 106609,
+          "config_capped_limit_tokens": 106609,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 72715,
+          "config_capped_limit_tokens": 72715,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 15569256448,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 147248,
+          "config_capped_limit_tokens": 131072,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": true,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 111626,
+          "config_capped_limit_tokens": 111626,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 76306,
+          "config_capped_limit_tokens": 76306,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    }
+  ]
+}

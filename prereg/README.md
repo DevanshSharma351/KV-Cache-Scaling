@@ -1,9 +1,17 @@
 # Preregistration gate
 
-No formal prediction has been frozen yet. This folder contains templates.
+No formal prediction has been frozen yet. This folder contains templates and
+the [Phase 1 CPU prediction draft](drafts/prefill-v1-phase1/prediction.md).
 Scaffold setup and CPU-only analytical calculations do not count as GPU
 measurements. No model-loading memory check, model forward, calibration or sweep
 may precede the formal prediction push.
+
+The working `kvcache prepare-prereg --output NEW_DIRECTORY` command checks pinned
+scientific inputs and generates a draft JSON/Markdown package plus local hashes.
+Its default VRAM budgets are hypothetical. It does not collect GPU data, freeze
+a prediction, record remote evidence or implement the future execution gate.
+Keep the committed draft unchanged; regenerate into a new directory to review
+changes. See `docs/P1_PROGRESS.md` for the remaining inventory/review handoffs.
 
 1. A1 completes `prediction.template.md` under a new dated name and includes the
    exact protocol/config/revision/hash, numerical predictions and uncertainties.

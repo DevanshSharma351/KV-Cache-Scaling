@@ -24,3 +24,12 @@ boundary search, deliberate OOM or empirical discrepancy analysis was tested.
 Those checks belong to the implementation milestones and formal preregistration.
 GitHub's CPU matrix is configured for Python 3.10–3.12; its remote result is
 separate from this local evidence.
+
+## Phase 1 update — 18 October 2026
+
+The Phase 1 CPU implementation now passes **27 tests**. Syntax compilation,
+batch-aware CLI prediction and deterministic draft-package generation passed.
+The new tests exercise component counts, input-integrity failures, numerical
+budget limits, draft status, repeat generation, hashes and overwrite protection.
+CI now includes the preparation CLI. These remain CPU checks; no GPU execution
+or formal preregistration has been completed. See [the current progress record](P1_PROGRESS.md).

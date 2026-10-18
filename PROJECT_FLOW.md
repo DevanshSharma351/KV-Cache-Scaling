@@ -36,6 +36,7 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 │   └── models/                  Exact config snapshot + revision/hash provenance
 ├── docs/
 │   ├── DERIVATION.md            Config math and draft uncertainty assumptions
+│   ├── P1_PROGRESS.md           Person 1 checks, draft evidence and open handoffs
 │   ├── REQUIREMENTS.md          Traceability, pass/fail criteria and deviations
 │   ├── MEASUREMENT_PROTOCOL.md  Worker lifecycle and counter semantics
 │   ├── DATA_CONTRACT.md         Journal events, fields and resume rules
@@ -45,6 +46,7 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 ├── src/kv_cache_scaling/
 │   ├── model_math.py            Working unique weights/KV/scenario calculations
 │   ├── cli.py                   Working predict/plan; explicit pending commands
+│   ├── preregistration.py       Working validated CPU prediction-draft generator
 │   ├── probe.py                 A2: isolated CUDA worker
 │   ├── telemetry.py             A2: counters, storage inspection and NVML
 │   ├── sweep.py                 A3: safety, child processes and boundary intervals

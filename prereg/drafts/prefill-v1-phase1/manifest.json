@@ -1,0 +1,8 @@
+{
+  "status": "DRAFT_THEORY_ONLY_NOT_PREREGISTERED",
+  "files_sha256": {
+    "prediction.json": "7c5e3e758a93f18ed2d1aa9ef92ef02fd79c3b7bea924776935767196ead1f24",
+    "prediction.md": "8b376ab82eb90d1b357cc896e7a5b63d1b0fde4087a4e4a154d89cc14d89c5e8"
+  },
+  "note": "Local integrity manifest; not a remote receipt or review sign-off."
+}
