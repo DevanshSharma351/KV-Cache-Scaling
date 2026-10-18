@@ -240,5 +240,8 @@ complete; directly observed Colab preparation and checksum-verified raw evidence
 are archived. Formal preregistration remains open pending runtime reconciliation,
 independent review, prediction push and subsequent receipt. Phase 2's primary
 engine and CPU validation are implemented; real GPU acceptance remains gated.
-Later phases remain planned. See [progress evidence](docs/P1_PROGRESS.md) and
-[the Phase 2 interface](docs/P2_PROBE_CONTRACT.md).
+Phase 3's coordinator, receipt gate, reference persistence adapter and CPU fault
+tests are implemented. B2 integration/mount review and real GPU acceptance remain
+open. Phases 4–5 remain planned. See [progress evidence](docs/P1_PROGRESS.md),
+[the Phase 2 interface](docs/P2_PROBE_CONTRACT.md) and
+[the Phase 3 contract](docs/P3_COORDINATOR_CONTRACT.md).

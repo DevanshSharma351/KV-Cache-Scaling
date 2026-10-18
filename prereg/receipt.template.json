@@ -9,5 +9,9 @@
   "config_sha256": null,
   "reviewers": [],
   "first_model_measurement_at_utc": null,
-  "note": "Fill from real pushed prediction evidence before model measurements. Preserve original prediction."
+  "note": "Fill from real pushed prediction evidence before model measurements. Preserve original prediction.",
+  "prediction_sha256": null,
+  "experiment_id": null,
+  "persistent_state_root": null,
+  "remote_branch": "main"
 }

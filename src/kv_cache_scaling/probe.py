@@ -47,6 +47,10 @@ class UnsupportedAllocator(RuntimeError):
     pass
 
 
+class EnvironmentDrift(RuntimeError):
+    pass
+
+
 class RuntimeMismatch(RuntimeError):
     pass
 
@@ -196,6 +200,8 @@ def classify_error(error, stage, torch=None):
         return "unsupported_backend"
     if isinstance(error, UnsupportedAllocator):
         return "unsupported_allocator"
+    if isinstance(error, EnvironmentDrift):
+        return "environment_drift"
     if isinstance(error, RuntimeMismatch):
         return "runtime_mismatch"
     if isinstance(error, TimeoutError):
@@ -213,7 +219,7 @@ def reject_unsupported_allocator(caught):
         raise UnsupportedAllocator("expandable_segments not supported; refusing a native fallback run")
 
 
-def _execute_probe(request, *, root=".", runtime=None):
+def _execute_probe(request, *, root=".", runtime=None, verified=None):
     """Internal engine for A3 integration; NOT a preregistration authorization API.
 
     Caller must persist start/token events and enforce receipts before invoking.
@@ -274,6 +280,12 @@ def _execute_probe(request, *, root=".", runtime=None):
                 raise ValueError("Other GPU processes are present")
             snap = lambda: snapshot(0, torch_module=torch, nvml_device=nvml)
             result["snapshots"]["context_only"] = snap()
+            if verified is not None:
+                baseline = result["snapshots"]["context_only"]
+                if (abs(baseline["cuda_free_bytes"] - verified.usable_bytes) > 64 * 1024**2
+                        or baseline["cuda_total_bytes"] != verified.total_bytes
+                        or result["gpu_identity"]["driver_version"] != verified.driver_version):
+                    raise EnvironmentDrift("Context budget/total/driver differs from frozen baseline")
             reject_unsupported_allocator(caught)
             result["stage"] = "load"
             cuda.reset_peak_memory_stats(0)
@@ -368,11 +380,16 @@ def _execute_probe(request, *, root=".", runtime=None):
     return result
 
 
-def run_probe(request):
-    """Public gate: A3 must wire real receipt validation; no caller boolean bypass."""
-    raise PreregistrationRequired(
-        "GPU entry point remains closed: runtime reconciliation, independent review, "
-        "formal prediction push and subsequent receipt/coordinator enforcement required")
+def run_probe(request, *, root=".", receipt_path=None, run_id=None):
+    """Recheck pushed receipt and durable launch before any GPU import."""
+    if receipt_path is None or run_id is None:
+        raise PreregistrationRequired("A pushed reviewed receipt and durable coordinator launch are required")
+    from .gate import claim_launch, verify_receipt, verify_launch
+    verified = verify_receipt(root, receipt_path)
+    verified.check_request(request)
+    verify_launch(verified, request, run_id)
+    claim_launch(verified, request, run_id)
+    return _execute_probe(request, root=root, verified=verified)
 
 
 def write_probe_result(path, result):

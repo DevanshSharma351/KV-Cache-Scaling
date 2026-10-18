@@ -3,13 +3,13 @@
 Predict the context memory limit before measuring it, then explain the error with
 reproducible GPU measurements.
 
-**Status: Phase 1 CPU foundation and Phase 2 primary-probe engine implemented.**
+**Status: Phase 1 foundation, Phase 2 probe and Phase 3 coordinator implemented and CPU-tested.**
 The analytical draft, auditable Colab preparation, GPU inventory and raw evidence
 are preserved. The probe/telemetry engine is tested with CPU doubles; real GPU
 acceptance is pending runtime reconciliation, independent review, formal
-preregistration and receipt/coordinator integration. No model-memory experiment
+preregistration and real persistence/GPU acceptance checks. No model-memory experiment
 or OOM test has run. See [Person 1 progress](docs/P1_PROGRESS.md) and the
-[Phase 2 contract](docs/P2_PROBE_CONTRACT.md).
+[Phase 2 contract](docs/P2_PROBE_CONTRACT.md) and [Phase 3 contract](docs/P3_COORDINATOR_CONTRACT.md).
 
 ## Start here
 
@@ -74,8 +74,10 @@ and future measured protocol remain B=1.
 `plan` lists candidate points and never touches CUDA. Run these commands from the
 repo root, or supply explicit config paths. `validate-probe` checks a primary
 request and its scientific hashes without importing GPU libraries. It never
-authorizes execution. `probe` stays closed pending receipt/coordinator integration;
-`sweep`, `analyze` and `generalize` remain scaffolded.
+authorizes execution. `check-receipt` verifies committed/pushed evidence without
+GPU work. `sweep` and the internal `probe` require a real completed receipt;
+workers also require durable launch evidence. The current template is incomplete
+and cannot authorize a run. `analyze` and `generalize` remain scaffolded.
 
 ## GPU setup target
 

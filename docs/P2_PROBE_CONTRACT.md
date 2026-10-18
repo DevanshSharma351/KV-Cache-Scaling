@@ -19,9 +19,11 @@ was performed during development.
 - `probe.write_probe_result`: exclusive JSON output, finite-value validation,
   flush/fsync and overwrite refusal. Torn/missing output must be handled by A3.
 
-The public `run_probe` and `kvcache probe` remain closed. There is no JSON field,
-boolean or CLI switch that grants measurement authorization. The private engine
-is an implementation detail, not a substitute for the receipt-checking launcher.
+At the Phase 2 boundary, public execution was deliberately closed. Phase 3 now
+wires the public entry to receipt verification, mirrored launch evidence and an
+exclusive worker claim. No JSON boolean grants authorization. See the
+[Phase 3 contract](P3_COORDINATOR_CONTRACT.md); the actual incomplete receipt still
+blocks execution. The private engine is not a substitute for that launcher.
 
 CPU request example:
 

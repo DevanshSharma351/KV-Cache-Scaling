@@ -23,8 +23,11 @@ changes. See `docs/P1_PROGRESS.md` for the remaining inventory/review handoffs.
 4. Add a later receipt based on `receipt.template.json`, linking the prediction
    commit and remote push/release/CI evidence. A commit cannot contain its own
    SHA; the subsequent receipt solves that without editing the prediction.
-5. The implemented coordinator will require a completed receipt and check hashes
-   before execution. That enforcement is an A3 task; it does not exist yet.
+5. The Phase 3 coordinator now verifies completed receipt evidence, frozen
+   scientific/code hashes, pushed Git state and durable launches before execution.
+   `kvcache check-receipt --receipt prereg/receipt.template.json` must reject the
+   current incomplete template. See [the formal contract and remaining acceptance](../docs/P3_COORDINATOR_CONTRACT.md).
+   The new gate does not turn any draft or template into real preregistration.
 
 Use a new protocol/prediction for scientific changes after freezing; retain the
 old files. Repository history and remote receipts improve auditability but do

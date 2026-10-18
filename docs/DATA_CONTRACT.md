@@ -73,3 +73,15 @@ fixed-L discrepancy tables and transfer predictions. Include input file hashes,
 analysis code SHA, units and schema version. Never edit raw records to fix a
 plot. Test fixtures belong under `tests/fixtures/`, labelled synthetic, and must
 not be loaded into a report as observations.
+
+## Phase 3 reference adapter
+
+A3 supplies `coordinator_store.py` while B2's `journal.py` remains a stub.
+[The coordinator contract](P3_COORDINATOR_CONTRACT.md) describes tested POSIX
+locking, mirrored fsynced events, orphan/torn recovery, immutable artifacts and
+the shared global ledger. A3 emits `coordinator-v1` run manifests and events with
+an `event` discriminator; `probe_result.metrics` carries the `primary-probe-v1`
+worker object. This is not a claim that the starter JSON Schema above already
+validates those wrappers. B2 must review/map the wrapper/schema and validate the
+actual persistent mount before bulk GPU use. CPU synthetic results are temporary
+test fixtures and are not scientific observations.

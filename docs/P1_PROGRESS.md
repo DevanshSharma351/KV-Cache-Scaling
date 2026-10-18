@@ -8,7 +8,7 @@ used in the allocation.
 | --- | --- | --- |
 | 1 — Analytical foundation | CPU deliverables and remote preparation archived; runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot and raw ZIP verified; runtime decision, B6 review and receipt still open |
 | 2 — Primary probe/telemetry | Engine and CPU checks implemented; GPU acceptance pending | Cold-prefill engine, telemetry, strict request validation and failure tests; no real model measurements |
-| 3 — Coordinator/safety | Planned | Journal integration and receipt enforcement remain implementation work |
+| 3 — Coordinator/safety | Coordinator and CPU fault checks implemented; real integration pending | Receipt/launch gates, fresh processes, mirrored reference adapter, bounded logs, safe bisection and shared attempt ledger; B2 mount/schema review and GPU acceptance remain open |
 | 4 — Empirical analysis | Planned | No measured dataset exists |
 | 5 — Transfer/integration | Planned | No transfer validation or final research report claimed |
 
@@ -121,8 +121,9 @@ is enforced; the observed newer Colab stack is not silently adopted.
 Implemented cold-forward ordering, separate load/forward peaks, UUID mapping,
 weight/tied-storage inspection, cache formula/shape validation, separate
 output/input/cache release snapshots, bounded sampled driver telemetry and
-structured partial failures. The public GPU entry point stays closed pending
-real receipt validation in Phase 3. CPU tests use explicit doubles; no fake
+structured partial failures. Public execution was kept closed at the Phase 2
+boundary; Phase 3 now wires the receipt/launch checks described below. CPU tests
+use explicit doubles; no fake
 measurement records are committed.
 
 Verification performed locally on macOS: **55 CPU tests passed**; syntax
@@ -141,6 +142,30 @@ Real L=512 smoke, efficient-kernel trace, allocator capability checks and
 persistent process-exit validation remain open after preregistration. Phase 2 is
 not claimed fully accepted from CPU checks. No Colab tabs, access prompts,
 package installs or model downloads were needed for this implementation.
+
+## Phase 3 implementation
+
+See [the coordinator contract](P3_COORDINATOR_CONTRACT.md). A3 now implements
+CPU/Git receipt validation, immutable prediction/input/code checks, live pushed
+head comparison, durable launch and duplicate-worker claims, per-point fresh
+processes, child-only allocator configuration, bounded streamed logs, timeouts,
+mirror-before-advance checkpoints, torn/orphan recovery, point-key resume,
+three repeats, original-model admission and 256-token safe-budget bisection.
+The global deliberate token is outside run/allocator folders and consumed before
+launch. Success/interruption still consumes it; accidental OOM stops escalation.
+
+The A3 reference adapter leaves Person 2's `journal.py` intact. B2 must review the
+schema mapping and actual persistent filesystem behavior. No distributed locking
+claim is made for independent Colab hosts or unverified cloud mounts. Actual
+package inventories remain in per-worker records; the manifest references them.
+
+Verification was local, with **77 CPU tests passed**, including synthetic Git
+receipts, subprocess isolation, timeout/log bounds, mirror failure, torn recovery,
+resume, global ledger reuse refusal and deliberate success/OOM distinctions.
+No tests contacted GitHub or used CUDA. No model measurements, formal review or
+preregistration evidence were invented. The current template remains incomplete;
+the CLI rejects it. Real persistence/session-loss tests and GPU smoke/kernel/
+allocator checks remain open after the real preregistration handoff.
 
 ## Commit boundaries
 

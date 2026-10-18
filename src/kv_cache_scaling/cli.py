@@ -1,4 +1,4 @@
-"""CPU entry points. GPU CLI stays closed pending receipt/coordinator integration."""
+"""CPU planning and receipt-gated isolated GPU coordinator entry points."""
 
 import argparse
 import json
@@ -30,7 +30,20 @@ def main(argv=None):
     validate = sub.add_parser("validate-probe", help="CPU-only primary request validation; never authorizes CUDA")
     validate.add_argument("--request", required=True)
     validate.add_argument("--root", default=".")
-    for name in ("probe", "sweep", "analyze", "generalize"):
+    receipt = sub.add_parser("check-receipt", help="CPU verification of formal pushed receipt; no GPU work")
+    receipt.add_argument("--receipt", required=True)
+    receipt.add_argument("--root", default=".")
+    sweep = sub.add_parser("sweep", help="Receipt-gated, isolated primary sweep")
+    sweep.add_argument("--receipt", required=True)
+    sweep.add_argument("--root", default=".")
+    sweep.add_argument("--local-root", required=True)
+    sweep.add_argument("--run-id")
+    sweep.add_argument("--deliberate-length", type=int)
+    probe = sub.add_parser("probe", help="Internal receipt/launch-gated worker; prefer sweep")
+    for name in ("request", "receipt", "output", "run-id"):
+        probe.add_argument("--" + name, required=True)
+    probe.add_argument("--root", default=".")
+    for name in ("analyze", "generalize"):
         sub.add_parser(name, help="Reserved implementation entry point")
     args = parser.parse_args(argv)
     if args.command == "predict":
@@ -96,9 +109,25 @@ def main(argv=None):
                   for repeat in range(1, exp["repeats"] + 1)]
         print(json.dumps({"protocol_version": exp["protocol_version"],
                           "executes_gpu_work": False, "points": points}, indent=2))
+    elif args.command in ("sweep", "check-receipt"):
+        from .gate import verify_receipt
+        try:
+            verified = verify_receipt(args.root, args.receipt)
+            if args.command == "check-receipt":
+                result = {"status": "RECEIPT_VERIFIED", "executes_gpu_work": False,
+                          "code_commit": verified.code_commit, "prediction_commit": verified.prediction_commit}
+            else:
+                from .sweep import run_sweep
+                result = run_sweep(verified, args.local_root, run_id=args.run_id,
+                                   deliberate_length=args.deliberate_length)
+        except (OSError, ValueError, KeyError, RuntimeError) as error:
+            parser.error(str(error))
+        print(json.dumps(result, indent=2, allow_nan=False))
+        return 0 if result["status"] in ("complete", "RECEIPT_VERIFIED") else 1
     elif args.command == "probe":
-        parser.error("Primary engine is CPU-tested; GPU execution requires runtime reconciliation, "
-                     "review, formal prediction and A3 receipt/coordinator integration.")
+        from .worker import main as worker_main
+        return worker_main(["--root", args.root, "--receipt", args.receipt, "--run-id", args.run_id,
+                            "--request", args.request, "--output", args.output])
     else:
         parser.error(f"'{args.command}' is scaffolded only. Follow TASK_ALLOCATION.md; "
                      "complete preregistration before any GPU probe.")
