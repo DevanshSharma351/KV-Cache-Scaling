@@ -298,6 +298,15 @@ class LifecycleTests(unittest.TestCase):
         self.assertEqual(result["status"], "error")
         self.assertNotIn("load", events)
 
+    def test_unavailable_process_attribution_aborts_before_model_load(self):
+        rt, events = fake_runtime()
+        def unavailable(handle): raise RuntimeError("NVML process list unavailable")
+        rt.nvml.nvmlDeviceGetComputeRunningProcesses = unavailable
+        result = self.run_engine(rt)
+        self.assertEqual(result["status"], "error")
+        self.assertFalse(result["processes"]["available"])
+        self.assertNotIn("load", events)
+
     def test_unsupported_allocator_warning_stops_before_load(self):
         import warnings
         rt, events = fake_runtime()

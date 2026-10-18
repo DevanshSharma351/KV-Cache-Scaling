@@ -369,7 +369,7 @@
   "context_inventory_path": "prereg/environment/colab-20261018T141242Z-a337a6c3/context-inventory.json",
   "context_inventory_sha256": "62a9aeffbf8831a0a1fa625db27ee1d5b7fc5c3d30f105a9627ce3cf65f59176",
   "execution_sha256": {
-    "src/kv_cache_scaling/probe.py": "25e4d156724b56ab2523517acc1c3275349a2ebaf6c90d165faba80a415b526f",
+    "src/kv_cache_scaling/probe.py": "64a2b6e2a029ff5f73f3e34c5ec39a540df0d38eb54a8f483d9743e37c6c279a",
     "src/kv_cache_scaling/telemetry.py": "6e3e5f0e91181373f5cc28e038d4bc45fce59c265aa2dcbe06e289b92b1f52bc",
     "src/kv_cache_scaling/worker.py": "4c2e3ef37e1cc2c261963d6a640c78d64da188a8b81fc6b89a63adb1269a9fd9",
     "src/kv_cache_scaling/gate.py": "2c66d2540f25ca5cafa4ea117af9f74e4f4d61b1b6b9b23a7aa8beaf9aecdbc6",

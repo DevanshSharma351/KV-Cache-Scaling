@@ -39,3 +39,12 @@ fits. No OOM attempt or full context sweep is part of this acceptance run.
 After actual approval, freeze a separately named formal prediction and push it;
 then commit and push its receipt. Only then may the gated coordinator load a
 model. Record actual reviewer approval time without inventing another review.
+
+## Delegated review
+
+The user subsequently instructed Codex to review on their behalf. Review is
+attributed to Codex acting for Person 1, rather than presented as an independent
+human sign-off. The review found one fail-closed gap: unavailable worker NVML
+process attribution was not rejected. It is corrected and regression tested
+before any formal prediction or model execution. Numerical predictions and the
+acceptance scope are unchanged. See REVIEW.md for the completed review.

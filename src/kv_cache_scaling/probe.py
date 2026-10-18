@@ -283,6 +283,8 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
             result["gpu_uuid"] = nvml.uuid
             result["gpu_identity"] = nvml.identity()
             result["processes"] = nvml.processes()
+            if not result["processes"]["available"]:
+                raise ValueError("GPU process attribution is unavailable")
             if result["processes"]["other_pids"]:
                 raise ValueError("Other GPU processes are present")
             snap = lambda: snapshot(0, torch_module=torch, nvml_device=nvml)
