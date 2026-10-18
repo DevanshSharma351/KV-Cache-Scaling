@@ -41,3 +41,17 @@ GPU-stack installation and contains no model forward or OOM command.
 PyTorch 2.6 documents expandable segments, but capability warnings and the actual
 wheel/platform must be checked. Standard FA2 is outside the T4 protocol. Do not
 silently change to eager or allow SDPA math fallback to make a notebook run.
+
+## Executed Phases 1–3 acceptance
+
+The [same live audit notebook](https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS)
+now includes cells 17–43 for the pinned runtime, real preregistration gate,
+83 tests, preserved preflight correction, seven T4 workers and external
+checkpoint restoration. See the [cell map and evidence](../artifacts/acceptance/2026-10-18-t4/README.md).
+Google Drive stayed disconnected; checkpoint archives were verified/fsynced
+locally before each next worker. The executed notebook remains saved at that
+link. Local notebook templates are not relabelled as executed outputs.
+Before replaying this Colab 2025.07 environment, remove its unused torchao 0.10.0
+with a visible pip uninstall cell and verify cold imports, as recorded in the
+preflight correction. Keep the scientific pins and never reuse a mismatched GPU
+identity or bypass the pushed receipt.

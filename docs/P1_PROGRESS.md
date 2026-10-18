@@ -6,11 +6,17 @@ used in the allocation.
 
 | Phase | Status | Evidence / remaining gate |
 | --- | --- | --- |
-| 1 — Analytical foundation | CPU deliverables and remote preparation archived; runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot and raw ZIP verified; runtime decision, B6 review and receipt still open |
-| 2 — Primary probe/telemetry | Engine and CPU checks implemented; GPU acceptance pending | Cold-prefill engine, telemetry, strict request validation and failure tests; no real model measurements |
-| 3 — Coordinator/safety | Coordinator and CPU fault checks implemented; real integration pending | Receipt/launch gates, fresh processes, mirrored reference adapter, bounded logs, safe bisection and shared attempt ledger; B2 mount/schema review and GPU acceptance remain open |
-| 4 — Empirical analysis | Planned | No measured dataset exists |
-| 5 — Transfer/integration | Planned | No transfer validation or final research report claimed |
+| 1 — Analytical foundation | Accepted under user-authorized delegated review | Pinned T4 runtime, formal prediction 7baff51 and later receipt 976158c pushed before model work |
+| 2 — Primary probe/telemetry | Bounded real-GPU acceptance passed | Six fresh L=512 primary probes; exact weights/cache/logits; separate SM75 efficient-SDPA CUDA trace |
+| 3 — Coordinator/safety | Bounded external-checkpoint acceptance passed | Seven unique worker PIDs, checkpoint before each next step, loss of both Colab copies restored, no duplicate point or OOM token use; continuous bulk B2 integration remains a handoff |
+| 4 — Empirical analysis | Planned | Full length sweep, slope, boundary and discrepancy results remain open |
+| 5 — Transfer/integration | Planned | Transfer validation and final research report remain open |
+
+Current evidence: [acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md),
+[verified raw capsule summary](../artifacts/acceptance/2026-10-18-t4/verification.json).
+83 CPU tests passed locally and in Colab. Later sections preserve the historical
+implementation sequence; their earlier open gates are superseded by the final
+acceptance record below where explicitly stated.
 
 ## Completed Phase 1 work
 
@@ -192,3 +198,38 @@ external checkpoint barriers. The [concrete review candidate](../prereg/review-2
 contains the actual-budget numerical prediction and full execution hashes.
 A policy change is not recorded as an actual review. Formal push/receipt and
 real GPU acceptance remain pending until approval of this candidate.
+
+## Final Phases 1–3 acceptance, 18 October 2026
+
+The user authorized one contributor review and delegated the technical review
+to Codex on behalf of Person 1. The frozen review records that attribution; it
+does not claim independent human or Person 2 approval. Review found and fixed
+unavailable NVML process attribution before any model execution. All 83 tests
+passed in the pinned Colab runtime before model work.
+
+Prediction 7baff51 and later receipt 976158c were pushed and verified before
+model attempts. An initial preflight failure was preserved: optional torchao
+initialized CUDA during class imports. Removing unused torchao restored cold
+imports without weakening the guard, changing scientific code or changing the
+frozen context budget. The failed run was stopped; a new reviewed run followed.
+
+Run 4353f74e-31b3-4574-93b0-7b0dc2a2beb2 passed seven real fresh workers:
+three default and three expandable L=512 primary repeats, then one separately
+profiled diagnostic. Unique parameter storage matched 3087428608 bytes; cache
+storage and retained-minus-released bytes were exactly 14680064 throughout.
+Logits were FP16 (1,1,151936). The trace includes the SM75 fmha_cutlass efficient
+CUDA kernel. All workers exited to idle; no OOM occurred or token was consumed.
+
+Drive remained disconnected. Verified/fsynced local capsules provided the
+external persistence barrier after every worker. Both Colab checkpoint trees
+were deleted and restored from the local copy; resume preserved the first point
+and advanced without duplication. Recorded Linux CPU process-exit, torn-journal
+and synthetic-token checks passed. A full cloud session restart was not tested.
+Unattended bulk execution and Person 2's continuous B2 persistence adapter remain
+separate integration work; this acceptance does not sign off Person 2's work.
+
+The [complete acceptance record](../artifacts/acceptance/2026-10-18-t4/README.md)
+links raw archives, transfer timestamps, exact numerical results, notebook cells
+and the CPU-only verification command. Phase 4 research criteria (five lengths,
+slope, context limit, allocator limit delta and discrepancy closure) are not
+claimed from L=512 acceptance. Phases 4–5 remain the next work.

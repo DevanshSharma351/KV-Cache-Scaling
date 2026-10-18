@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "scope": "Person 1 Phases 1\u20133 bounded acceptance; not bulk research results",
+  "archive_sha256": "8bbd8f5396e21716c02281df22780e5ad8d699f90ba8843b9e54af8b227cd187",
+  "verified_members": 185,
+  "run_id": "4353f74e-31b3-4574-93b0-7b0dc2a2beb2",
+  "gpu_uuid": "GPU-b99639a7-6b12-57ec-a587-b97fee738d2c",
+  "prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+  "code_commit": "afd86b137fd4e6220b6b23b6bdb4674f64275797",
+  "unique_worker_pids": 7,
+  "deliberate_attempt_used": false,
+  "cloud_session_restart_tested": false,
+  "external_restore": {
+    "status": "PASS",
+    "restored_files": 31,
+    "source": "Verified checkpoint persisted on user local filesystem",
+    "archive_sha256": "e866567b5f874edeb3bad8e9f217a2235e3aee7f1eea2b819fb5753f1c90df78",
+    "both_colab_checkpoint_trees_removed": true,
+    "full_cloud_session_restart": false
+  },
+  "kernel_evidence": [
+    "aten::_efficient_attention_forward",
+    "aten::_scaled_dot_product_efficient_attention",
+    "fmha_cutlassF_f16_aligned_32x128_rf_sm75(PyTorchMemEffAttention::AttentionKernel<cutlass::half_t, cutlass::arch::Sm75, true, 32, 128, 128, true, true>::Params)"
+  ],
+  "probes": [
+    {
+      "probe_id": "cf6acc32-9d79-4b26-a7a6-54cccfe50767",
+      "pid": 10381,
+      "measurement": "kernel_trace",
+      "allocator": "default",
+      "repeat": 1,
+      "peak_allocated_bytes": 3146681856,
+      "peak_reserved_bytes": 3330277376,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "9d6ad1e4-437c-4492-a077-2ffcaaea4d52",
+      "pid": 8143,
+      "measurement": "primary",
+      "allocator": "default",
+      "repeat": 1,
+      "peak_allocated_bytes": 3146681856,
+      "peak_reserved_bytes": 3330277376,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "490f8380-3e00-47ba-87ec-7ec15d04a563",
+      "pid": 9006,
+      "measurement": "primary",
+      "allocator": "default",
+      "repeat": 2,
+      "peak_allocated_bytes": 3146681856,
+      "peak_reserved_bytes": 3330277376,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "0e8899a1-2512-483a-a7c5-ad6fa8de174a",
+      "pid": 9248,
+      "measurement": "primary",
+      "allocator": "default",
+      "repeat": 3,
+      "peak_allocated_bytes": 3146681856,
+      "peak_reserved_bytes": 3330277376,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "8fd4daa6-01a5-4d13-8586-3e07dfb2c2e3",
+      "pid": 9476,
+      "measurement": "primary",
+      "allocator": "expandable",
+      "repeat": 1,
+      "peak_allocated_bytes": 3144715776,
+      "peak_reserved_bytes": 3164602368,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "b2facf53-dee9-4ed2-900a-f11646aaaca0",
+      "pid": 9692,
+      "measurement": "primary",
+      "allocator": "expandable",
+      "repeat": 2,
+      "peak_allocated_bytes": 3144715776,
+      "peak_reserved_bytes": 3164602368,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    },
+    {
+      "probe_id": "7ca51624-7622-44dd-9a7b-85c1e8bfaea1",
+      "pid": 10013,
+      "measurement": "primary",
+      "allocator": "expandable",
+      "repeat": 3,
+      "peak_allocated_bytes": 3144715776,
+      "peak_reserved_bytes": 3164602368,
+      "kv_bytes": 14680064,
+      "retained_minus_released_bytes": 14680064
+    }
+  ]
+}

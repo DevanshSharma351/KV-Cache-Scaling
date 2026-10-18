@@ -3,13 +3,15 @@
 Predict the context memory limit before measuring it, then explain the error with
 reproducible GPU measurements.
 
-**Status: Phase 1 foundation, Phase 2 probe and Phase 3 coordinator implemented and CPU-tested.**
-The analytical draft, auditable Colab preparation, GPU inventory and raw evidence
-are preserved. The probe/telemetry engine is tested with CPU doubles; real GPU
-acceptance is pending runtime reconciliation, independent review, formal
-preregistration and real persistence/GPU acceptance checks. No model-memory experiment
-or OOM test has run. See [Person 1 progress](docs/P1_PROGRESS.md) and the
-[Phase 2 contract](docs/P2_PROBE_CONTRACT.md) and [Phase 3 contract](docs/P3_COORDINATOR_CONTRACT.md).
+**Status: Person 1 Phases 1–3 passed bounded real-GPU acceptance.**
+The reviewed prediction and subsequent receipt were pushed before model work.
+83 CPU tests and seven fresh T4 workers passed: six L=512 primary probes across
+both allocators, plus a separate efficient-SDPA kernel trace. Cache storage
+matched theory exactly. External checkpoint restoration passed; no OOM attempt
+was used. Read the [acceptance evidence](artifacts/acceptance/2026-10-18-t4/README.md)
+and [Person 1 progress](docs/P1_PROGRESS.md). Full context sweeps, discrepancy
+analysis and transfer results remain Phase 4–5 work. Bulk execution needs
+continuous durable persistence; Colab staging alone is ephemeral.
 
 ## Start here
 

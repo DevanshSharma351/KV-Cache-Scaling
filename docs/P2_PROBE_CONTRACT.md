@@ -137,3 +137,17 @@ persistence and failure classification. Fake counters are test doubles and are
 never published as experimental data. Before declaring Phase 2 fully accepted,
 run the gated L=512 smoke, efficient-operator trace, both allocator support checks,
 cache formula check and clean process/persistent-write checks on real hardware.
+
+## Real acceptance outcome, 18 October 2026
+
+The earlier pending-GPU status is superseded by the
+[verified bounded acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md).
+All 83 CPU tests and seven real T4 workers passed, including both allocators,
+exact cache/weight/logits checks, an actual SM75 efficient-attention kernel trace
+and external checkpoint restoration. No OOM attempt was used. The user authorized
+a delegated one-contributor technical review and kept Drive disconnected.
+The operator-controlled checkpoint path is validated for the tested loss case;
+full cloud session restart, unattended bulk persistence and full scientific
+sweep results are not claimed. Person 2's continuous B2/B4 integration remains
+a handoff. Frozen scientific and execution files were not edited after model
+work; original predictions and raw failures remain intact.

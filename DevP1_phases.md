@@ -72,8 +72,8 @@ is frozen only when the actual environment and both reviewers are available.
 - [x] Required-length and VRAM-sensitivity predictions regenerate exactly.
 - [x] Tests cover component accounting, B/L scaling and invalid inputs.
 - [x] Draft/frozen status and omitted empirical evidence are unambiguous.
-- [ ] Actual GPU identity/usable-budget observation and independent review exist.
-- [ ] Formal prediction is pushed; its later receipt precedes model measurements.
+- [x] Actual GPU identity/usable budget and user-authorized delegated review exist.
+- [x] Formal prediction is pushed; its later receipt precedes model measurements.
 
 The CPU deliverables can be completed locally. Missing B1/B6 evidence leaves
 formal preregistration open; it does not prevent CPU implementation of later
@@ -235,13 +235,18 @@ or checkpoint weights, or combine unfinished phases into a misleading “done”
 Maintain `docs/P1_PROGRESS.md` with code checks, real evidence and outstanding
 handoffs. A scaffold or passing CPU test does not establish GPU correctness.
 
-**Current status (18 October 2026):** Phase 1 CPU implementation and draft are
-complete; directly observed Colab preparation and checksum-verified raw evidence
-are archived. Formal preregistration remains open pending runtime reconciliation,
-independent review, prediction push and subsequent receipt. Phase 2's primary
-engine and CPU validation are implemented; real GPU acceptance remains gated.
-Phase 3's coordinator, receipt gate, reference persistence adapter and CPU fault
-tests are implemented. B2 integration/mount review and real GPU acceptance remain
-open. Phases 4–5 remain planned. See [progress evidence](docs/P1_PROGRESS.md),
-[the Phase 2 interface](docs/P2_PROBE_CONTRACT.md) and
-[the Phase 3 contract](docs/P3_COORDINATOR_CONTRACT.md).
+**Current status (18 October 2026):** Person 1 Phases 1–3 passed the
+[bounded real-GPU acceptance](artifacts/acceptance/2026-10-18-t4/README.md):
+83 CPU tests, six primary L=512 workers across both allocators, one separate
+efficient-kernel trace, and verified external checkpoint restoration. Formal
+prediction 7baff51 and later receipt 976158c preceded model work. No OOM attempt
+was used. Phases 4–5 remain planned.
+
+**User-authorized amendments:** one contributor review is sufficient; Codex
+performed the technical review on behalf of Person 1 at the user's explicit
+request. This supersedes the earlier independent/two-contributor-review count
+for this run without inventing another review. Drive remains disconnected;
+bounded acceptance pauses after each worker for a verified/fsynced local
+checkpoint. A3's reference adapter and this recovery path were tested. Person 2's
+continuous B2 integration remains a bulk-run handoff. A full cloud session
+restart and unattended cloud persistence are not claimed.

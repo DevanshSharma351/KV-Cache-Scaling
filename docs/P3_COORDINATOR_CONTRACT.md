@@ -173,3 +173,17 @@ The user authorized one contributor review and kept Drive disconnected. See
 [P3_ACCEPTANCE.md](P3_ACCEPTANCE.md) for bounded L=512 acceptance, separate
 kernel profiling, and the required external checkpoint barrier. This supersedes
 the two-review count, without inventing any review or cloud persistence.
+
+## Real acceptance outcome, 18 October 2026
+
+The earlier pending-GPU status is superseded by the
+[verified bounded acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md).
+All 83 CPU tests and seven real T4 workers passed, including both allocators,
+exact cache/weight/logits checks, an actual SM75 efficient-attention kernel trace
+and external checkpoint restoration. No OOM attempt was used. The user authorized
+a delegated one-contributor technical review and kept Drive disconnected.
+The operator-controlled checkpoint path is validated for the tested loss case;
+full cloud session restart, unattended bulk persistence and full scientific
+sweep results are not claimed. Person 2's continuous B2/B4 integration remains
+a handoff. Frozen scientific and execution files were not edited after model
+work; original predictions and raw failures remain intact.

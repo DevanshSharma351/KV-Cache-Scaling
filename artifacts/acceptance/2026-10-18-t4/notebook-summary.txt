@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "scope": "Person 1 Phases 1\u20133 bounded acceptance",
+  "cpu_tests": 83,
+  "real_T4_workers": 7,
+  "primary_points": 6,
+  "kernel_diagnostics": 1,
+  "kv_bytes_at_L512": 14680064,
+  "kv_formula_error_percent": 0,
+  "default_repeats": 3,
+  "expandable_repeats": 3,
+  "external_checkpoint_restore": "PASS",
+  "deliberate_OOM_attempts": 0,
+  "full_context_sweep": "Phase 4 / Person 2 run handoff",
+  "full_cloud_session_restart_tested": false,
+  "Drive_mounted": false,
+  "prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+  "receipt_commit": "976158c82ccb10f12817af2ee16b76ade13f0cf3"
+}
+COMMAND: ['nvidia-smi']
+RETURN CODE: 0
+Sun Oct 18 14:42:16 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |
+| N/A   40C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
