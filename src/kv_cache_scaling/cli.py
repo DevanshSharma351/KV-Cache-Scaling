@@ -43,6 +43,12 @@ def main(argv=None):
                        help="Only paired L=512 repeats and a separate kernel trace; no boundary search")
     sweep.add_argument("--diagnostics-only", action="store_true",
                        help="Separate registered chunked/static grids, workspace control and kernel trace")
+    sweep.add_argument("--confirmation-only",action="store_true",
+                       help="One final deliberate attempt using a completed compatible safe sweep")
+    sweep.add_argument("--reference-run-id",help="Finished paired safe sweep for confirmation-only")
+    sweep.add_argument("--validation-only",action="store_true",help="Paired held-out primary point with a fitted admission gate")
+    sweep.add_argument("--validation-length",type=int)
+    sweep.add_argument("--external-attempt-sha256",help="Hash of the consumed durable external dispatch intent")
     sweep.add_argument("--checkpoint-each-probe", action="store_true",
                        help="Return after each new probe; persist the full checkpoint externally before resuming")
     probe = sub.add_parser("probe", help="Internal receipt/launch-gated worker; prefer sweep")
@@ -131,7 +137,10 @@ def main(argv=None):
                 from .sweep import run_sweep
                 result = run_sweep(verified, args.local_root, run_id=args.run_id,
                                    deliberate_length=args.deliberate_length, acceptance_only=args.acceptance_only,
-                                   checkpoint_each_probe=args.checkpoint_each_probe, diagnostics_only=args.diagnostics_only)
+                                   checkpoint_each_probe=args.checkpoint_each_probe, diagnostics_only=args.diagnostics_only,
+                                   confirmation_only=args.confirmation_only,reference_run_id=args.reference_run_id,
+                                   validation_only=args.validation_only,validation_length=args.validation_length,
+                                   external_attempt_sha256=args.external_attempt_sha256)
         except (OSError, ValueError, KeyError, RuntimeError) as error:
             parser.error(str(error))
         print(json.dumps(result, indent=2, allow_nan=False))

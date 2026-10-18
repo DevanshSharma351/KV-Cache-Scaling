@@ -263,6 +263,8 @@ class SweepTests(unittest.TestCase):
                                   "driver_version": self.verified.driver_version, "total_bytes": 100, "used_bytes": 0}})()
     def tearDown(self): self.directory.cleanup()
     def run_fake(self, runner, **kwargs):
+        if kwargs.get('confirmation_only') and 'external_attempt_sha256' not in kwargs:
+            kwargs['external_attempt_sha256']='0'*64  # Explicitly synthetic dispatch receipt.
         with patch("kv_cache_scaling.sweep.check_parent_runtime", return_value={"synthetic":True}):
             return run_sweep(self.verified, Path(self.directory.name)/"local", _runner=runner, _observer=self.observer, **kwargs)
 
@@ -324,13 +326,78 @@ class SweepTests(unittest.TestCase):
         runner=SyntheticRunner()
         result=self.run_fake(runner,diagnostics_only=True)
         self.assertEqual(result['status'],'complete',result)
-        self.assertEqual(len(runner.calls),25)
+        self.assertEqual(len(runner.calls),28)
         self.assertEqual(sum(r.measurement=='chunked_dynamic' for r in runner.calls),12)
         self.assertEqual(sum(r.measurement=='static_cache' for r in runner.calls),9)
-        self.assertEqual(sum(r.measurement=='workspace_control' for r in runner.calls),3)
-        self.assertTrue(all(r.attempt_kind=='safe' and r.allocator=='default' for r in runner.calls))
+        self.assertEqual(sum(r.measurement=='workspace_control' for r in runner.calls),6)
+        self.assertTrue(all(r.attempt_kind=='safe' for r in runner.calls))
+        self.assertTrue(all(r.allocator=='default' for r in runner.calls if r.measurement!='workspace_control'))
         self.assertFalse(AttemptLedger(self.verified.state_root,self.verified.experiment_id).path.exists())
         with self.assertRaises(ValueError):self.run_fake(runner,diagnostics_only=True,acceptance_only=True)
+
+    def test_confirmation_only_uses_finished_sweep_and_one_global_attempt(self):
+        safe=SyntheticRunner();reference=self.run_fake(safe)
+        runner=SyntheticRunner()
+        result=self.run_fake(runner,confirmation_only=True,reference_run_id=reference['run_id'],
+                             deliberate_length=131072,checkpoint_each_probe=True)
+        self.assertEqual(result['status'],'complete',result)
+        self.assertEqual(len(runner.calls),1)
+        self.assertEqual(runner.calls[0].attempt_kind,'deliberate')
+        self.assertEqual(result['boundaries']['default']['deliberate_outcome'],'success')
+        again=self.run_fake(runner,confirmation_only=True,reference_run_id=reference['run_id'],deliberate_length=131072)
+        self.assertEqual(again['status'],'needs_review');self.assertEqual(len(runner.calls),1)
+
+    def test_confirmation_rejects_incomplete_or_changed_reference(self):
+        from kv_cache_scaling.sweep import confirmation_reference
+        runner=SyntheticRunner();rid=str(uuid4())
+        self.run_fake(runner,run_id=rid,checkpoint_each_probe=True)
+        with self.assertRaises(ValueError):confirmation_reference(self.verified,rid)
+        reference=self.run_fake(runner)
+        directory=self.verified.state_root/'runs'/reference['run_id']
+        manifest=json.loads((directory/'manifest.json').read_text());manifest['gpu_uuid']='changed'
+        (directory/'manifest.json').write_text(json.dumps(manifest))
+        with self.assertRaises(ValueError):confirmation_reference(self.verified,rid)
+        with self.assertRaises(ValueError):self.run_fake(runner,confirmation_only=True,deliberate_length=131072)
+
+    def test_confirmation_oom_finishes_before_external_export_and_blocks_retry(self):
+        reference=self.run_fake(SyntheticRunner())
+        runner=SyntheticRunner('cuda_oom')
+        def deliberate(command,**kwargs):
+            outcome=runner(command,**kwargs)
+            path=Path(command[command.index('--output')+1]);raw=json.loads(path.read_text())
+            raw['oom_classification']='deliberate_request';path.write_text(json.dumps(raw))
+            return outcome
+        result=self.run_fake(deliberate,confirmation_only=True,reference_run_id=reference['run_id'],
+                             deliberate_length=131072,checkpoint_each_probe=True)
+        self.assertEqual(result['status'],'complete',result)
+        self.assertEqual(result['boundaries']['default']['observed_oom_upper_tokens'],131072)
+        events=[json.loads(line) for line in (self.verified.state_root/'runs'/result['run_id']/'events.jsonl').read_text().splitlines()]
+        self.assertEqual(events[-1]['event'],'run_finished')
+        retried=self.run_fake(deliberate,confirmation_only=True,reference_run_id=reference['run_id'],deliberate_length=131072)
+        self.assertEqual(retried['status'],'needs_review');self.assertEqual(len(runner.calls),1)
+
+    def test_held_out_validation_is_admitted_from_reference_then_can_anchor_confirmation(self):
+        from kv_cache_scaling.sweep import confirmation_reference
+        runner=SyntheticRunner()
+        def shaped(command,**kwargs):
+            outcome=runner(command,**kwargs)
+            path=Path(command[command.index('--output')+1]);raw=json.loads(path.read_text())
+            raw['peak_allocated_bytes']=3_000_000_000+90_000*raw['length']
+            raw['peak_reserved_bytes']=raw['peak_allocated_bytes']+2*1024**2
+            path.write_text(json.dumps(raw));return outcome
+        reference=self.run_fake(shaped)
+        count=len(runner.calls)
+        rejected=self.run_fake(shaped,validation_only=True,validation_length=131072,reference_run_id=reference['run_id'])
+        self.assertEqual(rejected['status'],'stopped');self.assertEqual(len(runner.calls),count)
+        validation=self.run_fake(shaped,validation_only=True,validation_length=114688,reference_run_id=reference['run_id'])
+        self.assertEqual(validation['status'],'complete',validation)
+        self.assertEqual(len(runner.calls)-count,6)
+        self.assertFalse(AttemptLedger(self.verified.state_root,self.verified.experiment_id).path.exists())
+        checked=confirmation_reference(self.verified,validation['run_id'])
+        self.assertEqual(checked['boundaries']['default']['largest_success_tokens'],114688)
+        confirmed=self.run_fake(shaped,confirmation_only=True,deliberate_length=131072,reference_run_id=validation['run_id'])
+        self.assertEqual(confirmed['status'],'complete',confirmed)
+        self.assertEqual(len(runner.calls)-count,7)
 
     def test_accidental_oom_stops_escalation_and_blocks_global_attempt(self):
         runner = SyntheticRunner("cuda_oom")

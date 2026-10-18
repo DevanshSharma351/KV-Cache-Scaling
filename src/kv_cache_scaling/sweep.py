@@ -2,10 +2,12 @@
 
 from dataclasses import asdict
 import json
+import re
 from importlib.metadata import version
 from pathlib import Path
 import sys
-from uuid import uuid4
+from statistics import median
+from uuid import UUID, uuid4
 
 from .coordinator_store import AttemptLedger, RunStore, file_lock, now
 from .gate import digest, json_bytes, verify_receipt
@@ -149,8 +151,100 @@ def collect_process(store, request, command, env, root, timeout, runner=launch_w
     return {"status": result["status"], "metrics": result, "process": process}
 
 
+def confirmation_reference(verified, reference_run_id, _depth=0):
+    """Read a completed compatible safe sweep; never manufacture launch events."""
+    reference_run_id=str(UUID(reference_run_id))
+    directory=verified.state_root/"runs"/reference_run_id
+    manifest=json.loads((directory/"manifest.json").read_text())
+    scope=manifest.get("execution_scope")
+    if scope not in ("primary_sweep","calibrated_validation") or _depth>1:
+        raise ValueError("Unsupported or recursive confirmation reference")
+    expected={"gpu_uuid":verified.gpu_uuid,
+              "environment_fingerprint":verified.environment_fingerprint,
+              "usable_bytes":verified.usable_bytes,"protocol_sha256":verified.protocol_sha256,
+              "config_sha256":verified.config_sha256,"experiment_id":verified.experiment_id,
+              "deliberate_length":None}
+    if any(manifest.get(k)!=v for k,v in expected.items()):
+        raise ValueError("Confirmation reference differs from the verified scientific environment")
+    events=[json.loads(line) for line in (directory/"events.jsonl").read_text().splitlines()]
+    if (not events or events[-1]["event"]!="run_finished"
+            or any(e["event"] in ("run_stopped","run_deviation","probe_interrupted") for e in events)):
+        raise ValueError("Confirmation requires a finished, uninterrupted safe sweep")
+    if [e["sequence"] for e in events]!=list(range(1,len(events)+1)):
+        raise ValueError("Confirmation reference journal is corrupt")
+    results=[e for e in events if e["event"]=="probe_result"]
+    idle={e["probe_id"] for e in events if e["event"]=="idle_verified"}
+    required={(a,n,i) for a in ("default","expandable") for n in (512,1024,2048,4096,8192) for i in (1,2,3)}
+    parent=None
+    if scope=="calibrated_validation":
+        parent=confirmation_reference(verified,manifest["reference_sweep"]["run_id"],_depth+1)
+        if parent!=manifest["reference_sweep"]:raise ValueError("Validation parent reference changed")
+        required={(a,manifest["validation_length"],i) for a in ("default","expandable") for i in (1,2,3)}
+    seen=set()
+    peak_points={a:{} for a in ("default","expandable")}
+    architecture=Architecture.from_config(json.loads((verified.root/"configs/models/qwen2.5-1.5b.json").read_text()))
+    starts={e["probe_id"]:e for e in events if e["event"]=="probe_started"}
+    for e in results:
+        if e["status"]!="success" or e["probe_id"] not in idle:
+            raise ValueError("Reference contains a failed or unreconciled worker")
+        ref=e["process"]["raw_result"]
+        path=Path(ref["path"])
+        if path.is_absolute() or ".." in path.parts:raise ValueError("Unsafe reference result")
+        data=(directory/path).read_bytes()
+        if digest(data)!=ref["sha256"] or len(data)!=ref["bytes"]:raise ValueError("Reference raw result changed")
+        r=json.loads(data)
+        if (r.get("status")!="success" or r.get("probe_id")!=e["probe_id"]
+                or e["probe_id"] not in starts or starts[e["probe_id"]]["request"]!=e["request"]):
+            raise ValueError("Reference worker identity/start/status mismatch")
+        validate_result(r,ProbeRequest.from_dict(e["request"]),architecture,verified.root)
+        if r["code_sha256"]!={name:digest((verified.root/"src/kv_cache_scaling"/name).read_bytes()) for name in ("probe.py","telemetry.py")}:
+            raise ValueError("Primary worker semantics changed since reference sweep")
+        q=e["request"]
+        if q["measurement"]=="primary":
+            seen.add((q["allocator"],q["length"],q["repeat"]))
+            peak_points[q["allocator"]].setdefault(q["length"],[]).append(r["peak_allocated_bytes"])
+    if not required.issubset(seen):raise ValueError("Reference required paired grid is incomplete")
+    boundaries=events[-1]["boundaries"]
+    if any(not boundaries.get(a,{}).get("largest_success_tokens") for a in ("default","expandable")):
+        raise ValueError("Reference lacks paired safe boundaries")
+    fits={}
+    for allocator,points in peak_points.items():
+        data=[(n,median(v)) for n,v in sorted(points.items())]
+        if len(data)<5:
+            if parent:fits[allocator]=parent["peak_fits"][allocator]
+            continue
+        xm=sum(x for x,y in data)/len(data);ym=sum(y for x,y in data)/len(data)
+        slope=sum((x-xm)*(y-ym) for x,y in data)/sum((x-xm)**2 for x,y in data)
+        intercept=ym-slope*xm
+        residual=sum((y-intercept-slope*x)**2 for x,y in data);total=sum((y-ym)**2 for x,y in data)
+        fits[allocator]={"slope_bytes_per_token":slope,"intercept_bytes":intercept,"length_count":len(data),
+                         "r_squared":1-residual/total if total else 1.0,
+                         "max_relative_fit_error":max(abs(y-intercept-slope*x)/y for x,y in data)}
+    return {"run_id":reference_run_id,"manifest_sha256":digest((directory/"manifest.json").read_bytes()),
+            "journal_sha256":digest((directory/"events.jsonl").read_bytes()),"boundaries":boundaries,"peak_fits":fits}
+
+
+def calibrated_admission(fit, length, usable_bytes):
+    """Prospective held-out check; 5% slope allowance plus 5% VRAM reserve.
+
+    These are explicit engineering assumptions, not confidence bounds. They do
+    not change the original advance prediction or legacy conservative sweep.
+    """
+    slope,intercept=fit["slope_bytes_per_token"],fit["intercept_bytes"]
+    if (slope<=0 or intercept<0 or fit["length_count"]<5
+            or fit.get("r_squared",0)<.995 or fit.get("max_relative_fit_error",1)>.02):
+        raise ValueError("No physical multi-length peak fit for calibrated admission")
+    upper=intercept+1.05*slope*length
+    return {"estimated_upper_peak_bytes":upper,"admission_budget_bytes":usable_bytes*.95,
+            "admitted":upper<=usable_bytes*.95,"slope_allowance_fraction":.05,"vram_reserve_fraction":.05,
+            "interpretation":"Post-observation scheduling assumptions; not preregistered prediction or proven bounds"}
+
+
 def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acceptance_only=False,
               checkpoint_each_probe=False, diagnostics_only=False,
+              confirmation_only=False, reference_run_id=None,
+              validation_only=False, validation_length=None,
+              external_attempt_sha256=None,
               _runner=launch_worker, _observer=None):
     """verified must come from verify_receipt in production; injected doubles are tests only."""
     run_id = run_id or str(uuid4())
@@ -158,6 +252,18 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
         raise ValueError("Acceptance mode cannot consume a deliberate attempt")
     if diagnostics_only and (acceptance_only or deliberate_length is not None):
         raise ValueError("Diagnostic scope cannot mix acceptance or deliberate intent")
+    if confirmation_only and (acceptance_only or diagnostics_only or validation_only or deliberate_length is None or reference_run_id is None):
+        raise ValueError("Confirmation-only requires a deliberate length and finished reference sweep")
+    if confirmation_only and (not isinstance(external_attempt_sha256,str) or not re.fullmatch(r"[0-9a-f]{64}",external_attempt_sha256)):
+        raise ValueError("Confirmation-only requires the consumed external dispatch intent SHA-256")
+    if external_attempt_sha256 is not None and not confirmation_only:
+        raise ValueError("External dispatch intent applies only to confirmation-only scope")
+    if validation_only and (acceptance_only or diagnostics_only or deliberate_length is not None or reference_run_id is None):
+        raise ValueError("Validation-only requires a finished reference and no deliberate intent")
+    if validation_length is not None and not validation_only:raise ValueError("Validation length needs validation-only scope")
+    if reference_run_id is not None and not (confirmation_only or validation_only):
+        raise ValueError("A reference sweep needs confirmation/validation-only scope")
+    reference=confirmation_reference(verified,reference_run_id) if (confirmation_only or validation_only) else None
     root = verified.root
     protocol = json.loads((root / "configs/experiment.json").read_text())
     arch = Architecture.from_config(json.loads((root / "configs/models/qwen2.5-1.5b.json").read_text()))
@@ -169,11 +275,14 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                 "gpu_uuid": verified.gpu_uuid, "usable_bytes": verified.usable_bytes,
                 "protocol_sha256": verified.protocol_sha256, "config_sha256": verified.config_sha256,
                 "experiment_id": verified.experiment_id, "deliberate_length": deliberate_length,
-                "execution_scope": "diagnostics" if diagnostics_only else ("acceptance_l512" if acceptance_only else "primary_sweep"),
+                "execution_scope": "calibrated_validation" if validation_only else ("boundary_confirmation" if confirmation_only else ("diagnostics" if diagnostics_only else ("acceptance_l512" if acceptance_only else "primary_sweep"))),
                 "checkpoint_each_probe": checkpoint_each_probe,
                 "expected_runtime": EXPECTED_RUNTIME, "expected_driver": verified.driver_version,
                 "expected_cuda_total_bytes": verified.total_bytes,
                 "actual_package_inventory": "per-worker runtime.package_versions in journal/result artifacts"}
+    if reference is not None:identity["reference_sweep"]=reference
+    if validation_only:identity["validation_length"]=validation_length
+    if confirmation_only:identity["external_attempt_sha256"]=external_attempt_sha256
     with RunStore(local_root, verified.state_root, run_id) as store:
         if deliberate_length is not None and ledger.path.exists() and not (store.local / "manifest.json").exists():
             return {"run_id": run_id, "status": "needs_review", "reason": "deliberate token unavailable", "boundaries": {}}
@@ -249,7 +358,7 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                 store.append("run_deviation", probe_id=request.probe_id, reason="idle driver memory/identity drift", idle_after=after)
                 raise RuntimeError("GPU idle state did not return to baseline")
             store.append("idle_verified", probe_id=request.probe_id, idle_after=after)
-            if checkpoint_each_probe:
+            if checkpoint_each_probe and kind!="deliberate":
                 raise CheckpointPause()
             return row
         def measure_length(length, allocator):
@@ -260,6 +369,31 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                 safe = safe and peak + prefill_scenarios(arch)[2].fixed_headroom_bytes <= verified.usable_bytes * 9 // 10
             return safe
         try:
+            if validation_only:
+                if type(validation_length) is not int or not 1<=validation_length<=arch.max_positions:
+                    raise ValueError("Validation length exceeds the config domain")
+                for allocator in protocol["allocator_variants"]:
+                    if validation_length<=reference["boundaries"][allocator]["largest_success_tokens"]:
+                        raise ValueError("Validation point must be beyond the reference grid")
+                    decision=calibrated_admission(reference["peak_fits"][allocator],validation_length,verified.usable_bytes)
+                    if not decision["admitted"]:raise ValueError("Calibrated validation fails its prospective admission gate")
+                    for repeat in range(1,protocol["repeats"]+1):perform(validation_length,allocator,repeat)
+                    boundaries[allocator]={"largest_success_tokens":validation_length,"observed_oom_upper_tokens":None,
+                                           "calibrated_admission":decision,"interpretation":"Held-out primary validation, not an OOM boundary"}
+                store.append("run_finished",boundaries=boundaries)
+                return {"run_id":run_id,"status":"complete","boundaries":boundaries}
+            if confirmation_only:
+                if type(deliberate_length) is not int or not 1<=deliberate_length<=arch.max_positions:
+                    raise ValueError("Confirmation length exceeds the config domain")
+                lower=reference["boundaries"]["default"]["largest_success_tokens"]
+                if deliberate_length<=lower:raise ValueError("Confirmation must exceed the observed default success")
+                row=perform(deliberate_length,"default",1,"deliberate")
+                boundaries={"default":{"largest_success_tokens":deliberate_length if row["status"]=="success" else lower,
+                                       "observed_oom_upper_tokens":deliberate_length if row["status"]=="cuda_oom" else None,
+                                       "deliberate_outcome":row["status"],"reference_run_id":reference["run_id"],
+                                       "interpretation":"One final deliberate attempt; reference safe sweep is separate evidence"}}
+                store.append("run_finished",boundaries=boundaries)
+                return {"run_id":run_id,"status":"complete","boundaries":boundaries}
             if diagnostics_only:
                 for measurement, grid in (("chunked_dynamic",protocol["diagnostics"]["chunked_prefill"]["lengths"]),
                                           ("static_cache",protocol["diagnostics"]["static_cache"]["lengths"]),
@@ -267,8 +401,9 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acc
                     for length in grid:
                         if not admission(arch,length,verified.usable_bytes)["admitted"]:
                             raise RuntimeError("Diagnostic fails analytical admission")
-                        for repeat in range(1,protocol["repeats"]+1):
-                            perform(length,"default",repeat,measurement=measurement)
+                        for allocator in (protocol["allocator_variants"] if measurement=="workspace_control" else ["default"]):
+                            for repeat in range(1,protocol["repeats"]+1):
+                                perform(length,allocator,repeat,measurement=measurement)
                 perform(512,"default",1,measurement="kernel_trace")
                 boundaries={"interpretation":"Separate diagnostic grids; never primary boundary observations"}
                 store.append("run_finished",boundaries=boundaries)

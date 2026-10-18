@@ -43,7 +43,7 @@ original numerical commitment as if informed estimates preceded those checks.
 
 Primary semantics stay one cold prefill with DynamicCache and reduced logits.
 Separate diagnostics add chunked prefill, capacity-equals-length StaticCache,
-and an L=512 cuBLAS workspace intervention. They must never enter primary fits.
+and paired L=512 cuBLAS workspace interventions. They must never enter primary fits.
 `CUBLAS_WORKSPACE_CONFIG=:0:0` is child-process-only for that intervention; normal
 workers remove inherited overrides. Requested allocator bytes are an optional
 additional counter, not a substitute for allocated peak.
@@ -53,3 +53,30 @@ Drive remains disconnected. Every coordinator call may stop after one probe with
 Colab before resuming. An ephemeral `/content` mirror alone is not durable.
 Any GPU allocation, version, UUID or usable-budget change requires reconciliation
 before model work. No independent Person 2 reproduction is claimed.
+
+## Prospective boundary extension
+
+The legacy 90% conservative sweep stays unchanged. A separate validation mode
+can schedule one held-out primary length after a finished paired sweep. It
+rechecks source hashes, raw references, repeat coverage and idle evidence. Its
+peak fit requires at least five lengths, R-squared >=0.995 and maximum relative
+fit error <=2%. Admission inflates the fitted token slope by 5% and requires
+the estimate to fit within 95% of the measured usable budget. These are
+engineering assumptions, not confidence bounds. The length and policy need a
+prospective pushed amendment before execution.
+
+Confirmation-only mode launches one final deliberate attempt using a compatible
+finished sweep or validation run, without rerunning safe points. The durable
+one-use authority is a local external dispatch claim created with
+`scripts/claim_external_attempt.py` before browser dispatch. Its SHA-256 is
+required by confirmation-only and recorded in the run manifest. The claim stays
+consumed even if dispatch or the cloud session is lost. Never create another
+claim/root or retry an uncertain dispatch. Colab also consumes its mirrored
+ledger before the GPU worker. Finish all other GPU work first: observed OOM
+stops model execution globally.
+
+Same-allocator L=512 zero-workspace controls directly establish the fixed cuBLAS
+allocation. Attribution at other lengths is labelled source-supported inference:
+pinned PyTorch 2.6 uses a length-independent T4 workspace, and each target's
+persistent delta must equal that exact source size. Unsupported allocators,
+runtimes or unmatched deltas remain unaccounted.
