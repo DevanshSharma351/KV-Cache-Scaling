@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.10', '3.11', '3.12']
+        python: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,3 +17,4 @@ jobs:
       - run: kvcache predict --usable-vram-gib 14.5
       - run: kvcache prepare-prereg --output "${{ runner.temp }}/phase1-prediction-draft"
       - run: kvcache plan --experiment configs/experiment.json
+      - run: kvcache validate-probe --request configs/probe.example.json

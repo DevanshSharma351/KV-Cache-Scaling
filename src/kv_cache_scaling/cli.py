@@ -1,4 +1,4 @@
-"""Working CPU entry points. GPU execution is deliberately unimplemented."""
+"""CPU entry points. GPU CLI stays closed pending receipt/coordinator integration."""
 
 import argparse
 import json
@@ -27,6 +27,9 @@ def main(argv=None):
     prepare.add_argument("--output", required=True, help="New directory; existing paths are never overwritten")
     plan = sub.add_parser("plan", help="List candidate points; never start CUDA")
     plan.add_argument("--experiment", default="configs/experiment.json")
+    validate = sub.add_parser("validate-probe", help="CPU-only primary request validation; never authorizes CUDA")
+    validate.add_argument("--request", required=True)
+    validate.add_argument("--root", default=".")
     for name in ("probe", "sweep", "analyze", "generalize"):
         sub.add_parser(name, help="Reserved implementation entry point")
     args = parser.parse_args(argv)
@@ -74,6 +77,16 @@ def main(argv=None):
             parser.error(str(error))
         print(json.dumps({"status": draft["status"], "output_directory": str(output),
                           "gpu_measurements_authorized": False}, indent=2))
+    elif args.command == "validate-probe":
+        from .probe import ProbeRequest, validate_inputs
+        try:
+            request = ProbeRequest.from_dict(load_json(args.request))
+            arch = validate_inputs(request, args.root)
+        except (OSError, ValueError) as error:
+            parser.error(str(error))
+        print(json.dumps({"status": "VALIDATED_REQUEST_NOT_AUTHORIZED", "probe_id": request.probe_id,
+                          "length": request.length, "gpu_measurements_authorized": False,
+                          "expected_kv_bytes": arch.kv_bytes(request.length)}, indent=2))
     elif args.command == "plan":
         exp = load_json(args.experiment)
         points = [{"length": length, "allocator": allocator, "repeat": repeat,
@@ -83,6 +96,9 @@ def main(argv=None):
                   for repeat in range(1, exp["repeats"] + 1)]
         print(json.dumps({"protocol_version": exp["protocol_version"],
                           "executes_gpu_work": False, "points": points}, indent=2))
+    elif args.command == "probe":
+        parser.error("Primary engine is CPU-tested; GPU execution requires runtime reconciliation, "
+                     "review, formal prediction and A3 receipt/coordinator integration.")
     else:
         parser.error(f"'{args.command}' is scaffolded only. Follow TASK_ALLOCATION.md; "
                      "complete preregistration before any GPU probe.")

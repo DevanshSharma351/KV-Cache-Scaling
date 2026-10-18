@@ -3,11 +3,13 @@
 Predict the context memory limit before measuring it, then explain the error with
 reproducible GPU measurements.
 
-**Status: Phase 1 CPU foundation implemented.** Config integrity checks,
-component-level weight/KV math, batch-aware sensitivity predictions and the
-prediction-draft generator work. GPU probes, sweeps, empirical analysis and plots
-remain assigned implementation tasks. No GPU measurements, OOM tests or formal
-preregistration have been performed. See [Person 1 progress](docs/P1_PROGRESS.md).
+**Status: Phase 1 CPU foundation and Phase 2 primary-probe engine implemented.**
+The analytical draft, auditable Colab preparation, GPU inventory and raw evidence
+are preserved. The probe/telemetry engine is tested with CPU doubles; real GPU
+acceptance is pending runtime reconciliation, independent review, formal
+preregistration and receipt/coordinator integration. No model-memory experiment
+or OOM test has run. See [Person 1 progress](docs/P1_PROGRESS.md) and the
+[Phase 2 contract](docs/P2_PROBE_CONTRACT.md).
 
 ## Start here
 
@@ -56,6 +58,7 @@ python -m pip install -e .
 python -m unittest discover -s tests -v
 kvcache predict --usable-vram-gib 14.5
 kvcache plan --experiment configs/experiment.json
+kvcache validate-probe --request configs/probe.example.json
 kvcache prepare-prereg --output /tmp/kvcache-review-draft
 ```
 
@@ -69,8 +72,10 @@ Review the [committed Phase 1 draft](prereg/drafts/prefill-v1-phase1/prediction.
 and future measured protocol remain B=1.
 
 `plan` lists candidate points and never touches CUDA. Run these commands from the
-repo root, or supply explicit config paths. Reserved commands (`probe`, `sweep`,
-`analyze`, `generalize`) exit with an explanation until implemented.
+repo root, or supply explicit config paths. `validate-probe` checks a primary
+request and its scientific hashes without importing GPU libraries. It never
+authorizes execution. `probe` stays closed pending receipt/coordinator integration;
+`sweep`, `analyze` and `generalize` remain scaffolded.
 
 ## GPU setup target
 
@@ -103,4 +108,4 @@ never commit model weights, tokens or cloud credentials.
 
 The supplied PDFs are preserved under `references/` for traceability. Their
 embedded recommendations are source material; the revised plan governs this
-project. CI checks CPU math and the scaffold only.
+project. CI checks CPU math, request/storage validation and mocked probe lifecycle; it does not establish real GPU correctness.

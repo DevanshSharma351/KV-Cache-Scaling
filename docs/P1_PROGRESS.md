@@ -7,7 +7,7 @@ used in the allocation.
 | Phase | Status | Evidence / remaining gate |
 | --- | --- | --- |
 | 1 — Analytical foundation | CPU deliverables and remote preparation archived; runtime reconciliation and formal preregistration pending | 36 Colab tests passed; fresh T4 snapshot and raw ZIP verified; runtime decision, B6 review and receipt still open |
-| 2 — Primary probe/telemetry | Planned | No CUDA model measurements performed |
+| 2 — Primary probe/telemetry | Engine and CPU checks implemented; GPU acceptance pending | Cold-prefill engine, telemetry, strict request validation and failure tests; no real model measurements |
 | 3 — Coordinator/safety | Planned | Journal integration and receipt enforcement remain implementation work |
 | 4 — Empirical analysis | Planned | No measured dataset exists |
 | 5 — Transfer/integration | Planned | No transfer validation or final research report claimed |
@@ -110,6 +110,37 @@ Until these are complete, the package status is
 `DRAFT_THEORY_ONLY_NOT_PREREGISTERED` and GPU measurement authorization is false.
 No reviewer or remote receipt has been filled in speculatively. The original inventory remains labelled user-reported; the later directly
 observed collection is kept separately and is not a model-memory measurement.
+
+## Phase 2 implementation
+
+The [primary probe contract](P2_PROBE_CONTRACT.md) documents `probe.py`,
+`telemetry.py`, `ProbeRequest`, CPU-only `validate-probe`, result persistence,
+measurement scopes and A3/B2/B4 integration. The original pinned-runtime policy
+is enforced; the observed newer Colab stack is not silently adopted.
+
+Implemented cold-forward ordering, separate load/forward peaks, UUID mapping,
+weight/tied-storage inspection, cache formula/shape validation, separate
+output/input/cache release snapshots, bounded sampled driver telemetry and
+structured partial failures. The public GPU entry point stays closed pending
+real receipt validation in Phase 3. CPU tests use explicit doubles; no fake
+measurement records are committed.
+
+Verification performed locally on macOS: **55 CPU tests passed**; syntax
+compilation passed. No Colab execution is claimed for this phase. A fresh CPU
+interpreter imported the new probe/telemetry modules without importing torch or
+NVML. `validate-probe --request configs/probe.example.json` returned the explicit
+non-authorizing status and 14680064 theoretical KV bytes for L=512.
+
+```bash
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m compileall -q src scripts
+.venv/bin/python -m kv_cache_scaling validate-probe --request configs/probe.example.json
+```
+
+Real L=512 smoke, efficient-kernel trace, allocator capability checks and
+persistent process-exit validation remain open after preregistration. Phase 2 is
+not claimed fully accepted from CPU checks. No Colab tabs, access prompts,
+package installs or model downloads were needed for this implementation.
 
 ## Commit boundaries
 

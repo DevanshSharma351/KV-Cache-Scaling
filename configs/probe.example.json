@@ -1,0 +1,9 @@
+{
+  "probe_id": "example-not-authorized",
+  "length": 512,
+  "gpu_uuid": "GPU-68cbea81-a683-22be-800d-74ff2d51155e",
+  "protocol_sha256": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+  "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+  "allocator": "default",
+  "repeat": 1
+}
