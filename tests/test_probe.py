@@ -128,6 +128,11 @@ def fake_runtime(failure=None):
 
 
 class ContractTests(unittest.TestCase):
+    def test_diagnostic_scope_cannot_escalate_or_use_deliberate_intent(self):
+        self.assertEqual(request(measurement="kernel_trace").length, 512)
+        for changes in ({"measurement": "unknown"}, {"measurement": "kernel_trace", "length": 1024},
+                        {"measurement": "kernel_trace", "attempt_kind": "deliberate"}):
+            with self.assertRaises(ValueError): request(**changes)
     def test_request_and_fingerprints_reject_drift(self):
         self.assertEqual(probe.validate_inputs(request(), ROOT), ARCH)
         for changes in ({"length": True}, {"length": 131073}, {"gpu_uuid": "0"},
@@ -257,6 +262,22 @@ class LifecycleTests(unittest.TestCase):
         self.assertGreaterEqual(result["peak_allocated_bytes"], result["snapshots"]["after_forward"]["allocated_bytes"])
         json.dumps(result, allow_nan=False)
         self.assertEqual(events[-1], "nvml_shutdown")
+
+    def test_kernel_diagnostic_requires_observed_efficient_event(self):
+        for names, expected in ((["aten::_scaled_dot_product_efficient_attention"], "success"),
+                                (["aten::_scaled_dot_product_attention_math"], "unsupported_backend")):
+            rt, _ = fake_runtime()
+            class Profile:
+                def __enter__(self): return self
+                def __exit__(self, *args): pass
+                def events(self): return [NS(name=n) for n in names]
+            rt.torch.profiler = NS(profile=lambda **kwargs: Profile(), ProfilerActivity=NS(CPU="cpu", CUDA="cuda"))
+            with patch.object(probe, "_USED", False), patch.dict(probe.os.environ, {}, clear=True), \
+                 patch.object(probe, "inspect_model", return_value={"cpu_double": True}):
+                result = probe._execute_probe(request(measurement="kernel_trace"), root=ROOT, runtime=rt)
+            self.assertEqual(result["status"], expected, result)
+            self.assertEqual(result["measurement"], "kernel_trace")
+            self.assertEqual(result["kernel_diagnostic"]["event_names"], names)
 
     def test_oom_and_backend_errors_do_not_continue_lifecycle(self):
         for error, status in ((OOM("failed"), "cuda_oom"), (RuntimeError("No available kernel"), "unsupported_backend"),

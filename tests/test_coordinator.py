@@ -114,6 +114,12 @@ class ReceiptTests(unittest.TestCase):
                 self.fixture.write("prereg/receipt.json", value)
                 with self.assertRaises(gate.GateError): self.fixture.verify()
 
+    def test_single_actual_contributor_review_is_allowed(self):
+        self.fixture.receipt["reviewers"] = self.fixture.receipt["reviewers"][:1]
+        self.fixture.write("prereg/receipt.json", self.fixture.receipt)
+        self.fixture.commit("synthetic single review policy")
+        self.assertEqual(self.fixture.verify().gpu_uuid, self.fixture.inventory["gpu_identity_csv"].split(",")[0])
+
     def test_unpushed_head_and_dirty_source_are_rejected(self):
         with self.assertRaises(gate.GateError): self.fixture.verify(remote_sha="0"*40)
         (self.fixture.root / "unexpected.py").write_text("# untracked\n")
@@ -241,6 +247,8 @@ class SyntheticRunner:
                   "snapshots": {key: snap for key in ("context_only", "post_load", "after_forward", "retained", "released")},
                   "peak_allocated_bytes": 1, "peak_reserved_bytes": 2, "cache": {"logical_bytes": arch.kv_bytes(request.length), "unique_storage_bytes": arch.kv_bytes(request.length)},
                   "weights": {"unique_parameters": arch.parameter_count()}, "sampling": {"error": None}}
+        if request.measurement == "kernel_trace":
+            result["kernel_diagnostic"] = {"event_names": ["aten::_scaled_dot_product_efficient_attention"]}
         Path(command[command.index("--output")+1]).write_text(json.dumps(result))
         return {"process_status": "exited", "returncode": 0 if self.status == "success" else 1,
                 "stdout": b"synthetic CPU fixture", "stderr": b"", "logs": {"stdout": {}, "stderr": {}}}
@@ -271,6 +279,35 @@ class SweepTests(unittest.TestCase):
         resumed = self.run_fake(runner, run_id=result["run_id"])
         self.assertEqual(resumed["status"], "complete")
         self.assertEqual(count, len(runner.calls))
+
+    def test_acceptance_run_is_bounded_separate_resumable_and_never_uses_token(self):
+        runner = SyntheticRunner()
+        result = self.run_fake(runner, acceptance_only=True)
+        self.assertEqual(result["status"], "complete", result)
+        self.assertEqual(len(runner.calls), 7)
+        self.assertTrue(all(r.length == 512 and r.attempt_kind == "safe" for r in runner.calls))
+        self.assertEqual(sum(r.measurement == "kernel_trace" for r in runner.calls), 1)
+        self.assertEqual(len({point_key(self.verified, r.length, r.allocator, r.repeat,
+                                      r.attempt_kind, r.measurement) for r in runner.calls}), 7)
+        self.assertFalse(AttemptLedger(self.verified.state_root, self.verified.experiment_id).path.exists())
+        self.assertEqual(self.run_fake(runner, run_id=result["run_id"], acceptance_only=True)["status"], "complete")
+        self.assertEqual(len(runner.calls), 7)
+        with self.assertRaises(ValueError):
+            self.run_fake(runner, run_id=result["run_id"])
+        with self.assertRaises(ValueError):
+            self.run_fake(runner, acceptance_only=True, deliberate_length=131072)
+
+    def test_acceptance_checkpoint_barrier_runs_one_new_probe_per_invocation(self):
+        runner = SyntheticRunner()
+        run_id = str(uuid4())
+        for count in range(1, 8):
+            result = self.run_fake(runner, run_id=run_id, acceptance_only=True, checkpoint_each_probe=True)
+            self.assertEqual(result["status"], "awaiting_external_checkpoint", result)
+            self.assertEqual(result["completed_probes"], count)
+            self.assertEqual(len(runner.calls), count)
+        result = self.run_fake(runner, run_id=run_id, acceptance_only=True, checkpoint_each_probe=True)
+        self.assertEqual(result["status"], "complete", result)
+        self.assertEqual(len(runner.calls), 7)
 
     def test_accidental_oom_stops_escalation_and_blocks_global_attempt(self):
         runner = SyntheticRunner("cuda_oom")

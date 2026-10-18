@@ -176,3 +176,19 @@ allocator checks remain open after the real preregistration handoff.
 
 Future commits follow the phase plan and preserve the original prediction and
 raw data. No published history was rewritten.
+
+## Completion work in progress: pinned runtime and bounded acceptance
+
+The [fresh preparation](../prereg/environment/colab-20261018T141242Z-a337a6c3/README.md)
+resolves the runtime mismatch: Python 3.11.13, torch 2.6.0+cu124, Transformers
+4.51.3. All 77 tests at 072293c passed in that Colab runtime. No model was run.
+The context inventory and a verified 22-member preparation archive persist
+locally. Actual package and API evidence is preserved.
+
+The user explicitly changed the review requirement to one contributor and
+requested no Drive mount. New [acceptance controls](P3_ACCEPTANCE.md) restrict
+execution to L=512, separate kernel-profile records, and support one-probe
+external checkpoint barriers. The [concrete review candidate](../prereg/review-2026-10-18/README.md)
+contains the actual-budget numerical prediction and full execution hashes.
+A policy change is not recorded as an actual review. Formal push/receipt and
+real GPU acceptance remain pending until approval of this candidate.

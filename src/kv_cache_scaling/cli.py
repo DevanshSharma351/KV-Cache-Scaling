@@ -39,6 +39,10 @@ def main(argv=None):
     sweep.add_argument("--local-root", required=True)
     sweep.add_argument("--run-id")
     sweep.add_argument("--deliberate-length", type=int)
+    sweep.add_argument("--acceptance-only", action="store_true",
+                       help="Only paired L=512 repeats and a separate kernel trace; no boundary search")
+    sweep.add_argument("--checkpoint-each-probe", action="store_true",
+                       help="Acceptance only: return after each new probe for an external persistence barrier")
     probe = sub.add_parser("probe", help="Internal receipt/launch-gated worker; prefer sweep")
     for name in ("request", "receipt", "output", "run-id"):
         probe.add_argument("--" + name, required=True)
@@ -119,11 +123,12 @@ def main(argv=None):
             else:
                 from .sweep import run_sweep
                 result = run_sweep(verified, args.local_root, run_id=args.run_id,
-                                   deliberate_length=args.deliberate_length)
+                                   deliberate_length=args.deliberate_length, acceptance_only=args.acceptance_only,
+                                   checkpoint_each_probe=args.checkpoint_each_probe)
         except (OSError, ValueError, KeyError, RuntimeError) as error:
             parser.error(str(error))
         print(json.dumps(result, indent=2, allow_nan=False))
-        return 0 if result["status"] in ("complete", "RECEIPT_VERIFIED") else 1
+        return 0 if result["status"] in ("complete", "RECEIPT_VERIFIED", "awaiting_external_checkpoint") else 1
     elif args.command == "probe":
         from .worker import main as worker_main
         return worker_main(["--root", args.root, "--receipt", args.receipt, "--run-id", args.run_id,

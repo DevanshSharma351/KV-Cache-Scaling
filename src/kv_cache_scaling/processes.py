@@ -19,6 +19,9 @@ def worker_env(allocator, root):
         raise ValueError("Unknown allocator")
     env["PYTHONPATH"] = str(Path(root).resolve() / "src")
     env["PYTHONUNBUFFERED"] = "1"
+    # Keep Transformers from importing unrelated installed GPU frameworks.
+    env["USE_TF"] = "0"
+    env["USE_FLAX"] = "0"
     return env
 
 

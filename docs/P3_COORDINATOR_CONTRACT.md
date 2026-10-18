@@ -29,7 +29,7 @@ those integration checks; CPU tests do not sign off another person's work.
 checks and never starts a GPU worker. Templates/drafts fail before remote lookup.
 The verifier requires:
 
-1. A complete receipt, distinct Person 1/Person 2 review roles with real timestamps,
+1. A complete receipt, at least one real Person 1/Person 2 review with an actual timestamp,
    a shared experiment UUID and an absolute persistent state root outside source.
 2. A clean source tree and a live GitHub remote branch head equal to local HEAD.
    Network failure, dirty/untracked source or an unpushed receipt fails closed.
@@ -166,3 +166,10 @@ kvcache sweep --receipt prereg/<actual-receipt>.json --local-root /content/kvcac
 Resume adds the original `--run-id`. Keep the original deliberate-length option
 if it was part of that run. Real L=512 smoke, efficient-kernel trace, allocator
 support and paired persistent runs remain unperformed acceptance checks.
+
+## Acceptance execution amendment
+
+The user authorized one contributor review and kept Drive disconnected. See
+[P3_ACCEPTANCE.md](P3_ACCEPTANCE.md) for bounded L=512 acceptance, separate
+kernel profiling, and the required external checkpoint barrier. This supersedes
+the two-review count, without inventing any review or cloud persistence.

@@ -18,7 +18,7 @@ changes. See `docs/P1_PROGRESS.md` for the remaining inventory/review handoffs.
 2. B1 records the actual GPU identity and context-only usable budget without a
    model load/forward. The prediction remains a function of usable VRAM even
    when this hardware observation is supplied.
-3. Both contributors review, commit and push the final prediction before model
+3. At least one contributor reviews (user-authorized amendment, 18 October 2026), then commit and push the final prediction before model
    measurements. Do not fill in a fake SHA or preregister this template as results.
 4. Add a later receipt based on `receipt.template.json`, linking the prediction
    commit and remote push/release/CI evidence. A commit cannot contain its own

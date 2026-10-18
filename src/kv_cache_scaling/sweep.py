@@ -17,6 +17,10 @@ RESULT_LIMIT = 16 * 1024**2
 IDLE_TOLERANCE = 64 * 1024**2
 
 
+class CheckpointPause(Exception):
+    """A bounded acceptance step completed; external controller must persist it."""
+
+
 class DriverObserver:
     """NVML only: no parent-owned CUDA context."""
     def __init__(self, verified):
@@ -38,10 +42,11 @@ class DriverObserver:
             pynvml.nvmlShutdown()
 
 
-def point_key(verified, length, allocator, repeat, attempt_kind="safe"):
+def point_key(verified, length, allocator, repeat, attempt_kind="safe", measurement="primary"):
     return digest(json_bytes({"policy": POLICY, "protocol": verified.protocol_sha256,
                               "config": verified.config_sha256, "environment": verified.environment_fingerprint,
-                              "allocator": allocator, "length": length, "repeat": repeat, "attempt_kind": attempt_kind}))
+                              "allocator": allocator, "length": length, "repeat": repeat,
+                              "attempt_kind": attempt_kind, "measurement": measurement}))
 
 
 def admission(arch, length, usable_bytes):
@@ -83,9 +88,13 @@ def validate_result(result, request, arch, root):
         for name in ("probe.py", "telemetry.py"):
             if result.get("code_sha256", {}).get(name) != digest((Path(root)/"src/kv_cache_scaling"/name).read_bytes()):
                 raise ValueError("Worker code fingerprint mismatch")
-        for key in ("repeat", "allocator", "protocol_sha256", "config_sha256", "gpu_uuid", "attempt_kind"):
+        for key in ("repeat", "allocator", "protocol_sha256", "config_sha256", "gpu_uuid", "attempt_kind", "measurement"):
             if result.get(key) != getattr(request, key):
                 raise ValueError("Successful result request mismatch: " + key)
+        if request.measurement == "kernel_trace":
+            names = result.get("kernel_diagnostic", {}).get("event_names", [])
+            if not any("_scaled_dot_product_efficient_attention" in name for name in names):
+                raise ValueError("Diagnostic lacks efficient SDPA trace evidence")
         for name in ("peak_allocated_bytes", "peak_reserved_bytes"):
             if type(result.get(name)) is not int or result[name] < 0:
                 raise ValueError("Success requires actual integer peaks")
@@ -140,10 +149,15 @@ def collect_process(store, request, command, env, root, timeout, runner=launch_w
     return {"status": result["status"], "metrics": result, "process": process}
 
 
-def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
+def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None, acceptance_only=False,
+              checkpoint_each_probe=False,
               _runner=launch_worker, _observer=None):
     """verified must come from verify_receipt in production; injected doubles are tests only."""
     run_id = run_id or str(uuid4())
+    if acceptance_only and deliberate_length is not None:
+        raise ValueError("Acceptance mode cannot consume a deliberate attempt")
+    if checkpoint_each_probe and not acceptance_only:
+        raise ValueError("External checkpoint stepping is restricted to acceptance mode")
     root = verified.root
     protocol = json.loads((root / "configs/experiment.json").read_text())
     arch = Architecture.from_config(json.loads((root / "configs/models/qwen2.5-1.5b.json").read_text()))
@@ -155,6 +169,8 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
                 "gpu_uuid": verified.gpu_uuid, "usable_bytes": verified.usable_bytes,
                 "protocol_sha256": verified.protocol_sha256, "config_sha256": verified.config_sha256,
                 "experiment_id": verified.experiment_id, "deliberate_length": deliberate_length,
+                "execution_scope": "acceptance_l512" if acceptance_only else "primary_sweep",
+                "checkpoint_each_probe": checkpoint_each_probe,
                 "expected_runtime": EXPECTED_RUNTIME, "expected_driver": verified.driver_version,
                 "expected_cuda_total_bytes": verified.total_bytes,
                 "actual_package_inventory": "per-worker runtime.package_versions in journal/result artifacts"}
@@ -191,12 +207,12 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
         if any(row["event"] == "probe_interrupted" for row in store.events):
             return {"run_id": run_id, "status": "needs_review", "boundaries": {}}
         boundaries = {}
-        def perform(length, allocator, repeat, kind="safe"):
-            key = point_key(verified, length, allocator, repeat, kind)
+        def perform(length, allocator, repeat, kind="safe", measurement="primary"):
+            key = point_key(verified, length, allocator, repeat, kind, measurement)
             if key in complete:
                 return complete[key]
             request = ProbeRequest(str(uuid4()), length, verified.gpu_uuid, verified.protocol_sha256,
-                                   verified.config_sha256, allocator, repeat, kind)
+                                   verified.config_sha256, allocator, repeat, kind, measurement)
             verified.check_request(request)
             before = observer.read()
             if kind == "deliberate":
@@ -233,6 +249,8 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
                 store.append("run_deviation", probe_id=request.probe_id, reason="idle driver memory/identity drift", idle_after=after)
                 raise RuntimeError("GPU idle state did not return to baseline")
             store.append("idle_verified", probe_id=request.probe_id, idle_after=after)
+            if checkpoint_each_probe:
+                raise CheckpointPause()
             return row
         def measure_length(length, allocator):
             safe = True
@@ -242,6 +260,15 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
                 safe = safe and peak + prefill_scenarios(arch)[2].fixed_headroom_bytes <= verified.usable_bytes * 9 // 10
             return safe
         try:
+            if acceptance_only:
+                if not admission(arch, 512, verified.usable_bytes)["admitted"]:
+                    raise RuntimeError("L=512 fails analytical admission")
+                for allocator in protocol["allocator_variants"]:
+                    measure_length(512, allocator)
+                perform(512, "default", 1, measurement="kernel_trace")
+                boundaries = {"interpretation": "L=512 acceptance only; no boundary search or context-limit estimate"}
+                store.append("run_finished", boundaries=boundaries)
+                return {"run_id": run_id, "status": "complete", "boundaries": boundaries}
             for allocator in protocol["allocator_variants"]:
                 lower, upper = 0, None
                 for length in sorted(protocol["required_lengths"] + protocol["candidate_lengths"]):
@@ -285,6 +312,10 @@ def _run_sweep(verified, local_root, *, run_id=None, deliberate_length=None,
                     boundaries["default"]["largest_success_tokens"] = deliberate_length
             store.append("run_finished", boundaries=boundaries)
             return {"run_id": run_id, "status": "complete", "boundaries": boundaries}
+        except CheckpointPause:
+            return {"run_id": run_id, "status": "awaiting_external_checkpoint",
+                    "completed_probes": len(complete), "boundaries": boundaries,
+                    "required_action": "Persist the complete state and logs outside Colab before invoking the next step"}
         except Exception as error:
             store.append("run_stopped", reason=str(error), boundaries=boundaries)
             return {"run_id": run_id, "status": "stopped", "reason": str(error), "boundaries": boundaries}

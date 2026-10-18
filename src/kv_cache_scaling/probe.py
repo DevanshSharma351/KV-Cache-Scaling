@@ -5,6 +5,7 @@ fresh interpreter. CPU tests inject doubles; they are never research records.
 """
 
 from dataclasses import dataclass
+from contextlib import nullcontext
 import gc
 import hashlib
 import inspect
@@ -65,8 +66,13 @@ class ProbeRequest:
     allocator: str = "default"
     repeat: int = 1
     attempt_kind: str = "safe"
+    measurement: str = "primary"
 
     def __post_init__(self):
+        if self.measurement not in ("primary", "kernel_trace"):
+            raise ValueError("Unknown measurement scope")
+        if self.measurement == "kernel_trace" and (self.length != 512 or self.attempt_kind != "safe"):
+            raise ValueError("Kernel diagnostics are restricted to safe L=512")
         if not isinstance(self.probe_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", self.probe_id):
             raise ValueError("Invalid probe_id")
         if positive_int(self.length, "length") > 131072:
@@ -233,6 +239,7 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
               "protocol_sha256": request.protocol_sha256, "config_sha256": request.config_sha256,
               "status": "incomplete", "stage": "preflight", "snapshots": {},
               "attempt_kind": request.attempt_kind, "oom_classification": None,
+              "measurement": request.measurement,
               "peak_allocated_bytes": None, "peak_reserved_bytes": None,
               "weights": None, "cache": None, "sampling": None, "warnings": [],
               "pid": os.getpid(), "started_unix_ns": time.time_ns(),
@@ -319,13 +326,22 @@ def _execute_probe(request, *, root=".", runtime=None, verified=None):
                 cache = rt.cache_class()
                 result["input_logical_bytes"] = int(ids.numel() * ids.element_size() + positions.numel() * positions.element_size())
                 result["stage"] = "forward"
-                with rt.efficient_context():
+                profile = (torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,
+                                                             torch.profiler.ProfilerActivity.CUDA])
+                           if request.measurement == "kernel_trace" else nullcontext())
+                with profile as trace, rt.efficient_context():
                     out = model(input_ids=ids, cache_position=positions, past_key_values=cache,
                                 use_cache=True, logits_to_keep=1, output_attentions=False,
                                 output_hidden_states=False, return_dict=True)
                 cuda.synchronize(0)
                 result["peak_allocated_bytes"] = int(cuda.max_memory_allocated(0))
                 result["peak_reserved_bytes"] = int(cuda.max_memory_reserved(0))
+                if request.measurement == "kernel_trace":
+                    names = sorted({event.name for event in trace.events()})
+                    result["kernel_diagnostic"] = {"event_names": names,
+                        "interpretation": "profiled diagnostic; exclude these peaks from primary fits"}
+                    if not any("_scaled_dot_product_efficient_attention" in name for name in names):
+                        raise UnsupportedBackend("Profiler did not observe efficient SDPA")
                 result["snapshots"]["after_forward"] = snap()
                 result["stage"] = "inspection"
                 if tuple(out.logits.shape) != (1, 1, arch.vocab) or out.logits.dtype != torch.float16:

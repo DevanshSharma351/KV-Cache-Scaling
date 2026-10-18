@@ -121,3 +121,18 @@ inventory, conditional report and documentation form one coherent commit. Record
 later compatibility decisions or validated runtime executions in substantive
 commits with evidence. Avoid a separate commit for every status message or command;
 preserve existing research artifacts and published history.
+
+## Fresh pinned-runtime reconciliation, 18 October 2026
+
+Selected Colab runtime 2025.07 with a T4. The native image provides Python
+3.11.13 and PyTorch 2.6.0+cu124; recorded installation of requirements-gpu.txt
+applies Transformers 4.51.3. The [fresh audit](../prereg/environment/colab-20261018T141242Z-a337a6c3/README.md)
+archives 77 passing CPU tests, package inventory and unwrapped API inspection.
+The GPU UUID differs from the historical session; the new baseline is kept
+separately. The stack now matches the implemented policy; no torch reinstall
+was necessary. Backend execution remains an empirical acceptance check.
+
+Google documents the older runtime selector in its
+[runtime version FAQ](https://research.google.com/colaboratory/runtime-version-faq.html).
+The raw installed-package inventory, rather than that documentation, establishes
+the actual versions used here. Google Drive remains disconnected at user request.
