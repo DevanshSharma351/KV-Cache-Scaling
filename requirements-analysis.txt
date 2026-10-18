@@ -1,0 +1,4 @@
+# Separate CPU analysis/report environment; these do not change the GPU stack.
+matplotlib==3.10.1
+reportlab==4.4.4
+pypdf==5.9.0

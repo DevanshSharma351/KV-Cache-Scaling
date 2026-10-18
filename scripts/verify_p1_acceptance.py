@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import sys
+import subprocess
+import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,7 +43,8 @@ def verify(path, run_id):
         receipt = json.loads((ROOT / "prereg/formal-2026-10-18-t4/receipt.json").read_text())
         prediction = json.loads((ROOT / receipt["prediction_path"]).read_text())
         for name, expected in {**prediction["input_sha256"], **prediction["execution_sha256"]}.items():
-            require(hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, "Frozen source drift: " + name)
+            blob=subprocess.check_output(["git","-C",str(ROOT),"show",receipt["prediction_commit_sha"]+":"+name])
+            require(hashlib.sha256(blob).hexdigest() == expected, "Historical frozen blob drift: " + name)
         arch = Architecture.from_config(json.loads((ROOT / "configs/models/qwen2.5-1.5b.json").read_text()))
         inventory = json.loads((ROOT / prediction["context_inventory_path"]).read_text())
         expected_uuid = inventory["gpu_identity_csv"].split(",")[0]
@@ -54,7 +57,12 @@ def verify(path, run_id):
         for row in results:
             request = ProbeRequest.from_dict(row["request"])
             r = json.loads(archive.read(prefix + f"results/{request.probe_id}.json"))
-            validate_result(r, request, arch, ROOT)
+            with tempfile.TemporaryDirectory() as historical:
+                historical_root=Path(historical)
+                for name in ("src/kv_cache_scaling/probe.py","src/kv_cache_scaling/telemetry.py","configs/models/qwen2.5-1.5b.json"):
+                    target=historical_root/name;target.parent.mkdir(parents=True,exist_ok=True)
+                    target.write_bytes(subprocess.check_output(["git","-C",str(ROOT),"show",receipt["prediction_commit_sha"]+":"+name]))
+                validate_result(r, request, arch, historical_root)
             require(r["status"] == row["status"] == "success", "Unsuccessful acceptance result")
             require(request.gpu_uuid == expected_uuid, "GPU drift")
             require(request.protocol_sha256 == receipt["protocol_sha256"] and

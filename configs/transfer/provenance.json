@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "model_id": "Qwen/Qwen2.5-3B",
+      "revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+      "config_path": "configs/transfer/qwen2.5-3b.json",
+      "config_sha256": "27467e2fc311a7656c09a43ae9c3d408211e1f212bbddbc93c8596a06423826f",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-3B/resolve/3aab1f1954e9cc14eb9509a215f9e5ca08227a9b/config.json",
+      "collected_at_utc": "2026-10-18T15:12:55.506068+00:00",
+      "checkpoint_loaded": false
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-7B",
+      "revision": "d149729398750b98c0af14eb82c78cfe92750796",
+      "config_path": "configs/transfer/qwen2.5-7b.json",
+      "config_sha256": "267ce68584c5f24c3b267d934db2de68dd21d1ca677fb78ed809eb60067f7642",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-7B/resolve/d149729398750b98c0af14eb82c78cfe92750796/config.json",
+      "collected_at_utc": "2026-10-18T15:12:56.525440+00:00",
+      "checkpoint_loaded": false
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-3B-Instruct",
+      "revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "config_path": "configs/transfer/qwen2.5-3b-instruct.json",
+      "config_sha256": "eed00b17e22553979d090fa492e587e92885e328914c8e0b0b78f0a0d3576b3b",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct/resolve/aa8e72537993ba99e69dfaafa59ed015b17504d1/config.json",
+      "collected_at_utc": "2026-10-18T15:12:57.235460+00:00",
+      "checkpoint_loaded": false
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-7B-Instruct",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "config_path": "configs/transfer/qwen2.5-7b-instruct.json",
+      "config_sha256": "7463bb0ea78315365e6c6b74de4e73bbcc8359dfb0c5a737584e077d42c0b03c",
+      "source_url": "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct/resolve/a09a35458c702b33eeacc393d103063234e8bc28/config.json",
+      "collected_at_utc": "2026-10-18T15:12:57.966433+00:00",
+      "checkpoint_loaded": false
+    }
+  ]
+}

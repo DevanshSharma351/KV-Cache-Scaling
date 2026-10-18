@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_url": "https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html",
+  "source_title": "Inside vLLM’s New KV Offloading Connector: Smarter Memory Transfer for Maximizing Inference Throughput",
+  "publisher": "vLLM team",
+  "published_date": "2026-01-08",
+  "source_section": "Changing vLLM’s Memory Layout, physical block size table",
+  "tokens_per_block": 16,
+  "element_bytes_assumption": 2,
+  "tensor_parallel_size": 1,
+  "quantity": "Physical K+V bytes for one token block across all layers; not a prefill peak or a GPU context boundary",
+  "rows": [
+    {"model_id": "Qwen/Qwen2.5-3B-Instruct", "base_model_id": "Qwen/Qwen2.5-3B", "reported_new_block_MB": "0.56", "reported_old_block_KB": "8"},
+    {"model_id": "Qwen/Qwen2.5-7B-Instruct", "base_model_id": "Qwen/Qwen2.5-7B", "reported_new_block_MB": "0.87", "reported_old_block_KB": "16"}
+  ],
+  "caveats": [
+    "The publication labels its units MB/KB without explicitly defining decimal versus binary units. Both interpretations must be reported.",
+    "The 2-byte cache dtype is an explicit compatibility assumption; fp16 and bf16 have the same byte width. The comparison does not validate cache quantization.",
+    "Base and Instruct KV architecture fields are checked against separately pinned official configs before comparison.",
+    "The table is rounded/truncated; percentage error against displayed values is not measurement uncertainty.",
+    "External evidence checks only the KV submodel. It cannot validate transferred HF efficient-SDPA peak context limits."
+  ]
+}
