@@ -14,6 +14,7 @@ no GPU measurements, OOM tests or formal preregistration have been performed.
 3. Pick work from [the 55/45 task allocation](TASK_ALLOCATION.md).
 4. Review [the measurement protocol](docs/MEASUREMENT_PROTOCOL.md) and
    [acceptance criteria](docs/REQUIREMENTS.md) before implementing the harness.
+5. Follow [Person 1's five-phase plan](DevP1_phases.md) for the 55% contribution.
 
 ## Frozen design proposal
 
