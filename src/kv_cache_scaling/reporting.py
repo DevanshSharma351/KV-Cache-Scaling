@@ -6,6 +6,7 @@ from importlib.metadata import version, PackageNotFoundError
 import json
 from pathlib import Path
 import platform
+import shlex
 import subprocess
 from statistics import median
 from xml.sax.saxutils import escape
@@ -91,8 +92,10 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     transfer_md=(transfer_dir/'transfer.md').read_text();md.append(transfer_md.replace('# Config-derived transfer predictions','### Unrun target models and GPUs'))
     md+=['','## Requirement status','', '| Requirement | Status | Evidence / remaining criterion |','| --- | --- | --- |']
     md += ['| '+' | '.join(row)+' |' for row in criteria]
+    capsule_args=' '.join('--capsule '+shlex.quote(source['path']) for source in a['provenance']['sources'])
+    run_args=' '.join('--run-id '+shlex.quote(run_id) for run_id in a['provenance']['run_ids'])
     md+=['','## Reproduction','', '```bash', 'python -m pip install -e . -r requirements-analysis.txt',
-         'kvcache analyze --capsule artifacts/acceptance/2026-10-18-t4/gpu-acceptance-complete.zip \\',
+         f'kvcache analyze {capsule_args} {run_args} \\',
          '  --output /tmp/kv-analysis --figures', 'kvcache generalize --output /tmp/kv-transfer',
          'python scripts/build_report.py --analysis /tmp/kv-analysis \\',
          '  --transfer /tmp/kv-transfer --output /tmp/kv-report', '```','',
@@ -144,6 +147,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     styles.add(ParagraphStyle(name='SmallKV',parent=styles['BodyText'],fontSize=8,leading=11,spaceAfter=6))
     styles.add(ParagraphStyle(name='HeroKV',parent=styles['Title'],fontSize=27,leading=32,alignment=TA_LEFT,textColor=colors.HexColor('#183d67'),spaceAfter=20))
     story=[];width=A4[0]-94
+    report_date=datetime.now(timezone.utc).strftime('%d %B %Y')
     def para(text,style='BodyKV'):return Paragraph(escape(str(text)).replace('\n','<br/>'),styles[style])
     def p(text):story.append(para(text))
     def h(text):story.append(Paragraph(escape(text),styles['Heading1']));story.append(Spacer(1,6))
@@ -165,7 +169,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     def page():story.append(PageBreak())
     story.append(Paragraph('KV-Cache Scaling',styles['HeroKV']))
     p('Predicting the context limit before reaching it')
-    p('Integrated scientific implementation and evidence report | 18 October 2026')
+    p('Integrated scientific implementation and evidence report | '+report_date)
     p('Status: '+status.replace('_',' '))
     p('The analysis, plots and transfer calculations are integrated and reproducible. Verified coverage: '+evidence_summary+'. Requirement status below distinguishes completed measurements from unmet scientific criteria.')
     table(['Built capability','Evidence / limit'],[
@@ -202,6 +206,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     plot('02_cache_scaling.png','Direct cache and corrected retained allocation are separate quantities. Fits require multiple distinct lengths.')
     page();h('4. Allocator slack and boundary status')
     plot('03_allocator_slack.png','Same-snapshot reserved minus allocated is allocator slack. It is not, by itself, fragmentation.')
+    page();h('4. Boundary evidence (continued)')
     plot('04_boundary_status.png','Observed success, safe-budget bracket, actual OOM upper bound and advance prediction remain distinct. No hardware threshold is fabricated.')
     for b in a.get('allocator_boundary_deltas',[]):
         p(f"Expandable-minus-default conservative safe-limit interval: {b['safe_bracket_delta_min_tokens']} to {b['safe_bracket_delta_max_tokens']} tokens; observed-success delta {b['observed_success_delta_tokens']}. A common analytical admission ceiling can censor both allocators; this is not a hardware-limit delta.")
@@ -244,7 +249,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     def footer(canvas,doc):
         canvas.saveState();canvas.setStrokeColor(colors.HexColor('#d2dce8'));canvas.line(47,38,A4[0]-47,38)
         canvas.setFont('Helvetica',8);canvas.setFillColor(colors.HexColor('#66758a'))
-        canvas.drawString(47,25,'KV-Cache Scaling | Evidence-linked report | 18 October 2026')
+        canvas.drawString(47,25,'KV-Cache Scaling | Evidence-linked report | '+report_date)
         canvas.drawRightString(A4[0]-47,25,str(doc.page));canvas.restoreState()
     SimpleDocTemplate(str(path),pagesize=A4,rightMargin=47,leftMargin=47,topMargin=45,bottomMargin=50,
                       title='KV-Cache Scaling - integrated evidence report',author='Project team').build(story,onFirstPage=footer,onLaterPages=footer)
