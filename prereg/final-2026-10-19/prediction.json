@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED",
+  "gpu_measurements_authorized": false,
+  "missing_evidence": [],
+  "units": {
+    "memory": "bytes",
+    "length": "tokens",
+    "GiB": 1073741824,
+    "MiB": 1048576
+  },
+  "usable_vram_definition": "after context/other users, before weights; do not subtract context twice",
+  "uncertainty_type": "shape-inspired assumption sensitivity; not statistical confidence or proven bounds",
+  "input_sha256": {
+    "configs/experiment.json": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+    "configs/models/provenance.json": "f8528701215fef3b0a94a6647d30bde8c449827504fd97622769f3f9119a0a27",
+    "configs/models/qwen2.5-1.5b.json": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+    "docs/DERIVATION.md": "54508b29832dcd4be09cfd9f0902f28921d8cde6731c70d31e053f590968bc5f",
+    "prereg/review-2026-10-18/REVIEW.md": "a12e36e681d5a0690b033513005b38b1c4524af2bc40cab55eaafbe51930271a",
+    "docs/P3_ACCEPTANCE.md": "fd553955eb9bf6944ae064e5b71d052db78e32d11f2c69b34044a39ade8452be",
+    "prereg/phase45-2026-10-18/REVIEW.md": "fbcc792f33709ca35f8d2b5d0e5b2fd7a640f67242ee95a4631927389c93c6fa",
+    "prereg/final-2026-10-19/REVIEW.md": "fe3e4b513a6cfc275688f556352ad1cecfc6d16c98bd74ecca3d01b4bff7cae4",
+    "scripts/claim_external_attempt.py": "e72231260bb302428bc3ffd98a9e434fcdeb1acaba82b03aa7554764dbc4dd21",
+    "artifacts/experiments/2026-10-19-t4-interim/recovery.json": "72587485bedc9fc02b4c0b6e89a34f16221c2401b24fc15df8bbf7603952b480",
+    "docs/P4_P5_INTEGRATION.md": "23518c3fe6a20581c4078f26f7d00e0cb61454d277791efb6e77822006988cfc"
+  },
+  "generator_sha256": {
+    "preregistration.py": "003379da5d8618b3e7a6ce46c3a3d7d9984ed42b85755bc8a10e4cbadc4eaaf0",
+    "model_math.py": "9ab3fa6d5b03128c956f62df0b77ce60598ede2c6dade4fde7c4f9d78cc23c6b"
+  },
+  "protocol": {
+    "protocol_version": "prefill-v1",
+    "model_id": "Qwen/Qwen2.5-1.5B",
+    "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+    "config_path": "configs/models/qwen2.5-1.5b.json",
+    "dtype": "float16",
+    "batch_size": 1,
+    "mode": "single_prefill",
+    "attention_implementation": "sdpa",
+    "sdpa_backend": "EFFICIENT_ATTENTION",
+    "cache_type": "DynamicCache",
+    "logits_to_keep": 1,
+    "seed": 42,
+    "warmup": false,
+    "allocator_backend": "native",
+    "allocator_variants": [
+      "default",
+      "expandable"
+    ],
+    "required_lengths": [
+      512,
+      1024,
+      2048,
+      4096,
+      8192
+    ],
+    "candidate_lengths": [
+      16384,
+      32768,
+      65536,
+      98304,
+      131072
+    ],
+    "quality_context_limit": 32768,
+    "memory_stress_limit": 131072,
+    "repeats": 3,
+    "boundary_resolution_tokens": 256,
+    "safe_budget_fraction": 0.9,
+    "deliberate_oom_attempt_budget": 1,
+    "per_probe_timeout_seconds": 1200,
+    "diagnostics": {
+      "chunked_prefill": {
+        "chunk_size": 512,
+        "lengths": [
+          512,
+          2048,
+          8192,
+          32768
+        ]
+      },
+      "static_cache": {
+        "lengths": [
+          512,
+          2048,
+          8192
+        ],
+        "capacity_equals_length": true
+      },
+      "eager_attention": false,
+      "full_logits": false
+    }
+  },
+  "architecture": {
+    "layers": 28,
+    "hidden": 1536,
+    "intermediate": 8960,
+    "query_heads": 12,
+    "kv_heads": 2,
+    "head_dim": 128,
+    "vocab": 151936,
+    "tied_embeddings": true,
+    "max_positions": 131072
+  },
+  "parameter_breakdown": {
+    "input_embedding": 233373696,
+    "untied_output_embedding": 0,
+    "attention_projection_weights": 154140672,
+    "attention_qkv_biases": 57344,
+    "mlp_weights": 1156055040,
+    "layer_norm_weights": 86016,
+    "final_norm_weight": 1536
+  },
+  "unique_parameters": 1543714304,
+  "weight_bytes_fp16": 3087428608,
+  "duplicate_tied_embedding_error_bytes": 466747392,
+  "kv_bytes_per_token": 28672,
+  "naive_kv_bytes_per_token": 172032,
+  "gqa_overestimate_factor": 6,
+  "scenarios": [
+    {
+      "name": "optimistic",
+      "activation_bytes_per_token": 54272,
+      "fixed_headroom_bytes": 268435456
+    },
+    {
+      "name": "central",
+      "activation_bytes_per_token": 78336,
+      "fixed_headroom_bytes": 536870912
+    },
+    {
+      "name": "conservative",
+      "activation_bytes_per_token": 120832,
+      "fixed_headroom_bytes": 1073741824
+    }
+  ],
+  "memory_predictions": [
+    {
+      "length_tokens": 512,
+      "kv_bytes": 14680064,
+      "naive_kv_bytes": 88080384,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3129895936,
+          "budget_bytes": 3398331392
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3142216704,
+          "budget_bytes": 3679087616
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3163974656,
+          "budget_bytes": 4237716480
+        }
+      ]
+    },
+    {
+      "length_tokens": 1024,
+      "kv_bytes": 29360128,
+      "naive_kv_bytes": 176160768,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3172363264,
+          "budget_bytes": 3440798720
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3197004800,
+          "budget_bytes": 3733875712
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3240520704,
+          "budget_bytes": 4314262528
+        }
+      ]
+    },
+    {
+      "length_tokens": 2048,
+      "kv_bytes": 58720256,
+      "naive_kv_bytes": 352321536,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3257297920,
+          "budget_bytes": 3525733376
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3306580992,
+          "budget_bytes": 3843451904
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3393612800,
+          "budget_bytes": 4467354624
+        }
+      ]
+    },
+    {
+      "length_tokens": 4096,
+      "kv_bytes": 117440512,
+      "naive_kv_bytes": 704643072,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3427167232,
+          "budget_bytes": 3695602688
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3525733376,
+          "budget_bytes": 4062604288
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 3699796992,
+          "budget_bytes": 4773538816
+        }
+      ]
+    },
+    {
+      "length_tokens": 8192,
+      "kv_bytes": 234881024,
+      "naive_kv_bytes": 1409286144,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "tensor_peak_bytes": 3766905856,
+          "budget_bytes": 4035341312
+        },
+        {
+          "name": "central",
+          "tensor_peak_bytes": 3964038144,
+          "budget_bytes": 4500909056
+        },
+        {
+          "name": "conservative",
+          "tensor_peak_bytes": 4312165376,
+          "budget_bytes": 5385907200
+        }
+      ]
+    }
+  ],
+  "vram_sensitivity": [
+    {
+      "usable_vram_bytes": 12884901888,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 114885,
+          "config_capped_limit_tokens": 114885,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 86541,
+          "config_capped_limit_tokens": 86541,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 58351,
+          "config_capped_limit_tokens": 58351,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 13958643712,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 127830,
+          "config_capped_limit_tokens": 127830,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 96575,
+          "config_capped_limit_tokens": 96575,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 65533,
+          "config_capped_limit_tokens": 65533,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 15032385536,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 140775,
+          "config_capped_limit_tokens": 131072,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": true,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 106609,
+          "config_capped_limit_tokens": 106609,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 72715,
+          "config_capped_limit_tokens": 72715,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    },
+    {
+      "usable_vram_bytes": 15569256448,
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "uncapped_memory_limit_tokens": 147248,
+          "config_capped_limit_tokens": 131072,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": true,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "central",
+          "uncapped_memory_limit_tokens": 111626,
+          "config_capped_limit_tokens": 111626,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        },
+        {
+          "name": "conservative",
+          "uncapped_memory_limit_tokens": 76306,
+          "config_capped_limit_tokens": 76306,
+          "quality_domain_limit_tokens": 32768,
+          "config_ceiling_reached": false,
+          "at_least_one_token_fits": true
+        }
+      ]
+    }
+  ],
+  "runtime": {
+    "python_minor": "3.11",
+    "torch": "2.6.0",
+    "cuda": "12.4",
+    "transformers": "4.51.3"
+  },
+  "context_inventory_path": "prereg/final-2026-10-19/context-inventory.json",
+  "context_inventory_sha256": "edb6c9cc740320f5c35ede27b324e5b5311e12e94fda0bc7d8dfbd164db88b78",
+  "execution_sha256": {
+    "src/kv_cache_scaling/probe.py": "1419fd80654d2b5804fc2848c6375200bfcf6cb5cdf6c09c541ffa57ceacde3f",
+    "src/kv_cache_scaling/telemetry.py": "a7748ab8b3581d9e763e0428182b44471096bc0389c4e3b5a1bc8e544d7eacd9",
+    "src/kv_cache_scaling/worker.py": "4c2e3ef37e1cc2c261963d6a640c78d64da188a8b81fc6b89a63adb1269a9fd9",
+    "src/kv_cache_scaling/gate.py": "2c66d2540f25ca5cafa4ea117af9f74e4f4d61b1b6b9b23a7aa8beaf9aecdbc6",
+    "src/kv_cache_scaling/sweep.py": "6bc23f01f9f7307969edb119c8ef47814b46ab8eab80e59f12694217950a0dc3",
+    "src/kv_cache_scaling/coordinator_store.py": "8de4a3bc227003c6e6f7efacc346524791e837f32f9810765ac0dddf074f45b2",
+    "src/kv_cache_scaling/processes.py": "2799bd58c5a21817ecdad87362b3d54bc0b426deddd5028cff5ede83534b31a7",
+    "src/kv_cache_scaling/model_math.py": "9ab3fa6d5b03128c956f62df0b77ce60598ede2c6dade4fde7c4f9d78cc23c6b",
+    "src/kv_cache_scaling/environment.py": "e0a275ae25f625c7b58aff5ac639f58d48f7d33100c6e7fc152bc1de5e03411b",
+    "src/kv_cache_scaling/cli.py": "8e8504d96dc3411ec0b33e91b7f29a55971fec60c8dcf92e9df259d0e7caedb9",
+    "src/kv_cache_scaling/preregistration.py": "003379da5d8618b3e7a6ce46c3a3d7d9984ed42b85755bc8a10e4cbadc4eaaf0"
+  },
+  "gpu_prediction": {
+    "usable_vram_bytes": 15527116800,
+    "central_limit_tokens": 111232,
+    "limit_range_tokens": [
+      76024,
+      131072
+    ],
+    "central_budget_bytes_at_required_lengths": {
+      "512": 3679087616,
+      "1024": 3733875712,
+      "2048": 3843451904,
+      "4096": 4062604288,
+      "8192": 4500909056
+    }
+  },
+  "acceptance_policy": {
+    "review_minimum": 1,
+    "scope": "Paired primary sweep; 28 separate diagnostics; six held-out L114688 checks under frozen parent-fit admission; one final L131072 default attempt with externally consumed dispatch claim",
+    "durability": "External full capsule verified and fsynced before each next point; Drive disconnected",
+    "external_dispatch_script": "scripts/claim_external_attempt.py",
+    "held_out_length": 114688,
+    "final_deliberate_length": 131072
+  },
+  "review_completed_at_utc": "2026-10-19T05:21:43.389255+00:00",
+  "review_attribution": "Codex technical review on behalf of Person 1; explicit user delegation; not independent human review",
+  "authorization": "Requires a separately pushed later receipt and durable launches. Same one-use experiment identity survives runtime loss.",
+  "amendment": {
+    "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+    "prior_observations": "Seven original successful L512 acceptance workers and 43 bulk primary workers; all prior data disclosed. New GPU identity is a separate cohort.",
+    "numerical_prediction_changed": false,
+    "purpose": "Reconcile fresh T4 after runtime loss; freeze complete primary, diagnostic, held-out and one-use final-boundary execution before new model measurements"
+  }
+}
