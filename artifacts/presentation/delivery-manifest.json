@@ -67,13 +67,18 @@
     "data/processed/project-results/transfer/transfer.json": "d762471b03c28c1d135e3134c4a9e821ccde10912894a49db284b76d6dcd6225",
     "data/processed/project-results/transfer/transfer.md": "9ce98433842f1397f7666615e1549727313e5f297b4dc95a4c24e702ab3f006e",
     "docs/DECISIONS_AND_PHASE_GUIDE.md": "da28dc4bfed79ed5c41143a879e912725a50bf2a6f0dfb8ee3b23dcfe80d0608",
-    "docs/LIVE_DEMO.md": "b1f588691be69783ec4f1fd6e206ec57942d7ec8ea5e535f9f5be22a5bbbf2c2",
-    "docs/PROJECT_STATUS.md": "ee76678be7b351ef5f5e26f7045f59ce181d804768211a057fceea6a053e0cbb",
+    "docs/LIVE_DEMO.md": "c66d0de092362cddf1f991fa34e3390e7f4f261721f6f5b319f3a9ddc45159c9",
+    "docs/PROJECT_STATUS.md": "c11135e4d5419a7829b8d3347f05b21d1c6c42e31da6bf303d8b423723864f9c",
     "docs/REMAINING_WORK.md": "5d903dcaec1910437d553d2f16427e1cdd758cd6628fd9995598263ffae0f3d6",
     "docs/measurement.schema.json": "1bad93eca1a937f37f74dcabda4a604b4e7fd0be328ab205d1d7f4e3fe872246",
     "notebooks/FINAL_PRESENTATION.ipynb": "d9d38cbe3e654fdf2f6eeeadbfaba889d106fd410049c4ff7f5fb6f350fa6767",
     "prereg/formal-2026-10-18-t4/prediction.json": "0581e076f6252874538769f7542b5f838a906589119a6581a472264b2ddfdb57",
     "prereg/formal-2026-10-18-t4/prediction.md": "b5e250dc29bbfc318094b890d2820d1d73cdc09714dde2cbfbe747d9314803f5",
     "prereg/formal-2026-10-18-t4/receipt.json": "45046f61955f482598c26caf4023b5ea4106b7c5ac1abd4874d1c26f7e130afb"
+  },
+  "browser_presentation_status": {
+    "standalone_html": "Six scientific images and tables verified; no Google login required",
+    "colab_backend": "Executed and exported successfully",
+    "colab_browser_renderer": "Google login/cookie-related script-loading error observed; use HTML fallback"
   }
 }

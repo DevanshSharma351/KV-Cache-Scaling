@@ -34,3 +34,7 @@ cells** and embeds all **six scientific figures**. Its standalone HTML embeds
 individual downloadable deliverables. The existing Drive audit now has a final
 presentation header and an executed six-deliverable section. These are CPU
 replays, not additional GPU measurements.
+
+The final browser check also encountered Colab's Google login/cookie-related
+output-renderer error. Backend execution and saved outputs passed; the standalone
+HTML is the independent presentation fallback. See [live demo](LIVE_DEMO.md).

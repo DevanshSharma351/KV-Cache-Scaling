@@ -69,3 +69,18 @@ The optional all-deliverables ZIP packages display artifacts, frozen prediction
 files, pinned configs and source snapshots. For execution with historical Git
 provenance, use the cloned repository/pinned notebook checkout rather than
 treating that artifact ZIP as a replacement Git history.
+
+## If Colab cannot render outputs
+
+During the final browser check, Colab reported “Could not load the JavaScript
+files needed to display output” and referenced Google login access or third-party
+cookies. The backend run still completed: its downloaded notebook verifies all
+118 tests and six scientific image outputs. This browser-rendering problem is
+separate from the GPU quota limit.
+
+Use the standalone HTML immediately for presentation: it embeds the graphs,
+tables and individual downloads and has no Google login dependency. Its content
+was verified in the browser. Cached notebook outputs are also in GitHub. Do not
+change security/cookie settings merely to demonstrate the science. A CPU
+re-execution regenerates the artifacts, but cannot itself repair browser login
+or blocked frontend scripts.
