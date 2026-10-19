@@ -32,3 +32,12 @@ The primary run still needs the remaining expandable points and finalization.
 Diagnostic controls, prospective held-out checks and the one-use final boundary
 attempt must follow their reviewed execution amendment; none is claimed here.
 The original numerical prediction remains unchanged.
+
+## Subsequent recovery
+
+The original `primary-043` packet was recovered from saved cell 94 on 19 October.
+`primary-043-recovered.zip` and `recovery.json` preserve the verified original bytes
+and the additional successful expandable L=32768 repeat 1. The original runtime
+was lost; its interrupted acknowledgement does not invalidate that raw result.
+A new GPU UUID requires a separate prospective amendment and measurement cohort.
+The original journal is preserved without a fabricated run-finished event.

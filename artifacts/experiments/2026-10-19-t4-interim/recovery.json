@@ -1,0 +1,21 @@
+{
+  "status": "RECOVERED_AFTER_RUNTIME_LOSS",
+  "checkpoint": {
+    "label": "primary-043",
+    "sha256": "1f55bc42f902ae3d6f5bcbc5d099f435edc1f08f8883ab7842bc95395865bdf6",
+    "bytes": 3365230,
+    "members": 591
+  },
+  "recovery_method": "Original checkpoint transport decoded from saved cell 94; length/hash/member manifest/raw references verified; fsynced outside Colab",
+  "completed_primary_probes": 43,
+  "last_point": {
+    "allocator": "expandable",
+    "length": 32768,
+    "repeat": 1,
+    "peak_allocated_bytes": 6217035264
+  },
+  "original_gpu_uuid": "GPU-50c9760c-d3ab-6d00-dde4-95288250a589",
+  "new_gpu_uuid": "GPU-89f781af-1ec0-992b-3dc3-46ef2d0941de",
+  "old_run_termination": "Runtime lost after completed probe; external acknowledgement prompt interrupted. No model retry or OOM dispatch. Journal preserved unchanged.",
+  "new_cohort_policy": "Fresh prospective context and execution amendment; never pool different GPU UUIDs."
+}
