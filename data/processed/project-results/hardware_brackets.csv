@@ -1,0 +1,3 @@
+group_id,allocator,largest_observed_success_tokens,smallest_observed_oom_tokens,original_prediction_tokens,consistent_monotone_bracket,prediction_error_percent_interval,interpretation
+2db952ea3ec76ca166eef3224d6c3bfcd4db471b61c9ac4283863dcdeeef44c1,default,114688,,111232,True,,"Under monotone feasibility, successful lower bound <= true limit < failed upper bound; no exact threshold or confidence interval"
+56fc68191e67ba19b7d58939f112e29df43c4cfa818533877774b8d08ee5d361,expandable,114688,,111232,True,,"Under monotone feasibility, successful lower bound <= true limit < failed upper bound; no exact threshold or confidence interval"

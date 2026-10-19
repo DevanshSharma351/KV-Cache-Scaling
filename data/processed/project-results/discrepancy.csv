@@ -1,0 +1,469 @@
+probe_id,signed_gap_bytes,component,signed_bytes,supported,evidence
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,output_and_input_lifetime,2139136,True,Controlled output/input release delta
+5de4f220-242d-441c-985a-9cb69cfa2780,-1339293184,transient_envelope_difference,-1350870016,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,output_and_input_lifetime,2139136,True,Controlled output/input release delta
+c3fb0542-e8c2-4325-9b1e-8f57d39d4d0b,-1339293184,transient_envelope_difference,-1350870016,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,output_and_input_lifetime,2139136,True,Controlled output/input release delta
+d60afb1a-89ce-4585-9fa7-0415f4bcb6b4,-1339293184,transient_envelope_difference,-1350870016,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,output_and_input_lifetime,2139136,True,Controlled output/input release delta
+9a193cc4-9884-42b1-a6d3-176826691deb,-1340210688,transient_envelope_difference,-1350870016,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,output_and_input_lifetime,312320,True,Controlled output/input release delta
+c7498c18-92f2-4758-80f4-10d08e69196e,4465152,transient_envelope_difference,-5284864,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,output_and_input_lifetime,312320,True,Controlled output/input release delta
+36c414ff-5749-43c8-a282-0fb76aeb0e2e,4465152,transient_envelope_difference,-5284864,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,output_and_input_lifetime,312320,True,Controlled output/input release delta
+3df5ba80-639a-4027-b946-487dca1c00e3,4465152,transient_envelope_difference,-5284864,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,output_and_input_lifetime,320512,True,Controlled output/input release delta
+c496d7f8-fa40-459b-b82f-38ce51035e41,-1555968,transient_envelope_difference,-11314176,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+615c572d-5760-405c-baac-73d406650d27,-1555968,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+615c572d-5760-405c-baac-73d406650d27,-1555968,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+615c572d-5760-405c-baac-73d406650d27,-1555968,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+615c572d-5760-405c-baac-73d406650d27,-1555968,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+615c572d-5760-405c-baac-73d406650d27,-1555968,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+615c572d-5760-405c-baac-73d406650d27,-1555968,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+615c572d-5760-405c-baac-73d406650d27,-1555968,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+615c572d-5760-405c-baac-73d406650d27,-1555968,output_and_input_lifetime,320512,True,Controlled output/input release delta
+615c572d-5760-405c-baac-73d406650d27,-1555968,transient_envelope_difference,-11314176,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,output_and_input_lifetime,320512,True,Controlled output/input release delta
+666887a4-cc10-4cd7-a209-3f4083e153f9,-1555968,transient_envelope_difference,-11314176,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,output_and_input_lifetime,336896,True,Controlled output/input release delta
+8ed1722e-aab1-4e3b-a46f-db356a3dbb02,-11501056,transient_envelope_difference,-21275648,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,output_and_input_lifetime,336896,True,Controlled output/input release delta
+090b1141-abb0-4b4f-af90-89bd87e2f853,-11501056,transient_envelope_difference,-21275648,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,output_and_input_lifetime,336896,True,Controlled output/input release delta
+4b9295d8-c6f2-4542-842b-9a91074e2b1a,-11501056,transient_envelope_difference,-21275648,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,output_and_input_lifetime,369664,True,Controlled output/input release delta
+e273355e-d38e-4d5f-aa6d-9e8e2b4218b1,-38731264,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,output_and_input_lifetime,369664,True,Controlled output/input release delta
+a6a0fcb0-2d41-4f8d-8784-f1e763766004,-38731264,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,output_and_input_lifetime,369664,True,Controlled output/input release delta
+c984a0d4-5fe1-4c95-a120-d72bdcc0964c,-38731264,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,output_and_input_lifetime,435200,True,Controlled output/input release delta
+1b405bfa-a8ac-4d77-a420-8c4126c9e53d,-86900224,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,output_and_input_lifetime,435200,True,Controlled output/input release delta
+5c6ec9df-c1cf-407e-ad27-d4961fcf36cb,-86900224,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,output_and_input_lifetime,435200,True,Controlled output/input release delta
+eff46d57-a2af-406f-8701-607188a57a10,-86900224,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,output_and_input_lifetime,566272,True,Controlled output/input release delta
+14188d51-e48d-457b-a15b-5655aae0c2c1,-183238144,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,output_and_input_lifetime,566272,True,Controlled output/input release delta
+2462d3f5-dad0-41d8-ae0a-689f9f6b2c0c,-183238144,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,output_and_input_lifetime,566272,True,Controlled output/input release delta
+92a79474-0f32-44dd-9174-52e3b14c1426,-183238144,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,output_and_input_lifetime,828416,True,Controlled output/input release delta
+1ae5e2cc-4f50-448f-a4ce-fc421ea00104,-375913984,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,output_and_input_lifetime,828416,True,Controlled output/input release delta
+957b2ed0-243c-4dd4-8c1f-08fb64200e65,-375913984,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,output_and_input_lifetime,828416,True,Controlled output/input release delta
+257e6fe5-4df1-45af-9150-558fb58db1f8,-375913984,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+8f7103bf-e9ec-4c98-967e-045bedaeacff,-761265664,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+0e690158-300a-474c-b887-22d2065c98a9,-761265664,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,postload_allocator_internal_padding,917760,True,Same-snapshot allocated minus requested bytes
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87"
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+fbac8630-25b4-4bee-bd29-6e2cf671c612,-761265664,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,output_and_input_lifetime,312320,True,Controlled output/input release delta
+1c8be7eb-4013-483b-bd96-d21d177eb3e3,2499072,transient_envelope_difference,-6333440,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,output_and_input_lifetime,312320,True,Controlled output/input release delta
+70daadd4-7a9a-4fbd-b1f4-ac68877b7339,2499072,transient_envelope_difference,-6333440,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,controlled_cublas_workspace,8519680,True,"Direct L=512 intervention; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,output_and_input_lifetime,312320,True,Controlled output/input release delta
+a7f755c0-f877-4356-9338-21ac9d5dd235,2499072,transient_envelope_difference,-6333440,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,output_and_input_lifetime,320512,True,Controlled output/input release delta
+08a4d77c-a272-4119-89a4-1dcb7b47e126,-3522048,transient_envelope_difference,-12362752,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,output_and_input_lifetime,320512,True,Controlled output/input release delta
+b7a2ec42-f4ee-4804-87e9-b812cfff7c3e,-3522048,transient_envelope_difference,-12362752,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,output_and_input_lifetime,320512,True,Controlled output/input release delta
+c8e18bc0-13f5-4009-89c7-7f46876de125,-3522048,transient_envelope_difference,-12362752,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,output_and_input_lifetime,336896,True,Controlled output/input release delta
+5d45f7d7-a075-4d75-bed1-f2845396c2b0,-15564288,transient_envelope_difference,-24421376,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,output_and_input_lifetime,336896,True,Controlled output/input release delta
+8c318d6c-ee1b-4af2-803f-2e62ef2c1563,-15564288,transient_envelope_difference,-24421376,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,output_and_input_lifetime,336896,True,Controlled output/input release delta
+e3fe8b76-d099-4d8c-858f-6b52ba0511c8,-15564288,transient_envelope_difference,-24421376,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,output_and_input_lifetime,369664,True,Controlled output/input release delta
+16ba8a9c-e5ef-4a82-950f-adbcc340a7af,-39648768,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,output_and_input_lifetime,369664,True,Controlled output/input release delta
+0d7ecd1f-130f-4059-a93a-3e2e0d58439a,-39648768,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,output_and_input_lifetime,369664,True,Controlled output/input release delta
+d8b8df69-bb0c-458d-8e0b-1e52a44bed44,-39648768,transient_envelope_difference,-48538624,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,output_and_input_lifetime,435200,True,Controlled output/input release delta
+b7bbb115-23c8-4408-acb2-d044e6e179ff,-87817728,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,output_and_input_lifetime,435200,True,Controlled output/input release delta
+ad771d06-7ec5-422b-8114-cb061437dba3,-87817728,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,output_and_input_lifetime,435200,True,Controlled output/input release delta
+16c31478-71b8-4e09-a5d1-2f164a89d050,-87817728,transient_envelope_difference,-96773120,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,output_and_input_lifetime,566272,True,Controlled output/input release delta
+11f5e602-bbf1-46fc-bf11-728adeb0e53e,-184155648,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,output_and_input_lifetime,566272,True,Controlled output/input release delta
+262a77c6-20bc-491e-ba5b-9353c413905f,-184155648,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,output_and_input_lifetime,566272,True,Controlled output/input release delta
+bf84bbab-7d19-4e4c-a959-4d4933d6be80,-184155648,transient_envelope_difference,-193242112,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,output_and_input_lifetime,828416,True,Controlled output/input release delta
+327ad445-5e46-4052-a6ef-48353b1eaf71,-376831488,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,output_and_input_lifetime,828416,True,Controlled output/input release delta
+f85c3c36-c926-495c-8990-0da92b2be3e7,-376831488,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,output_and_input_lifetime,828416,True,Controlled output/input release delta
+039a0679-df4d-4fa0-8ae6-febb0724fe88,-376831488,transient_envelope_difference,-386180096,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+bba28d64-1f6d-49e3-a39b-eb504dfb3c56,-762183168,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+f223dcf6-be66-4f47-be96-b3ef5bcf1be8,-762183168,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,unique_weight_difference,0,True,Deduplicated parameter storage vs config-derived weights
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,loaded_model_buffer_storage,256,True,Unique loaded model storage excluding parameters
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,postload_allocator_internal_padding,256,True,Same-snapshot allocated minus requested bytes
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,unaccounted_postload_storage,0,False,Unclassified post-load allocation; not assumed to be framework overhead
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,controlled_cublas_workspace,8519680,True,"Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 0b2ca818-ad88-40d2-9606-abc4febdfe5c,caec2e96-fd03-4746-8bc0-4bb477751b53,d1676bcf-072b-4814-990a-4ce22264e20e"
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,unaccounted_postforward_persistent_growth,0,False,Measured released-minus-postload allocation; physical cause unconfirmed
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,cache_lifetime_difference,0,True,Controlled cache release delta minus analytical retained KV
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,output_and_input_lifetime,1352704,True,Controlled output/input release delta
+ba0937b1-e8a7-4410-92cd-a54dee965325,-762183168,transient_envelope_difference,-772056064,True,"Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution"

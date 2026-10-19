@@ -1,0 +1,42 @@
+[
+  {
+    "requirement": "FR1",
+    "status": "PASS",
+    "criterion": "Pinned config, KV heads and tied-weight arithmetic"
+  },
+  {
+    "requirement": "FR2",
+    "status": "PASS_FOR_SAVED_ACCEPTANCE",
+    "criterion": "Exact weights/cache verified; residuals reported separately"
+  },
+  {
+    "requirement": "FR3",
+    "status": "PASS_FOR_SAVED_ACCEPTANCE",
+    "criterion": "Original prediction 7baff51 and later receipt 976158c precede model work"
+  },
+  {
+    "requirement": "FR4",
+    "status": "CHECKPOINTED_GRID_PASS",
+    "criterion": "Fresh workers and per-probe external checkpoint barriers; original acceptance restoration verified"
+  },
+  {
+    "requirement": "FR5",
+    "status": "PASS",
+    "criterion": "Five lengths, three repeats and retained-cache slope required"
+  },
+  {
+    "requirement": "FR6",
+    "status": "SAFE_BUDGET_CENSORED",
+    "criterion": "One-use OOM bracket and paired safe-budget delta are distinct; an exact hardware-limit delta is not established"
+  },
+  {
+    "requirement": "FR7",
+    "status": "PASS",
+    "criterion": "Closed signed table; unsupported bytes remain unaccounted"
+  },
+  {
+    "requirement": "FR8",
+    "status": "CONDITIONAL_KV_COMPARISON",
+    "criterion": "Four unrun transfer cells; published KV block comparison with dtype/unit caveats"
+  }
+]

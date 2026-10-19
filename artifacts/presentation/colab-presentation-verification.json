@@ -1,0 +1,20 @@
+{
+  "status": "PASS_FINAL_COLAB_PRESENTATION_SECTION",
+  "scope": "New final presentation section only; historical setup errors are preserved",
+  "source_commit": "e33b3992341e7b7d3a0a8e56326f0a1d1b08e928",
+  "cloud_notebook": "https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS",
+  "cloud_title": "KV_Cache_Project_Audit.ipynb",
+  "export_sha256": "3705d1253990d2c1acc37b0cc1446a53435b315d956671a641b1534a4f6a9566",
+  "export_bytes": 83685386,
+  "export_cells": 153,
+  "header_cell_index": 150,
+  "executed_section_cell_index": 151,
+  "source_cell_sha256": "bae9f91659480b060bc761b5c951cf4afd372360802ef966a49b4c591c3fb824",
+  "cpu_tests_passed": 118,
+  "scientific_png_outputs": 6,
+  "required_deliverables_rendered": 6,
+  "saved_gpu_workers": 80,
+  "new_model_cuda_calls": false,
+  "research_acceptance": "PENDING_GPU_QUOTA_BOUNDARY_EVIDENCE",
+  "stream_output_sha256": "054baa3c45c5a6e4dabafd67bd7357f20c2632f0e8d16809aa777a9a9c59e27f"
+}

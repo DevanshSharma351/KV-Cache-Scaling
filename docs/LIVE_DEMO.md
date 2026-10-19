@@ -64,3 +64,8 @@ using the historical notebook. Do not Run all its old measurement cells. The
 clean presentation notebook is the recommended public demo because every cell
 is designed for safe CPU replay. Historical exports retain original attribution
 and names as provenance; current presentation/docs use the unified five-phase flow.
+
+The optional all-deliverables ZIP packages display artifacts, frozen prediction
+files, pinned configs and source snapshots. For execution with historical Git
+provenance, use the cloned repository/pinned notebook checkout rather than
+treating that artifact ZIP as a replacement Git history.

@@ -31,9 +31,9 @@ temporary-filesystem checkpoint recovery demo. Downloads are optional.
 | Derivation with every symbol defined | [Derivation](docs/DERIVATION.md); presentation section 1 |
 | Original prediction and commit timestamp | [Unchanged commitment](prereg/formal-2026-10-18-t4/prediction.md), [original commit](https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/7baff5121ed643f27ba06959065855a8913f8e8c); section 2 |
 | Checkpointing sweep harness | [Coordinator](src/kv_cache_scaling/sweep.py), [persistence API](src/kv_cache_scaling/journal.py), [contract](docs/DATA_CONTRACT.md); section 3 |
-| Memory curves with analytical overlays | [Separate PNG/PDF figures](artifacts/figures/p1-2026-10-19/); section 4 |
-| Discrepancy table in bytes / MiB | [CSV](data/processed/p1-2026-10-19/discrepancy.csv); section 5. Fixed-length peak accounting is available; OOM-threshold error is unmeasured |
-| Cross-model / cross-GPU predictions with verification | [Transfer table](data/processed/p1-2026-10-19/transfer/transfer.md); section 6. Published comparison validates KV blocks, not unrun HF peak limits |
+| Memory curves with analytical overlays | [Separate PNG/PDF figures](artifacts/figures/project-results/); section 4 |
+| Discrepancy table in bytes / MiB | [CSV](data/processed/project-results/discrepancy.csv); section 5. Fixed-length peak accounting is available; OOM-threshold error is unmeasured |
+| Cross-model / cross-GPU predictions with verification | [Transfer table](data/processed/project-results/transfer/transfer.md); section 6. Published comparison validates KV blocks, not unrun HF peak limits |
 
 Some immutable evidence paths retain their historical names. Current docs and
 presentation use the unified project flow; frozen predictions, receipts and audit

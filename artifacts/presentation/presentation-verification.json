@@ -1,0 +1,20 @@
+{
+  "status": "CPU_PRESENTATION_EXECUTED_RESEARCH_BOUNDARY_PENDING",
+  "executed_at_utc": "2026-10-19T11:37:32.715093+00:00",
+  "source_commit": "e33b3992341e7b7d3a0a8e56326f0a1d1b08e928",
+  "source_tree_dirty": false,
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "executed_code_cells": 12,
+  "embedded_scientific_figures": 6,
+  "model_or_cuda_calls": false,
+  "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+  "saved_gpu_workers": 80,
+  "missing_gpu_evidence": [
+    "Two expandable held-out repeats",
+    "One final deliberate boundary attempt"
+  ],
+  "files": {
+    "FINAL_PRESENTATION.ipynb": "d9d38cbe3e654fdf2f6eeeadbfaba889d106fd410049c4ff7f5fb6f350fa6767",
+    "PROJECT_PRESENTATION.html": "e8c6b26f4c3d36aa5c852caed281c3cc4835a75283c4e229dc58f44213610779"
+  }
+}

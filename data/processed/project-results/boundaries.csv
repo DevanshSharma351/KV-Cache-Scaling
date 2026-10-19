@@ -1,0 +1,5 @@
+run_id,allocator,execution_scope,largest_observed_success_tokens,observed_oom_upper_tokens,safe_budget_lower_tokens,safe_budget_upper_tokens,status
+0cb5db86-c7be-41f1-99cf-c3fb73430756,default,calibrated_validation,114688,,,,NO_BOUNDARY_MEASURED
+0cb5db86-c7be-41f1-99cf-c3fb73430756,expandable,calibrated_validation,114688,,,,NO_BOUNDARY_MEASURED
+c6b37c71-23e8-4209-a278-2c9f65b6b763,default,primary_sweep,65536,,65536,65792,SAFE_BUDGET_CENSORED
+c6b37c71-23e8-4209-a278-2c9f65b6b763,expandable,primary_sweep,65536,,65536,65792,SAFE_BUDGET_CENSORED

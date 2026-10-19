@@ -1,0 +1,11 @@
+{
+  "status": "ANALYZED_SAVED_OBSERVATIONS",
+  "output": "/private/tmp/kv-project-presentation-release/reproduction/analysis",
+  "acceptance": {
+    "five_length_paired_primary_complete": true,
+    "cache_slope_pass": true,
+    "discrepancy_coverage_pass": true,
+    "discrepancy_closure_pass": true
+  },
+  "executes_gpu_work": false
+}

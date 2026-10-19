@@ -18,8 +18,8 @@ as a substitute for missing GPU observations.
   explicit discrepancy/unaccounted rows.
 - The CPU pipeline generates six figure pairs, four transfer predictions,
   published KV-block comparisons and an evidence-linked Markdown/PDF report.
-- The earlier **109 CPU tests passed** locally, in Colab and in CI on Python 3.10–3.13.
-  The expanded journal/schema/presentation suite now has 118 tests.
+- The expanded full-environment suite passes **118 tests** locally, in Colab and
+  in presentation CI. The CPU matrix also passes on Python 3.10–3.13.
   Both Colab and CI reproduce the saved final-cohort data.
   The executed Colab notebook records source checkout, commands and outputs.
 
@@ -77,7 +77,7 @@ Report status is intentionally **RESEARCH_CRITERIA_PENDING**. The strict
 
 [Raw evidence](../artifacts/experiments/2026-10-19-t4-final/README.md) ·
 [PDF](../artifacts/reports/p1-2026-10-19/report.pdf) ·
-[processed tables](../data/processed/p1-2026-10-19/) ·
+[processed tables](../data/processed/project-results/) ·
 [executed notebook](../notebooks/03_p1_executed_t4_2026-10-19.ipynb).
 
 ## Resume only with a valid GPU allocation
