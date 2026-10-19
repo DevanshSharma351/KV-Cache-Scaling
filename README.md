@@ -3,15 +3,28 @@
 Predict the context memory limit before measuring it, then explain the error with
 reproducible GPU measurements.
 
-**Status: Person 1 Phases 1–3 passed bounded real-GPU acceptance.**
-The reviewed prediction and subsequent receipt were pushed before model work.
-83 CPU tests and seven fresh T4 workers passed: six L=512 primary probes across
-both allocators, plus a separate efficient-SDPA kernel trace. Cache storage
-matched theory exactly. External checkpoint restoration passed; no OOM attempt
-was used. Read the [acceptance evidence](artifacts/acceptance/2026-10-18-t4/README.md)
-and [Person 1 progress](docs/P1_PROGRESS.md). Phases 4–5 now have an integrated analysis, plotting, transfer and PDF pipeline;
-the extended GPU sweep is in progress. Per-probe bulk checkpoint barriers are
-implemented. Colab staging alone is ephemeral.
+**Person 1 implementation is integrated; GPU research acceptance is incomplete.**
+80 successful workers on one T4 are checkpointed: 48 sweep, 28 diagnostic and
+4 held-out workers. Both allocators reached 114,688 tokens. The measured KV slope
+is exactly 28,672 bytes/token. All 109 CPU tests pass.
+
+Colab terminated the runtime and then refused GPU access because of its usage
+limit. Two expandable-allocator validation repeats and the single deliberate
+boundary attempt remain unperformed/unverified. No OOM threshold is claimed.
+See the [delivery and remaining work](docs/P1_HANDOFF.md),
+[GPU evidence](artifacts/experiments/2026-10-19-t4-final/README.md),
+[report](artifacts/reports/p1-2026-10-19/report.pdf) and
+[executed notebook](notebooks/03_p1_executed_t4_2026-10-19.ipynb).
+
+Regenerate the complete saved-data analysis, six figure pairs, four transfer
+predictions and PDF on CPU (Python 3.11–3.13; use a new output directory):
+
+```bash
+python -m pip install -e . -r requirements-analysis.txt
+python scripts/reproduce_results.py \
+  --capsule artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip \
+  --output /tmp/kv-reproduction
+```
 
 ## Start here
 
@@ -46,8 +59,8 @@ See [daily responsibilities and handoffs](TASK_ALLOCATION.md). Reserve GPU windo
 on days 3–5 and use independent CPU tasks while probes run. Day 7 is protected
 for recovery, integration, final reproduction and review.
 
-These decisions become frozen only when the formal prediction is reviewed and
-pushed. See [sources and corrections](docs/SOURCES.md).
+These decisions were frozen in the original formal prediction; later execution
+amendments preserve the original numerical commitment. See [sources and corrections](docs/SOURCES.md).
 
 ## Run the working CPU scaffold
 

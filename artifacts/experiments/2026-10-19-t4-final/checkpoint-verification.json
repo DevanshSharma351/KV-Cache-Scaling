@@ -1,0 +1,37 @@
+{
+  "status": "PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE",
+  "verified_at_utc": "2026-10-19T06:52:14.099496+00:00",
+  "sources": [
+    {
+      "path": "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+      "sha256": "cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389",
+      "verified_members": 1090
+    }
+  ],
+  "successful_workers": 80,
+  "unique_worker_pids": 80,
+  "execution_counts": {
+    "calibrated_validation": 4,
+    "diagnostics": 28,
+    "primary_sweep": 48
+  },
+  "completed_journals": {
+    "calibrated_validation": false,
+    "diagnostics": true,
+    "primary_sweep": true
+  },
+  "prospective_receipt_source_and_heldout_freeze_verified": true,
+  "deliberate_attempt_consumed": false,
+  "empirical_checks": {
+    "five_length_paired_primary_complete": true,
+    "cache_slope_pass": true,
+    "discrepancy_coverage_pass": true,
+    "discrepancy_closure_pass": true
+  },
+  "research_signoff": false,
+  "missing_evidence": [
+    "Paired prospective held-out validation at L=114688.",
+    "Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold."
+  ],
+  "interruption": "Colab runtime removed; GPU quota prevented reconnection"
+}

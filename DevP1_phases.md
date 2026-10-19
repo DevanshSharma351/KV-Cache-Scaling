@@ -235,18 +235,18 @@ or checkpoint weights, or combine unfinished phases into a misleading “done”
 Maintain `docs/P1_PROGRESS.md` with code checks, real evidence and outstanding
 handoffs. A scaffold or passing CPU test does not establish GPU correctness.
 
-**Current status (18 October 2026):** Person 1 Phases 1–3 passed the
-[bounded real-GPU acceptance](artifacts/acceptance/2026-10-18-t4/README.md):
-83 CPU tests, six primary L=512 workers across both allocators, one separate
-efficient-kernel trace, and verified external checkpoint restoration. Formal
-prediction 7baff51 and later receipt 976158c preceded model work. No OOM attempt
-was used. Phases 4–5 remain planned.
+**Current status (19 October 2026):** all five implementation phases are
+integrated and 109 CPU tests pass. The final T4 cohort contains 80 verified
+successful GPU workers: 48 primary, 28 diagnostic, four held-out. Both allocators
+reached 114,688 tokens; KV slope is exactly 28,672 bytes/token. Colab runtime loss
+and its GPU usage limit prevent two remaining held-out repeats and the final
+one-use boundary attempt. **Research acceptance is incomplete**; no measured OOM
+threshold or completed validation journal is claimed. Read
+[the final handoff](docs/P1_HANDOFF.md) and [evidence](artifacts/experiments/2026-10-19-t4-final/README.md).
 
 **User-authorized amendments:** one contributor review is sufficient; Codex
-performed the technical review on behalf of Person 1 at the user's explicit
-request. This supersedes the earlier independent/two-contributor-review count
-for this run without inventing another review. Drive remains disconnected;
-bounded acceptance pauses after each worker for a verified/fsynced local
-checkpoint. A3's reference adapter and this recovery path were tested. Person 2's
-continuous B2 integration remains a bulk-run handoff. A full cloud session
-restart and unattended cloud persistence are not claimed.
+performed technical review on behalf of Person 1 at the user's request. Drive
+remained disconnected. Each GPU worker had a verified/fsynced external checkpoint
+before the next dispatch. The original bounded restoration test passed; full
+cloud-session recovery on the same GPU is not claimed. Person 2's independent
+implementation and reproduction remain explicitly separate.

@@ -29,7 +29,7 @@ jobs:
       - name: Reproduce saved evidence without a GPU
         run: >-
           python scripts/reproduce_results.py
-          --capsule artifacts/acceptance/2026-10-18-t4/gpu-acceptance-complete.zip
+          --capsule artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip
           --output "${{ runner.temp }}/kv-reproduction"
       - uses: actions/upload-artifact@v4
         with:

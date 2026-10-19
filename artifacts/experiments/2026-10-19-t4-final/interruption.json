@@ -1,0 +1,20 @@
+{
+  "status": "GPU_EXECUTION_INTERRUPTED_COLAB_QUOTA",
+  "checkpoint": {
+    "label": "final-validation-004",
+    "sha256": "cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389",
+    "bytes": 7066557,
+    "members": 1090
+  },
+  "gpu_uuid": "GPU-89f781af-1ec0-992b-3dc3-46ef2d0941de",
+  "verified_successful_workers": 80,
+  "remaining_registered_workers": {
+    "held_out_expandable_114688_repeats": 2,
+    "final_default_131072_deliberate_attempt": 1
+  },
+  "deliberate_attempt_consumed": false,
+  "uncheckpointed_worker_outcome": "Unknown; validation-005 may have started before Colab removed the runtime. Do not infer success or OOM.",
+  "browser_notice": "You cannot currently connect to a GPU due to usage limits in Colab.",
+  "recovery_policy": "Do not reuse the old receipt on a different GPU. Preserve existing journals unchanged; reconcile a fresh allocation and register any continuation before further model work.",
+  "screenshot": "colab-gpu-quota.png"
+}

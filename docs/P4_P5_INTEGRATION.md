@@ -6,15 +6,19 @@ capsules. It does not run the GPU experiment or manufacture missing observations
 ```bash
 python -m pip install -e . -r requirements-analysis.txt
 python scripts/reproduce_results.py \
-  --capsule artifacts/acceptance/2026-10-18-t4/gpu-acceptance-complete.zip \
+  --capsule artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip \
   --output /tmp/kv-reproduction
 ```
 
 Use Python 3.11-3.13 for the pinned plotting dependencies. Output directories must
 be new. The command records subprocess commands, times, exit codes and log hashes.
 It produces validated tables, six figure pairs, four transfer predictions and a
-Markdown/PDF report with explicit requirement status. The original L=512 capsule
-alone cannot establish a cache slope, full curve or hardware context limit.
+Markdown/PDF report with explicit requirement status. The final saved capsule contains 80 successful workers, including the paired
+sweep and complete diagnostics. Its report deliberately remains
+`RESEARCH_CRITERIA_PENDING`: two expandable held-out repeats and the deliberate
+OOM boundary are absent after Colab runtime loss/quota refusal. See
+[P1 handoff](P1_HANDOFF.md). The original L=512 capsule alone cannot establish
+a cache slope, full curve or hardware context limit.
 
 ## Analysis decisions
 
@@ -34,7 +38,7 @@ alone cannot establish a cache slope, full curve or hardware context limit.
   Usable VRAM ranges are explicit assumptions. Published KV-block agreement
   validates only that submodel, not an HF peak-memory or context-limit prediction.
 
-## Remaining GPU integration
+## GPU integration and current interruption
 
 Execution changes require a new implementation amendment, delegated review,
 pushed prediction and later receipt before measurements. Preserve the original

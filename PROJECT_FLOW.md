@@ -48,7 +48,7 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 ├── prereg/                      Templates; formal signed-off prediction goes here
 ├── src/kv_cache_scaling/
 │   ├── model_math.py            Working unique weights/KV/scenario calculations
-│   ├── cli.py                   Working predict/plan; explicit pending commands
+│   ├── cli.py                   Prediction, probes, sweeps and analysis CLI
 │   ├── preregistration.py       Working validated CPU prediction-draft generator
 │   ├── probe.py                 A2: isolated CUDA worker
 │   ├── telemetry.py             A2: counters, storage inspection and NVML
@@ -60,8 +60,8 @@ with explicit contracts. Formal preregistration freezes those contracts later.
 │   ├── plotting.py              Figures from validated processed data
 │   └── reporting.py             Evidence-linked Markdown/PDF report
 ├── scripts/                     Reproduction, report and external-claim helpers
-├── notebooks/                   Colab instructions + CPU-only starter notebook
-├── tests/                       CPU analytical tests; future fault-injection tests
+├── notebooks/                   Colab instructions + executed audit notebook
+├── tests/                       109 CPU analytical, lifecycle and fault tests
 ├── data/raw/                    Generated append-only records (ignored)
 ├── data/processed/              Derived CSV/JSON tables (ignored)
 ├── artifacts/figures/           Generated figures (ignored)
@@ -129,3 +129,12 @@ gate and storage operation; it does not invent independent Person 2 work.
 Every GPU point pauses for a verified/fsynced external capsule. The final
 deliberate dispatch additionally requires a durable local one-use claim before
 the browser command is sent. An uncertain dispatch is never retried.
+
+## Delivered reference pipeline
+
+The five Person 1 implementation phases now work together against 80 saved T4
+workers. CPU reproduction produces tables, six figure pairs, four transfers and
+the report. [P1 handoff](docs/P1_HANDOFF.md) records the two missing validation
+repeats and unperformed boundary attempt after Colab's GPU quota refusal. The
+report enforces incomplete research status; independent Person 2 reproduction
+is a separate contribution.

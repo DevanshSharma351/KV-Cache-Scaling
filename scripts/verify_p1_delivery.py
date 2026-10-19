@@ -68,9 +68,18 @@ def verify(capsule,external_intent,external_ledger):
             'External allowance was not consumed before GPU launch')
     with zipfile.ZipFile(capsule) as z:
         internal=json.loads(z.read('state/global_deliberate_attempt.json'))
+        frozen_reference=json.loads(z.read('audit/heldout-reference.json'))
+        acknowledgements=[json.loads(line) for line in z.read('audit/external-checkpoint-receipts.jsonl').splitlines()]
     require(internal['state']=='completed_oom' and internal['probe_id']==oom['probe_id']
             and internal['experiment_id']==ledger['experiment_id']
             and internal['run_id']==ledger['run_id'],'Internal and external attempt ledgers disagree')
+    validation=next(r for r in runs.values() if r['manifest']['execution_scope']=='calibrated_validation')
+    require(validation['manifest']['reference_sweep']==frozen_reference['reference'],'Held-out fit changed after its external freeze')
+    require(any(r['sha256']==frozen_reference['parent_checkpoint_sha256'] for r in acknowledgements),
+            'Held-out reference parent lacks an external checkpoint receipt')
+    heldout=[r['record'] for r in records if r['manifest']['execution_scope']=='calibrated_validation']
+    require(datetime.fromisoformat(frozen_reference['frozen_at_utc']).timestamp()
+            <min(r['started_unix_ns'] for r in heldout)/1e9,'Held-out reference was not frozen prospectively')
     code_commits={r['manifest']['code_commit'] for r in runs.values()}
     require(len(code_commits)==1,'Execution source commit changed within the final cohort')
     code_commit=next(iter(code_commits))
