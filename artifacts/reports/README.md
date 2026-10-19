@@ -1,11 +1,10 @@
-# Evidence-linked report
+# Project report
 
-[Person 1 PDF](p1-2026-10-19/report.pdf) and
-[Markdown](p1-2026-10-19/report.md) are generated from the 80-worker saved T4
-checkpoint. Six figure pairs, processed data and four transfer cases accompany
-it. The report status is **RESEARCH_CRITERIA_PENDING**, because Colab's GPU quota
-blocked the final two validation repeats and one boundary attempt.
+The current [PDF](project-report/report.pdf) and [Markdown](project-report/report.md)
+use the unified five-phase project flow. All six deliverables are also exposed
+separately in the [presentation notebook](../../notebooks/FINAL_PRESENTATION.ipynb).
 
-See [delivery / continuation](../../docs/P1_HANDOFF.md) and
-[CPU reproduction](../../docs/P4_P5_INTEGRATION.md). Provenance and manifests
-record the input hashes, generator commit and package versions.
+Status remains **RESEARCH_CRITERIA_PENDING** until the missing GPU validation and
+boundary evidence exist. Earlier reports remain unchanged as historical output.
+See [the decision guide](../../docs/DECISIONS_AND_PHASE_GUIDE.md) and
+[reproduction commands](../../docs/REPRODUCTION.md).

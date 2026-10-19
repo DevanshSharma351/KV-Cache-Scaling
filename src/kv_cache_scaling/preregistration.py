@@ -236,7 +236,7 @@ def render_draft(draft):
               "Require same-metric discrepancy closure within max(1 MiB, 0.1% measured bytes) and >=90% supported attribution",
               "for gaps >=10 MiB; below that, residual <=1 MiB with the ratio labelled ill-conditioned.",
               "Actual GPU/backend/allocator support is still untested; no CUDA/model load occurred during generation.",
-              "Obtain context-only inventory and Person 2 review, then freeze a separately named prediction and push it.",
+              "Obtain context-only inventory and a documented review, then freeze a separately named prediction and push it.",
               "Record its SHA/remote evidence in a subsequent receipt before model-memory measurements.", "",
               "## Input and generator provenance", "",
               "```json", json.dumps({"inputs": draft["input_sha256"],

@@ -1,9 +1,10 @@
 # Data and resume contract
 
-Schema version: 1. B2 owns validation/persistence; A2/A3 own scientific fields and
-status classification; B4 implements diagnostic-path fields against that contract.
-The JSON Schema is a starter for result events; expand it
-with tests before actual measurements. It does not validate start/receipt events.
+The worker format is `primary-probe-v1`; coordinator result envelopes use
+`coordinator-v1`. [measurement.schema.json](measurement.schema.json) validates
+both forms against actual saved records. Other event kinds follow the lifecycle
+below. Hashes, counter relationships and cross-field identity are additionally
+validated by the gate and immutable-data analysis.
 
 ## Run files
 
@@ -74,14 +75,16 @@ analysis code SHA, units and schema version. Never edit raw records to fix a
 plot. Test fixtures belong under `tests/fixtures/`, labelled synthetic, and must
 not be loaded into a report as observations.
 
-## Phase 3 reference adapter
+## Shared persistence implementation
 
-A3 supplies `coordinator_store.py` while B2's `journal.py` remains a stub.
-[The coordinator contract](P3_COORDINATOR_CONTRACT.md) describes tested POSIX
-locking, mirrored fsynced events, orphan/torn recovery, immutable artifacts and
-the shared global ledger. A3 emits `coordinator-v1` run manifests and events with
-an `event` discriminator; `probe_result.metrics` carries the `primary-probe-v1`
-worker object. This is not a claim that the starter JSON Schema above already
-validates those wrappers. B2 must review/map the wrapper/schema and validate the
-actual persistent mount before bulk GPU use. CPU synthetic results are temporary
-test fixtures and are not scientific observations.
+`journal.py` is the public API. It re-exports the exact `RunStore`, `AttemptLedger`
+and lock/atomic-write helpers used by `coordinator_store.py`; `append_event`
+requires an acquired store and cannot bypass its mirror. The coordinator and
+public API share one format and persistence implementation. Tests cover lock
+ownership, mirrored fsync, failed mirroring, immutable artifacts, torn tails,
+orphaned starts, duplicate scheduling and one-use attempt claims.
+
+POSIX fsync does not prove remote-provider durability. With Drive disconnected,
+every point was externally verified and fsynced in the local workspace before
+another worker was dispatched. Full cloud-session recovery on the same GPU is
+not claimed. Synthetic test/demo events never become measured data.

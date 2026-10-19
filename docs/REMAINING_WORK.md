@@ -1,7 +1,7 @@
-# Person 1 delivery and remaining GPU acceptance
+# Remaining research acceptance
 
 **19 October 2026. Implementation delivered; research acceptance incomplete.**
-Person 1's five phases are integrated. Colab removed the T4 runtime after the
+The five-phase implementation is integrated. Colab removed the T4 runtime after the
 80th externally verified worker and then refused GPU access due to its usage
 limit. This is the remaining execution blocker; passing CPU tests is not used
 as a substitute for missing GPU observations.
@@ -18,7 +18,8 @@ as a substitute for missing GPU observations.
   explicit discrepancy/unaccounted rows.
 - The CPU pipeline generates six figure pairs, four transfer predictions,
   published KV-block comparisons and an evidence-linked Markdown/PDF report.
-- All **109 CPU tests pass** locally, in Colab and in CI on Python 3.10–3.13.
+- The earlier **109 CPU tests passed** locally, in Colab and in CI on Python 3.10–3.13.
+  The expanded journal/schema/presentation suite now has 118 tests.
   Both Colab and CI reproduce the saved final-cohort data.
   The executed Colab notebook records source checkout, commands and outputs.
 
@@ -101,6 +102,11 @@ Report status is intentionally **RESEARCH_CRITERIA_PENDING**. The strict
 6. Regenerate analysis/report and rerun strict delivery checks. Claim final
    research acceptance only when the actual recorded outcome supports it.
 
-Drive remained disconnected as requested. One contributor review was authorized
-and delegated on behalf of Person 1. Independent Person 2 work/reproduction is
-not claimed. The anonymous **55/45** allocation and seven-day plan remain intact.
+Drive remained disconnected. The user authorized one delegated technical review;
+historical attribution remains in frozen receipts. The current project is one
+flow without contributor allocation. A separate human review is not invented.
+
+The public journal API and actual result schema are now implemented. The clean
+[presentation notebook](../notebooks/FINAL_PRESENTATION.ipynb) and
+[decision guide](DECISIONS_AND_PHASE_GUIDE.md) expose all six saved-data
+deliverables. The remaining blocker is GPU evidence, not a hidden software stub.

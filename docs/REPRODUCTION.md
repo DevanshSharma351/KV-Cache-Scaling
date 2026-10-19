@@ -17,7 +17,7 @@ Markdown/PDF report with explicit requirement status. The final saved capsule co
 sweep and complete diagnostics. Its report deliberately remains
 `RESEARCH_CRITERIA_PENDING`: two expandable held-out repeats and the deliberate
 OOM boundary are absent after Colab runtime loss/quota refusal. See
-[P1 handoff](P1_HANDOFF.md). The original L=512 capsule alone cannot establish
+[Remaining work](REMAINING_WORK.md). The original L=512 capsule alone cannot establish
 a cache slope, full curve or hardware context limit.
 
 ## Analysis decisions
@@ -56,7 +56,7 @@ Drive remains disconnected. Every coordinator call may stop after one probe with
 `--checkpoint-each-probe`. Copy, verify and fsync the complete capsule outside
 Colab before resuming. An ephemeral `/content` mirror alone is not durable.
 Any GPU allocation, version, UUID or usable-budget change requires reconciliation
-before model work. No independent Person 2 reproduction is claimed.
+before model work. No separate human reproduction/review is claimed; clean CPU and CI replays are recorded.
 
 ## Prospective boundary extension
 
@@ -84,3 +84,16 @@ allocation. Attribution at other lengths is labelled source-supported inference:
 pinned PyTorch 2.6 uses a length-independent T4 workspace, and each target's
 persistent delta must equal that exact source size. Unsupported allocators,
 runtimes or unmatched deltas remain unaccounted.
+
+## Execute and export the clean presentation
+
+```bash
+python -m pip install -e . -r requirements-demo.txt
+python scripts/execute_presentation.py --output /tmp/kv-presentation
+```
+
+The output path must be new. This executes every presentation cell, verifies six
+embedded plots and original prediction bytes/timestamp, and exports a standalone
+HTML with hidden code. The source commit is pinned in the notebook. An existing
+checkout must match that commit. CPU replay never imports torch/NVML or consumes
+a deliberate-attempt token. See [live demo](LIVE_DEMO.md).

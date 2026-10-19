@@ -1,0 +1,7 @@
+# Local execution/QA for the presentation notebook. Colab already has IPython.
+-r requirements-analysis.txt
+ipython==9.6.0
+ipykernel==6.30.1
+nbformat==5.10.4
+nbclient==0.10.2
+nbconvert==7.16.6

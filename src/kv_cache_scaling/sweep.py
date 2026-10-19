@@ -1,4 +1,4 @@
-"""A3 CPU coordinator. No torch import; primary execution lives only in worker.py."""
+"""CPU coordinator. No torch import; primary execution lives only in worker.py."""
 
 from dataclasses import asdict
 import json

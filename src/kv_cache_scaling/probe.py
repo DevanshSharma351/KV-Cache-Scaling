@@ -1,6 +1,6 @@
-"""A2 cold single-prefill engine. Public execution stays closed until A3 receipts.
+"""Cold single-prefill engine, guarded by prospective receipt verification.
 
-Only the future receipt-checking coordinator may call _execute_probe, once in a
+Only the receipt-checking coordinator may call _execute_probe, once in a
 fresh interpreter. CPU tests inject doubles; they are never research records.
 """
 
@@ -242,7 +242,7 @@ def reject_unsupported_allocator(caught):
 
 
 def _execute_probe(request, *, root=".", runtime=None, verified=None):
-    """Internal engine for A3 integration; NOT a preregistration authorization API.
+    """Internal engine for coordinator integration; NOT a preregistration authorization API.
 
     Caller must persist start/token events and enforce receipts before invoking.
     Call once per fresh process. No retries, no warmup, no diagnostics here.
@@ -450,7 +450,7 @@ def run_probe(request, *, root=".", receipt_path=None, run_id=None):
 def write_probe_result(path, result):
     """Exclusive, fsynced worker result; parent must reject incomplete/torn JSON.
 
-    A3 owns durable start events, process termination, journal mirroring and
+    The coordinator owns durable start events, process termination, journal mirroring and
     interpretation of absent output. This writer cannot make timeouts into OOMs.
     """
     payload = json.dumps(result, indent=2, allow_nan=False) + "\n"

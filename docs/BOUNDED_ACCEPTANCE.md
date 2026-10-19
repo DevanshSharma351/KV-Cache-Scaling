@@ -54,6 +54,5 @@ experiment root.
 This proves recovery from the tested loss/restart cases using the external
 checkpoint. A complete machine/session-loss test requires reconnecting and
 restoring in a new session. A process restart is not a machine restart. Report
-which was actually tested. Bulk execution requires Person 2's continuous durable
-storage integration or a separately validated continuous external checkpoint
-controller; do not remove acceptance stepping for an ephemeral root.
+which was actually tested. The subsequent 80-worker run used a validated external per-worker checkpoint
+controller. Do not remove the checkpoint barrier for an ephemeral root.

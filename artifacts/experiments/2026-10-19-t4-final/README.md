@@ -27,8 +27,8 @@ T4 allocation. Its complete command logs, versions, source/receipt hashes, raw
 telemetry, coordinator journals and external checkpoint acknowledgements are in
 `audit/`, `state/` and `local/` inside the ZIP. Drive remained disconnected.
 
-[Final report](../../reports/p1-2026-10-19/report.pdf) ·
-[delivery and continuation](../../../docs/P1_HANDOFF.md).
+[Final report](../../reports/project-report/report.pdf) ·
+[delivery and continuation](../../../docs/REMAINING_WORK.md).
 
 ## Final CPU verification
 
@@ -37,3 +37,9 @@ in Colab Python 3.11. [Actual command audit](colab-cpu-verification.json) includ
 timestamps, return codes, log hashes and the preserved venv setup failure.
 The subsequent system-Python path passed. Local clean-commit reproduction and
 GitHub Actions also passed. [Archived executed notebook](../../../notebooks/03_p1_executed_t4_2026-10-19.ipynb).
+
+The original delivery-manifest.json describes the publication snapshot at commit
+`71660a51d6259dd80cd50e49c1b69bf9e305afb2`; renamed/updated current docs should be
+verified against that historical Git snapshot, not mistaken for raw-data changes.
+The GPU capsule itself remains byte-identical. Current presentation provenance
+is separate from that original delivery manifest.

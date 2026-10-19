@@ -1,4 +1,4 @@
-"""Verify the complete final P1 cohort and its external one-use dispatch proof."""
+"""Verify the complete final project cohort and its external one-use dispatch proof."""
 import argparse
 from collections import Counter
 from datetime import datetime, timezone
@@ -105,7 +105,7 @@ def verify(capsule,external_intent,external_ledger):
     trace=next(r for r in all_records if r['measurement']=='kernel_trace')
     require(any('sm75' in name.lower() and ('fmha' in name.lower() or 'cutlass' in name.lower())
                 for name in trace['kernel_diagnostic']['event_names']),'Missing actual SM75 efficient-attention kernel')
-    return dict(status='PASS',scope='Final Person 1 reference delivery; independent Person 2 reproduction not claimed',
+    return dict(status='PASS',scope='Final project delivery; independent human reproduction not claimed',
                 verified_at_utc=datetime.now(timezone.utc).isoformat(),sources=sources,
                 gpu_uuid=next(iter(identities))[0],unique_gpu_worker_pids=83,successful_workers=82,
                 deliberate_oom_workers=1,execution_scopes=expected,acceptance=a['acceptance'],

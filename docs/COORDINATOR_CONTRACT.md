@@ -1,11 +1,11 @@
-# Phase 3: isolated coordinator and persistence contract
+# Phase 3: coordinator and persistence contract
 
-Updated 18 October 2026. Implemented and tested locally with synthetic CPU
-workers. No real model, GPU sweep, allocator intervention or deliberate OOM was
-run. Real execution remains blocked by the incomplete preregistration receipt
-and unresolved runtime mismatch.
+The implemented coordinator was exercised by the saved T4 cohort. Primary and
+diagnostic journals finished; held-out validation was interrupted by Colab
+runtime loss/quota. This contract distinguishes implementation from missing
+hardware acceptance.
 
-## Components and ownership
+## Components
 
 - `gate.py`: CPU-only pushed-receipt, frozen-input/code and launch verification.
 - `worker.py`: fresh interpreter entry, rechecks receipt and durable launch before
@@ -15,13 +15,12 @@ and unresolved runtime mismatch.
   stderr, timeout/signal classification and process-group cleanup.
 - `sweep.py`: three repeats, required/candidate grid, analytical admission,
   safe-budget bisection, identity/idle checks, resume and boundary summaries.
-- `coordinator_store.py`: A3 reference adapter for run locks, durable mirrors,
+- `coordinator_store.py`: shared persistence store for run locks, durable mirrors,
   recovery artifacts and the shared deliberate-attempt ledger.
 
-Person 2's `journal.py` remains intact. B2 owns review of persistence/schema
-integration, including replacement of this adapter if needed. B4 still owns
-chunked/static diagnostics and actual run operations. GPU acceptance requires
-those integration checks; CPU tests do not sign off another person's work.
+`journal.py` exposes the same tested store/ledger implementation used by the
+coordinator. The result schema validates actual worker records and result
+envelopes; analysis additionally checks raw references and compatible identities.
 
 ## Authorization and formal input contract
 
@@ -29,7 +28,7 @@ those integration checks; CPU tests do not sign off another person's work.
 checks and never starts a GPU worker. Templates/drafts fail before remote lookup.
 The verifier requires:
 
-1. A complete receipt, at least one real Person 1/Person 2 review with an actual timestamp,
+1. A complete receipt, at least one real contributor review with an actual timestamp,
    a shared experiment UUID and an absolute persistent state root outside source.
 2. A clean source tree and a live GitHub remote branch head equal to local HEAD.
    Network failure, dirty/untracked source or an unpushed receipt fails closed.
@@ -128,7 +127,7 @@ confirmed. Changing intent on resume is rejected.
 This reference adapter relies on POSIX locks, atomic rename and meaningful fsync
 on a **single host or genuinely shared locking filesystem**. It does not establish
 distributed locking across independent Colab hosts or prove cloud durability.
-Use one coordinator at a time. B2 must validate the actual persistent mount and
+Use one coordinator at a time. Validate the actual persistent mount and
 session-loss behavior before real bulk execution; do not substitute `/tmp` or
 an ephemeral `/content` directory for the declared persistent root.
 
@@ -170,20 +169,14 @@ support and paired persistent runs remain unperformed acceptance checks.
 ## Acceptance execution amendment
 
 The user authorized one contributor review and kept Drive disconnected. See
-[P3_ACCEPTANCE.md](P3_ACCEPTANCE.md) for bounded L=512 acceptance, separate
+[BOUNDED_ACCEPTANCE.md](BOUNDED_ACCEPTANCE.md) for bounded L=512 acceptance, separate
 kernel profiling, and the required external checkpoint barrier. This supersedes
 the two-review count, without inventing any review or cloud persistence.
 
-## Real acceptance outcome, 18 October 2026
+## Verified execution
 
-The earlier pending-GPU status is superseded by the
-[verified bounded acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md).
-All 83 CPU tests and seven real T4 workers passed, including both allocators,
-exact cache/weight/logits checks, an actual SM75 efficient-attention kernel trace
-and external checkpoint restoration. No OOM attempt was used. The user authorized
-a delegated one-contributor technical review and kept Drive disconnected.
-The operator-controlled checkpoint path is validated for the tested loss case;
-full cloud session restart, unattended bulk persistence and full scientific
-sweep results are not claimed. Person 2's continuous B2/B4 integration remains
-a handoff. Frozen scientific and execution files were not edited after model
-work; original predictions and raw failures remain intact.
+Bounded checkpoint restoration passed, followed by 80 successful externally
+checkpointed workers on the current T4 cohort. Colab then removed the runtime
+and refused another GPU allocation. The interrupted validation journal remains
+unchanged and its next worker's outcome is unknown. No deliberate claim was
+consumed. See [remaining work](REMAINING_WORK.md) for valid continuation.

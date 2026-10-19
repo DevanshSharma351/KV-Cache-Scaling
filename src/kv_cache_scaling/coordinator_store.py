@@ -1,7 +1,7 @@
-"""A3 reference persistence adapter; B2 journal.py ownership remains unchanged.
+"""Shared POSIX persistence: locked runs, durable mirrors and one-use ledger.
 
-Local POSIX implementation with a durable mirror. B2 must review integration on
-actual persistent storage. fsync cannot prove a cloud provider's durability.
+Local fsync cannot prove a cloud provider's durability. Actual external storage
+must be validated before treating an ephemeral mirror as a durable checkpoint.
 """
 
 from contextlib import contextmanager

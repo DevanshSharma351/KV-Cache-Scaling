@@ -6,7 +6,7 @@ labels: ''
 assignees: ''
 ---
 
-Owner: Person 1 / Person 2
+Phase: 1 / 2 / 3 / 4 / 5
 Project share (%):
 Dependencies:
 

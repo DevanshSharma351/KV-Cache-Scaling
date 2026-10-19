@@ -70,7 +70,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
         ('FR7','PASS' if coverage and a['acceptance']['discrepancy_closure_pass'] else 'NOT_MET','Closed signed table; unsupported bytes remain unaccounted'),
         ('FR8','CONDITIONAL_KV_COMPARISON','Four unrun transfer cells; published KV block comparison with dtype/unit caveats'),
     ]
-    status='RESEARCH_CRITERIA_PENDING' if pending or any(v=='NOT_MET' for _,v,_ in criteria) else 'P1_EVIDENCE_COMPLETE_WITH_LIMITATIONS'
+    status='RESEARCH_CRITERIA_PENDING' if pending or any(v=='NOT_MET' for _,v,_ in criteria) else 'EVIDENCE_COMPLETE_WITH_LIMITATIONS'
     md=['# KV-Cache Scaling: integrated evidence report','',f'Status: **{status}**. No missing experiment is presented as a successful result.','',
         '## What we built','',
         'A config-derived memory predictor, preregistration gate, fresh-process CUDA probes, checkpointed coordinator, immutable-data analysis, reproducible scientific plots, and config-only transfer predictions. The measurement coverage below is computed from verified records.','',
@@ -205,7 +205,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         ('Recovery','External checkpoint restoration passed after both Colab copies were removed'),
         ('Analysis','Validated immutable capsules; regressions require multiple lengths; unexplained bytes remain explicit'),
         ('Transfer','Four config-only model/GPU predictions; conditional published KV-only comparison')],[135,width-135])
-    p('The project uses anonymous Person 1 / Person 2 roles with a 55/45 planning allocation. The user authorized delegated review on behalf of Person 1 and requested that Drive remain disconnected.')
+    p('The project followed five phases: derivation and preregistration, isolated probes, checkpointing and safety, empirical analysis, and transfer with reproducible presentation. Drive remained disconnected; review provenance is preserved in the original frozen records.')
     if evidence_gaps(a):p('Unmet evidence: '+' '.join(evidence_gaps(a)))
     page();h('1. Model, derivation and committed prediction')
     p('Primary model: Qwen/Qwen2.5-1.5B, FP16, batch size 1. Sequence length L is one cold prefill of L tokens with an empty DynamicCache and logits_to_keep=1. HF SDPA is forced to the efficient backend. No generation-to-L, eager fallback or FlashAttention-2 is used.')

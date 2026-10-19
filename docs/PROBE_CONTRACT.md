@@ -1,8 +1,9 @@
-# Phase 2: primary probe implementation and integration contract
+# Phase 2: isolated probe contract
 
-Updated 18 October 2026. Person 1's A2 implementation is CPU-tested. It has **not**
-been validated with a real GPU/model. No research measurement or deliberate OOM
-was performed during development.
+The isolated probe is implemented and exercised by the saved 80-worker T4
+cohort. This contract describes its measurement semantics. Original bounded
+acceptance and later bulk evidence are preserved separately. New GPU execution
+requires a compatible prospective receipt.
 
 ## Available code
 
@@ -11,18 +12,18 @@ was performed during development.
 - `probe.validate_inputs`: checks exact config hash and supported experiment
   semantics before heavy imports. The pinned primary model and revision are
   unchanged.
-- `probe._execute_probe`: internal cold single-prefill engine for A3 integration.
+- `probe._execute_probe`: internal cold single-prefill engine for coordinator integration.
   It accepts an injected runtime only for CPU tests. Production must use its
   local imports and one call per fresh interpreter.
 - `telemetry`: synchronized counter snapshots, physical UUID mapping, bounded
   NVML sampler and storage-deduplicated tensor metadata.
 - `probe.write_probe_result`: exclusive JSON output, finite-value validation,
-  flush/fsync and overwrite refusal. Torn/missing output must be handled by A3.
+  flush/fsync and overwrite refusal. Torn/missing output must be handled by the coordinator.
 
 At the Phase 2 boundary, public execution was deliberately closed. Phase 3 now
 wires the public entry to receipt verification, mirrored launch evidence and an
 exclusive worker claim. No JSON boolean grants authorization. See the
-[Phase 3 contract](P3_COORDINATOR_CONTRACT.md); the actual incomplete receipt still
+[Phase 3 contract](COORDINATOR_CONTRACT.md); the actual incomplete receipt still
 blocks execution. The private engine is not a substitute for that launcher.
 
 CPU request example:
@@ -115,21 +116,19 @@ Statuses include `success`, `cuda_oom`, `unsupported_backend`,
 counters are preserved. Error text alone never establishes CUDA OOM. A CUDA OOM
 is labelled accidental for a safe request or `deliberate_request` for that intent;
 **intent is not proof that the coordinator consumed the required ledger token**.
-Only A3 may authorize that intent. No failure triggers a retry or recovery forward.
+Only the coordinator may authorize that intent. No failure triggers a retry or recovery forward.
 
 ## Handoff and remaining acceptance
 
-A3 must validate actual reviewed/pushed prediction and subsequent remote receipt,
+The coordinator must validate actual reviewed/pushed prediction and subsequent remote receipt,
 validate code/input/runtime fingerprints, persist a start event before launch,
 set env before a fresh interpreter, enforce timeout and process exit, validate
 result schema/ID, mirror output and enforce the one global deliberate-attempt
 ledger. A worker-raised timeout is distinct from a killed interpreter with no
 JSON. The latter is a coordinator responsibility, never inferred as OOM.
 
-B2 reviews schema/journal integration. B4 owns chunked/static and profiler helpers;
-the primary implementation has no diagnostic mode or mathematical-backend
-fallback. The coordinator should use the shared request, snapshots and result
-writer, without copying model execution into a second implementation.
+The shared journal/store and result schema support all primary and diagnostic
+paths. Immutable-data analysis validates wrapper identity and raw references.
 
 CPU tests exercise ordering, reference lifetimes, byte accounting, malformed
 requests, hashes, aliases, identity/context drift, runtime mismatch, output
@@ -138,16 +137,11 @@ never published as experimental data. Before declaring Phase 2 fully accepted,
 run the gated L=512 smoke, efficient-operator trace, both allocator support checks,
 cache formula check and clean process/persistent-write checks on real hardware.
 
-## Real acceptance outcome, 18 October 2026
+## Verified execution
 
-The earlier pending-GPU status is superseded by the
-[verified bounded acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md).
-All 83 CPU tests and seven real T4 workers passed, including both allocators,
-exact cache/weight/logits checks, an actual SM75 efficient-attention kernel trace
-and external checkpoint restoration. No OOM attempt was used. The user authorized
-a delegated one-contributor technical review and kept Drive disconnected.
-The operator-controlled checkpoint path is validated for the tested loss case;
-full cloud session restart, unattended bulk persistence and full scientific
-sweep results are not claimed. Person 2's continuous B2/B4 integration remains
-a handoff. Frozen scientific and execution files were not edited after model
-work; original predictions and raw failures remain intact.
+The original bounded acceptance verified weights/cache/logits, both allocator
+settings, an actual SM75 efficient-attention trace and external checkpoint
+restoration. The current cohort adds 48 sweep workers, all 28 diagnostics and
+four held-out workers. All saved workers succeeded. The remaining boundary
+evidence is described in [REMAINING_WORK.md](REMAINING_WORK.md); no OOM was
+observed or invented. Drive remained disconnected.

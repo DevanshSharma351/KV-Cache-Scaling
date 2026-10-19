@@ -1,6 +1,6 @@
 # Measurement protocol: prefill-v1
 
-Implementation contract for A2/A3, with B4 owning diagnostic execution paths.
+Measurement contract for the isolated probe, coordinator and separate diagnostic paths.
 This is a specification, not an already-tested
 GPU worker. The primary policy is cold forward, batch 1, FP16, one empty-cache
 prefill, reduced logits and efficient SDPA.

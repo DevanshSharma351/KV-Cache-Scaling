@@ -97,7 +97,7 @@ def _verify_receipt(root, receipt_path):
     roles = set()
     for reviewer in receipt.get("reviewers", []):
         role = reviewer.get("role")
-        if role in roles or role not in ("Person 1", "Person 2"):
+        if role in roles or role not in ("Project reviewer", "Independent reviewer", "Person 1", "Person 2"):
             raise GateError("Review roles must be distinct contributor roles")
         if utc(reviewer["reviewed_at_utc"]) > observed:
             raise GateError("Review occurred after claimed remote observation")

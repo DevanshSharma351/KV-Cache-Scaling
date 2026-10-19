@@ -1,4 +1,4 @@
-"""A2 telemetry. Importing this module never imports torch or initializes CUDA."""
+"""GPU telemetry. Importing this module never imports torch or initializes CUDA."""
 
 from collections import deque
 import os

@@ -120,6 +120,12 @@ class ReceiptTests(unittest.TestCase):
         self.fixture.commit("synthetic single review policy")
         self.assertEqual(self.fixture.verify().gpu_uuid, self.fixture.inventory["gpu_identity_csv"].split(",")[0])
 
+    def test_neutral_review_labels_preserve_historical_receipt_compatibility(self):
+        self.fixture.receipt["reviewers"]=[{"role":"Project reviewer","reviewed_at_utc":"2020-01-01T00:00:00+00:00"}]
+        self.fixture.write("prereg/receipt.json",self.fixture.receipt)
+        self.fixture.commit("synthetic project review label")
+        self.assertEqual(self.fixture.verify().gpu_uuid,self.fixture.inventory["gpu_identity_csv"].split(",")[0])
+
     def test_unpushed_head_and_dirty_source_are_rejected(self):
         with self.assertRaises(gate.GateError): self.fixture.verify(remote_sha="0"*40)
         (self.fixture.root / "unexpected.py").write_text("# untracked\n")

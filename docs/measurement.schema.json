@@ -1,68 +1,265 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "KV-cache probe result starter schema v1",
-  "description": "B2 must extend and test before GPU use. Start/recovery events have a separate contract.",
-  "type": "object",
-  "required": ["schema_version", "record_type", "probe_id", "protocol_hash", "environment_fingerprint", "request", "status", "started_at_utc", "finished_at_utc", "metrics"],
-  "properties": {
-    "schema_version": {"const": 1},
-    "record_type": {"const": "probe_result"},
-    "probe_id": {"type": "string", "minLength": 1},
-    "protocol_hash": {"type": "string", "minLength": 1},
-    "environment_fingerprint": {"type": "string", "minLength": 1},
-    "started_at_utc": {"type": "string", "format": "date-time"},
-    "finished_at_utc": {"type": "string", "format": "date-time"},
-    "status": {"enum": ["ok", "cuda_oom", "unsupported", "timeout", "interrupted", "error"]},
-    "request": {
-      "type": "object",
-      "required": ["length", "batch_size", "mode", "cache_type", "allocator", "repeat", "seed", "deliberate_oom"],
-      "properties": {
-        "length": {"type": "integer", "minimum": 1},
-        "batch_size": {"type": "integer", "minimum": 1},
-        "mode": {"enum": ["single_prefill", "chunked_prefill"]},
-        "cache_type": {"enum": ["DynamicCache", "StaticCache"]},
-        "allocator": {"enum": ["default", "expandable"]},
-        "repeat": {"type": "integer", "minimum": 1},
-        "seed": {"type": "integer", "minimum": 0},
-        "deliberate_oom": {"type": "boolean"}
-      }
+  "title": "KV-cache saved worker and coordinator result schema",
+  "description": "Matches primary-probe-v1 records and coordinator-v1 probe_result envelopes. Other journal events follow DATA_CONTRACT.md. Cross-field identity, counter ordering, immutable references and scientific compatibility are checked by the analysis/gate code.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/worker"
     },
-    "metrics": {
-      "type": ["object", "null"],
+    {
+      "$ref": "#/$defs/coordinator_result"
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullable_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "worker": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "probe_id",
+        "length",
+        "repeat",
+        "allocator",
+        "execution_policy",
+        "protocol_sha256",
+        "config_sha256",
+        "status",
+        "stage",
+        "snapshots",
+        "attempt_kind",
+        "measurement",
+        "peak_allocated_bytes",
+        "peak_reserved_bytes",
+        "pid",
+        "started_unix_ns",
+        "finished_unix_ns",
+        "code_sha256"
+      ],
       "properties": {
-        "peak_allocated_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "peak_reserved_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "cache_logical_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "cache_storage_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "schema_version": {
+          "const": "primary-probe-v1"
+        },
+        "probe_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "repeat": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pid": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allocator": {
+          "enum": [
+            "default",
+            "expandable"
+          ]
+        },
+        "attempt_kind": {
+          "enum": [
+            "safe",
+            "deliberate"
+          ]
+        },
+        "measurement": {
+          "enum": [
+            "primary",
+            "chunked_dynamic",
+            "static_cache",
+            "workspace_control",
+            "kernel_trace"
+          ]
+        },
+        "status": {
+          "enum": [
+            "success",
+            "incomplete",
+            "cuda_oom",
+            "unsupported_backend",
+            "unsupported_allocator",
+            "environment_drift",
+            "runtime_mismatch",
+            "timeout",
+            "error",
+            "telemetry_error"
+          ]
+        },
+        "stage": {
+          "type": "string",
+          "minLength": 1
+        },
         "snapshots": {
+          "type": "object"
+        },
+        "execution_policy": {
+          "type": "object"
+        },
+        "protocol_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "code_sha256": {
           "type": "object",
-          "properties": {
-            "context": {"$ref": "#/$defs/snapshot"},
-            "post_load": {"$ref": "#/$defs/snapshot"},
-            "after_forward": {"$ref": "#/$defs/snapshot"},
-            "retained": {"$ref": "#/$defs/snapshot"},
-            "released": {"$ref": "#/$defs/snapshot"}
+          "required": [
+            "probe.py",
+            "telemetry.py"
+          ],
+          "additionalProperties": {
+            "$ref": "#/$defs/sha256"
+          }
+        },
+        "peak_allocated_bytes": {
+          "$ref": "#/$defs/nullable_bytes"
+        },
+        "peak_reserved_bytes": {
+          "$ref": "#/$defs/nullable_bytes"
+        },
+        "started_unix_ns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "finished_unix_ns": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "success"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "weights",
+              "cache",
+              "logits",
+              "gpu_uuid"
+            ],
+            "properties": {
+              "peak_allocated_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "peak_reserved_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "weights": {
+                "type": "object"
+              },
+              "cache": {
+                "type": "object"
+              },
+              "logits": {
+                "type": "object"
+              },
+              "gpu_uuid": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
           }
         }
-      }
-    }
-  },
-  "$defs": {
-    "snapshot": {
+      ]
+    },
+    "coordinator_result": {
       "type": "object",
-      "required": ["monotonic_start_ns", "monotonic_end_ns", "allocated_bytes", "reserved_bytes", "cuda_free_bytes", "cuda_total_bytes"],
+      "required": [
+        "event",
+        "sequence",
+        "run_id",
+        "probe_id",
+        "point_key",
+        "timestamp_utc",
+        "request",
+        "status",
+        "metrics",
+        "process"
+      ],
       "properties": {
-        "monotonic_start_ns": {"type": "integer", "minimum": 0},
-        "monotonic_end_ns": {"type": "integer", "minimum": 0},
-        "allocated_bytes": {"type": "integer", "minimum": 0},
-        "reserved_bytes": {"type": "integer", "minimum": 0},
-        "cuda_free_bytes": {"type": "integer", "minimum": 0},
-        "cuda_total_bytes": {"type": "integer", "minimum": 1},
-        "nvml_used_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "nvml_free_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "nvml_total_bytes": {"type": ["integer", "null"], "minimum": 1},
-        "inactive_split_bytes": {"type": ["integer", "null"], "minimum": 0}
-      }
+        "event": {
+          "const": "probe_result"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "run_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "probe_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "point_key": {
+          "$ref": "#/$defs/sha256"
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "request": {
+          "type": "object"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "metrics": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/worker"
+            }
+          ]
+        },
+        "process": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "success"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "metrics": {
+                "$ref": "#/$defs/worker"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

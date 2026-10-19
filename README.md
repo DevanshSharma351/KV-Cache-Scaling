@@ -1,130 +1,74 @@
 # KV-Cache Scaling
 
-Predict the context memory limit before measuring it, then explain the error with
-reproducible GPU measurements.
+**Predict the context limit before measuring it, then explain the difference.**
+We built a config-derived memory model, a checkpointing GPU harness and a
+reproducible analysis/presentation pipeline in [five phases](PHASES.md).
 
-**Person 1 implementation is integrated; GPU research acceptance is incomplete.**
-80 successful workers on one T4 are checkpointed: 48 sweep, 28 diagnostic and
-4 held-out workers. Both allocators reached 114,688 tokens. The measured KV slope
-is exactly 28,672 bytes/token. All 109 CPU tests pass.
+**Measured evidence:** 80 successful T4 workers; both allocators reached
+114,688 tokens; inspected KV storage grows by exactly 28,672 bytes/token.
+**Research acceptance remains incomplete:** Colab's GPU quota blocked two final
+validation repeats and the single boundary attempt. No hardware OOM threshold
+is claimed. [Current status](docs/PROJECT_STATUS.md) · [Remaining work](docs/REMAINING_WORK.md).
 
-Colab terminated the runtime and then refused GPU access because of its usage
-limit. Two expandable-allocator validation repeats and the single deliberate
-boundary attempt remain unperformed/unverified. No OOM threshold is claimed.
-See the [delivery and remaining work](docs/P1_HANDOFF.md),
-[GPU evidence](artifacts/experiments/2026-10-19-t4-final/README.md),
-[report](artifacts/reports/p1-2026-10-19/report.pdf) and
-[executed notebook](notebooks/03_p1_executed_t4_2026-10-19.ipynb).
+## Present the project
 
-Regenerate the complete saved-data analysis, six figure pairs, four transfer
-predictions and PDF on CPU (Python 3.11–3.13; use a new output directory):
+[Open the clean presentation notebook in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb).
+Choose a **CPU runtime** and **Run all**. It regenerates the saved-data results
+and presents each required deliverable; no GPU, model download or Drive mount
+is needed. Change usable VRAM/batch size for an analytical live demo, or run the
+temporary-filesystem checkpoint recovery demo. Downloads are optional.
+
+- [Executed presentation notebook](notebooks/FINAL_PRESENTATION.ipynb)
+- [Standalone presentation HTML](artifacts/presentation/PROJECT_PRESENTATION.html)
+- [Project report PDF](artifacts/reports/project-report/report.pdf)
+- [Easy decision and phase guide](docs/DECISIONS_AND_PHASE_GUIDE.md)
+- [Live-demo instructions and questions](docs/LIVE_DEMO.md)
+
+## The six deliverables
+
+| Deliverable | Where to inspect it directly |
+| --- | --- |
+| Derivation with every symbol defined | [Derivation](docs/DERIVATION.md); presentation section 1 |
+| Original prediction and commit timestamp | [Unchanged commitment](prereg/formal-2026-10-18-t4/prediction.md), [original commit](https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/7baff5121ed643f27ba06959065855a8913f8e8c); section 2 |
+| Checkpointing sweep harness | [Coordinator](src/kv_cache_scaling/sweep.py), [persistence API](src/kv_cache_scaling/journal.py), [contract](docs/DATA_CONTRACT.md); section 3 |
+| Memory curves with analytical overlays | [Separate PNG/PDF figures](artifacts/figures/p1-2026-10-19/); section 4 |
+| Discrepancy table in bytes / MiB | [CSV](data/processed/p1-2026-10-19/discrepancy.csv); section 5. Fixed-length peak accounting is available; OOM-threshold error is unmeasured |
+| Cross-model / cross-GPU predictions with verification | [Transfer table](data/processed/p1-2026-10-19/transfer/transfer.md); section 6. Published comparison validates KV blocks, not unrun HF peak limits |
+
+Some immutable evidence paths retain their historical names. Current docs and
+presentation use the unified project flow; frozen predictions, receipts and audit
+exports retain their original bytes and review attribution.
+
+## Reproduce on CPU
+
+Use Python 3.11–3.13 for the pinned plotting/report packages and a new output path.
 
 ```bash
 python -m pip install -e . -r requirements-analysis.txt
+python -m unittest discover -s tests -v
 python scripts/reproduce_results.py \
   --capsule artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip \
   --output /tmp/kv-reproduction
 ```
 
-## Start here
+For local notebook execution/HTML export, install `requirements-demo.txt`.
+[Reproduction guide](docs/REPRODUCTION.md) · [Architecture and scaffold](PROJECT_FLOW.md).
+Generated figures/tables/report carry hashes; the original ZIP is preserved.
 
-1. Read [the implementation plan](IMPLEMENTATION_PLAN.md).
-2. Follow [the project flow and scaffold decisions](PROJECT_FLOW.md).
-3. Pick work from [the 55/45 task allocation](TASK_ALLOCATION.md).
-4. Review [the measurement protocol](docs/MEASUREMENT_PROTOCOL.md) and
-   [acceptance criteria](docs/REQUIREMENTS.md) before implementing the harness.
-5. Follow [Person 1's five-phase plan](DevP1_phases.md) for the 55% contribution.
-6. Use [the auditable Phase 1 Colab notebook](notebooks/02_p1_phase1_colab.ipynb)
-   for recorded commands and evidence export. Check the
-   [runtime reconciliation note](docs/COLAB_RUNTIME_RECONCILIATION.md) first.
-
-## Frozen design proposal
+## Frozen measurement decisions
 
 | Setting | Decision |
 | --- | --- |
-| Measured model | `Qwen/Qwen2.5-1.5B`, pinned Hub revision in `configs/experiment.json` |
-| Meaning of L | One forward pass over exactly L input tokens, starting with an empty cache |
-| Runtime | FP16 weights/cache; batch 1; eval + inference mode; no generation |
-| Attention | HF `sdpa`, forced PyTorch `SDPBackend.EFFICIENT_ATTENTION`; fail on unsupported kernels |
-| Logits | Explicit `logits_to_keep=1`; no labels or loss |
-| Cache | Explicit `DynamicCache()` per point; static/chunked are labelled diagnostics |
-| Isolation | New OS process for every point and repeat |
-| Primary memory metric | `max_memory_allocated()` after a synchronized peak reset |
-| Prediction | Function of usable VRAM with a declared assumption range |
-| Team | One intensive week: Person 1 handles 55% of the work; Person 2 handles 45% |
+| Model | Pinned ungated `Qwen/Qwen2.5-1.5B`; GQA and tied embeddings; appropriate T4 weight footprint |
+| L | One cold prefill of exactly L tokens, B=1; no generation |
+| Dtype/logits | FP16 weights/cache; eval + inference mode; `logits_to_keep=1`; no labels/loss |
+| Attention | HF SDPA with forced PyTorch efficient attention; actual SM75 trace; no eager fallback or FA2 |
+| Cache | Fresh DynamicCache; chunked/static paths are separate diagnostics |
+| Isolation/peaks | Fresh process per point/repeat; allocator env before CUDA; peak reset and max counters |
+| Budget | Context-adjusted usable VRAM; parametric prediction with assumption range |
+| Safety | Conservative scheduling, external checkpoint before advance, one-use final attempt gate |
 
-The seven-day schedule preserves all project requirements and includes both
-chunked and static-cache diagnostics, independent reproduction and the final PDF.
-See [daily responsibilities and handoffs](TASK_ALLOCATION.md). Reserve GPU windows
-on days 3–5 and use independent CPU tasks while probes run. Day 7 is protected
-for recovery, integration, final reproduction and review.
-
-These decisions were frozen in the original formal prediction; later execution
-amendments preserve the original numerical commitment. See [sources and corrections](docs/SOURCES.md).
-
-## Run the working CPU scaffold
-
-From the repository root, with Python 3.10+:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e .
-python -m unittest discover -s tests -v
-kvcache predict --usable-vram-gib 14.5
-kvcache plan --experiment configs/experiment.json
-kvcache validate-probe --request configs/probe.example.json
-kvcache prepare-prereg --output /tmp/kvcache-review-draft
-```
-
-`predict` outputs hypothetical sensitivity scenarios, explicitly marked DRAFT.
-Its VRAM input is **GiB after context/other-process deductions, before weights**.
-`prepare-prereg` verifies the pinned inputs and emits exact-byte prediction
-tables, component counts, VRAM sensitivity and integrity hashes into a **new**
-directory. It never overwrites existing output or authorizes GPU measurements.
-Review the [committed Phase 1 draft](prereg/drafts/prefill-v1-phase1/prediction.md).
-`predict --batch-size B` explores theoretical batch scaling; the primary draft
-and future measured protocol remain B=1.
-
-`plan` lists candidate points and never touches CUDA. Run these commands from the
-repo root, or supply explicit config paths. `validate-probe` checks a primary
-request and its scientific hashes without importing GPU libraries. It never
-authorizes execution. `check-receipt` verifies committed/pushed evidence without
-GPU work. `sweep` and the internal `probe` require a real completed receipt;
-workers also require durable launch evidence. The current template is incomplete
-and cannot authorize a run. `analyze` validates immutable capsules and writes measured tables; `generalize`
-creates four pinned-config transfer predictions. The complete CPU reproduction
-command is in [Phase 4–5 integration](docs/P4_P5_INTEGRATION.md).
-
-## GPU setup target
-
-Use a Linux NVIDIA environment, preferably a Colab/Kaggle T4, with Python 3.11.
-Do not install CUDA wheels on a Mac for the CPU checks above.
-
-```bash
-python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
-python -m pip install -r requirements-gpu.txt
-python -m pip install -e .
-```
-
-Restart the runtime after changing installed torch/transformers. Validate the
-driver, wheel and efficient SDPA support on the actual T4 after preregistration.
-Direct pins are provided; Person 2 must capture a successful Linux runtime's
-full `pip freeze`, driver/CUDA versions and platform in the run manifest. No GPU
-compatibility claim is made by the CPU CI checks.
-
-The parent coordinator sets allocator variables before starting each worker.
-For notebook-owned CUDA, set the variable in the first cell and restart the
-runtime between allocator variants. See [the Colab guide](notebooks/README.md).
-
-## Expected outputs
-
-Formal prediction + remote receipt under `prereg/`; immutable probe journals
-under `data/raw/`; derived tables under `data/processed/`; figures and the final
-report under `artifacts/`. Generated data is ignored by default. Publish only
-reviewed, bounded result files deliberately, with `git add -f` if appropriate;
-never commit model weights, tokens or cloud credentials.
-
-The supplied PDFs are preserved under `references/` for traceability. Their
-embedded recommendations are source material; the revised plan governs this
-project. CI checks CPU math, request/storage validation and mocked probe lifecycle; it does not establish real GPU correctness.
+Changing a measurement decision requires prospective registration before new
+model work. An archived receipt cannot authorize another GPU silently. See
+[measurement protocol](docs/MEASUREMENT_PROTOCOL.md), [requirements](docs/REQUIREMENTS.md)
+and [evidence](artifacts/experiments/2026-10-19-t4-final/README.md).

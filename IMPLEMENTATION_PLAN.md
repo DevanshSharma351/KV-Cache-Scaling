@@ -1,13 +1,12 @@
 # Implementation plan: KV-cache scaling
 
-Version: proposed `prefill-v1`, updated 17 October 2026. Scope: two people,
-**one intensive week**. **Person 1 handles 55% of the project work; Person 2
-handles 45%.** Independent CPU tasks proceed while GPU probes run.
-The seven-day target retains every project requirement and both
-diagnostic grids; completion is judged by evidence, not the calendar alone.
-Model measurements start after formal preregistration; the scaffold commit is
-not that preregistration. This schedule revision preserves the primary measurement
-definition and its acceptance tolerances.
+Measurement design: `prefill-v1`, organized into one intensive week and
+[five phases](PHASES.md). This document preserves the technical design; the
+[decision guide](docs/DECISIONS_AND_PHASE_GUIDE.md) explains actual execution.
+The software and 80-worker saved-data pipeline are integrated. Colab quota still
+blocks final GPU validation/boundary evidence; completion is judged by evidence,
+not the calendar or a passing software test alone. Original preregistration and
+raw observations remain unchanged.
 
 ## 1. Research question and operational definition
 
@@ -326,7 +325,7 @@ long-context kernels while independent analysis and documentation proceed.
 | 3 | Finish worker, integrate coordinator/journal, run CPU fault tests and post-preregistration GPU smoke checks; build plot templates | Backend/support check and crash/resume/OOM-ledger tests pass before bulk sweeps |
 | 4 | Finish safety/boundary integration; collect paired primary sweeps; begin retained-cache regression and report methods | Same GPU UUID; durable raw records; admitted required grid collected or explicit stop reason |
 | 5 | Complete both diagnostic grids and boundary repeats; one final OOM attempt if justified; analyze discrepancy; regenerate figures | Measurements locked by end of day; same-metric closure/coverage and deviations reviewed |
-| 6 | Person 1 finishes transfer predictions/comparison and scientific conclusions; Person 2 completes report assembly and clean reproduction | Every required result, source, figure and limitation in the draft; reproduction issues listed |
+| 6 | Finish transfer predictions/comparison, conclusions, report assembly and clean reproduction | Every required result, source, figure and limitation in the draft; reproduction issues listed |
 | 7 | Protected recovery/integration block, final reproduction, PDF visual review, repository cleanup and release | Full definition of done reviewed; unresolved failures remain explicitly open |
 
 Critical path: day-1 preregistration -> day-3 smoke-tested harness -> days-4/5 locked
