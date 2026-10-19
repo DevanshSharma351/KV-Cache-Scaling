@@ -1,3 +1,26 @@
+# Notebook trail
+
+[Executed T4 audit notebook](03_p1_executed_t4_2026-10-19.ipynb) records the real
+commands, 80-worker checkpoint, errors and final CPU checks. Its final saved
+cell passes all 109 tests, verifies the checkpoint and regenerates the report.
+The original cloud notebook remains at
+[the supplied Colab URL](https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS).
+
+The archived file preserves every source cell and all scientific outputs/errors.
+Only 50 duplicate ZIP-transfer base64 blocks are omitted; archive hashes and
+checkpoint receipts remain. [Provenance](03_p1_executed_t4_2026-10-19.provenance.json)
+records the original and archived hashes. The untouched 81.7 MB export is retained
+in the local hidden checkpoint folder. This is a historical execution archive,
+not a notebook to run top-to-bottom on a different GPU: receipts and point guards
+are intentionally tied to the original allocation.
+
+Colab's attempted `venv` setup failed at ensurepip. The next recorded cell used
+its existing Python 3.11 and completed tests, integrity verification and CPU
+reproduction. That failure is preserved. GPU research remains incomplete due
+to quota; see [remaining work](../docs/P1_HANDOFF.md).
+
+---
+
 # Colab / Kaggle execution guide
 
 The starter notebook is a CPU-only orientation/preview; GPU execution is pending

@@ -1,0 +1,11 @@
+{
+  "status": "ANALYZED_SAVED_OBSERVATIONS",
+  "output": "/private/tmp/kvcache-p1-release-e09fdf9/analysis",
+  "acceptance": {
+    "five_length_paired_primary_complete": true,
+    "cache_slope_pass": true,
+    "discrepancy_coverage_pass": true,
+    "discrepancy_closure_pass": true
+  },
+  "executes_gpu_work": false
+}

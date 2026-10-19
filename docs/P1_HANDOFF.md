@@ -18,7 +18,8 @@ as a substitute for missing GPU observations.
   explicit discrepancy/unaccounted rows.
 - The CPU pipeline generates six figure pairs, four transfer predictions,
   published KV-block comparisons and an evidence-linked Markdown/PDF report.
-- All **109 CPU tests pass**. CI reproduces the saved final-cohort data.
+- All **109 CPU tests pass** locally, in Colab and in CI on Python 3.10–3.13.
+  Both Colab and CI reproduce the saved final-cohort data.
   The executed Colab notebook records source checkout, commands and outputs.
 
 ## Actual results

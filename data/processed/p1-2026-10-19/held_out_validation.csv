@@ -1,0 +1,3 @@
+run_id,reference_run_id,allocator,length,repeats,prospective_fit_peak_bytes,observed_peak_median_bytes,prospective_fit_error_percent,interpretation
+0cb5db86-c7be-41f1-99cf-c3fb73430756,c6b37c71-23e8-4209-a278-2c9f65b6b763,default,114688,3,14019203874.258532,14020668928,-0.010449242821379524,Frozen reference fit evaluated on a later held-out length; separate from original advance prediction
+0cb5db86-c7be-41f1-99cf-c3fb73430756,c6b37c71-23e8-4209-a278-2c9f65b6b763,expandable,114688,1,14019751424.0,14019751424,0.0,Frozen reference fit evaluated on a later held-out length; separate from original advance prediction

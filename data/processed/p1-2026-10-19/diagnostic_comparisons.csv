@@ -1,0 +1,10 @@
+measurement,allocator,length,primary_repeats,diagnostic_repeats,primary_peak_median_bytes,diagnostic_peak_median_bytes,diagnostic_minus_primary_peak_bytes,interpretation
+chunked_dynamic,default,512,3,3,3146681856,3147730432,1048576,Separate semantics/intervention; not a primary slope or boundary observation
+chunked_dynamic,default,2048,3,3,3295079936,3194940928,-100139008,Separate semantics/intervention; not a primary slope or boundary observation
+chunked_dynamic,default,8192,3,3,3877137920,3411570176,-465567744,Separate semantics/intervention; not a primary slope or boundary observation
+chunked_dynamic,default,32768,3,3,6217952768,4317408768,-1900544000,Separate semantics/intervention; not a primary slope or boundary observation
+static_cache,default,512,3,3,3146681856,3147206144,524288,Separate semantics/intervention; not a primary slope or boundary observation
+static_cache,default,2048,3,3,3295079936,3303468544,8388608,Separate semantics/intervention; not a primary slope or boundary observation
+static_cache,default,8192,3,3,3877137920,4011355648,134217728,Separate semantics/intervention; not a primary slope or boundary observation
+workspace_control,default,512,3,3,3146681856,3138162176,-8519680,Separate semantics/intervention; not a primary slope or boundary observation
+workspace_control,expandable,512,3,3,3144715776,3136196096,-8519680,Separate semantics/intervention; not a primary slope or boundary observation

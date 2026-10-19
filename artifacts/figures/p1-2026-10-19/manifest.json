@@ -1,0 +1,14 @@
+{
+  "01_peak_vs_length.png": "f5106c19d45bb0df1be058f55c3856a6ea3a75ba1a0172b99d08b5a62776dc60",
+  "01_peak_vs_length.pdf": "8cb150035eca2e3474b683426313e2a3da28115156d13a3c09bc38932bc5ee42",
+  "02_cache_scaling.png": "6706220fa125db0f0ac342e2d0a2da14fc2e0f2c020eb42a7dd32d49b250c2f0",
+  "02_cache_scaling.pdf": "fa5c203d450ae6d9547c2e100b1d87e300a663de18ba4ef6f72be441d0b255f9",
+  "03_allocator_slack.png": "d4bfe8a53029c0e8a21030db7828516aa171a06e4579186577ddfb3ebc57db13",
+  "03_allocator_slack.pdf": "5e9459adf8f57a1776c0744f40f4f473bdb6825040063e05ddf14a17d1e71501",
+  "04_boundary_status.png": "8e3fd1b4df84201d0a59f25d27919886c6cdb60161ef0bb9aaf9fcf70be7a737",
+  "04_boundary_status.pdf": "f0b0c4318bd634de52d127bf7d9f2ba30035fb9001af63fdbf5ebd5101960128",
+  "05_discrepancy_default.png": "8d7b9d002180842252d7c3758e1e0962f3dc4e02d21f6d31f841fd40677c5523",
+  "05_discrepancy_default.pdf": "df801500806ed9373a83c9e9aa7d21f98ad916a37906c0bc7408c934b6d8f0d3",
+  "05_discrepancy_expandable.png": "998198e4d66d33587123a226141d0e4c64a12122ce19eed1c9cfb54756db28bd",
+  "05_discrepancy_expandable.pdf": "f43219736527dfd08f7b4c060177a549c536cf4495bb0c9c001407f4bfdf1e6d"
+}

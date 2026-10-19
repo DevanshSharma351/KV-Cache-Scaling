@@ -12,6 +12,9 @@ Implementation, CPU integration, analysis and reference reporting are delivered.
 | 4 — Empirical analysis | 80 saved workers; paired eight-length sweep; all 28 diagnostics; all four curve/discrepancy checks pass; held-out default n=3 and expandable n=1 | Two expandable repeats; deliberate OOM boundary; exact hardware allocator delta remains unidentified |
 | 5 — Transfer/integration | Four config-only model/GPU cases, published KV-block comparison, CSV/JSON, six figure pairs, Markdown/PDF, CPU reproduction and executed notebook | Full research signoff waits on missing GPU evidence; independent Person 2 reproduction is not claimed |
 
+Final CPU checks passed locally, in Colab Python 3.11 and in GitHub Actions
+on Python 3.10–3.13. Colab also regenerated the full report from the saved data.
+
 Latest evidence: [80-worker capsule and quota notice](../artifacts/experiments/2026-10-19-t4-final/README.md).
 Delivery details and safe continuation: [P1 handoff](P1_HANDOFF.md).
 

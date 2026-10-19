@@ -1,0 +1,2 @@
+run_id,observed_success_delta_tokens,safe_bracket_delta_min_tokens,safe_bracket_delta_max_tokens,interpretation
+c6b37c71-23e8-4209-a278-2c9f65b6b763,0,-256,256,"Expandable minus default conservative safe-budget limit, not a measured hardware-context improvement"

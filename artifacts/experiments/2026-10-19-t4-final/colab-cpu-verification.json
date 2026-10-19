@@ -1,0 +1,337 @@
+[
+  {
+    "label": "clone",
+    "command": [
+      "git",
+      "clone",
+      "https://github.com/DevanshSharma351/KV-Cache-Scaling.git",
+      "/content/p1-delivery-verification"
+    ],
+    "cwd": null,
+    "started_at_utc": "2026-10-19T06:53:34.840475+00:00",
+    "finished_at_utc": "2026-10-19T06:53:39.923478+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "0aecd4a3e28af56bc3e7f87bcab9486dfbb0804c61af9f2d66412b3035d995e6",
+    "stdout_tail": "",
+    "stderr_tail": "Cloning into '/content/p1-delivery-verification'...\n"
+  },
+  {
+    "label": "checkout",
+    "command": [
+      "git",
+      "checkout",
+      "e09fdf954d86a1b757b63505343d8f6cfd0e49e7"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T06:53:39.930419+00:00",
+    "finished_at_utc": "2026-10-19T06:53:40.024341+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "c5df3ea8399e15b681117643290a2fb59d7bb8c2fbb5e4f7740d29a150fcd74d",
+    "stdout_tail": "",
+    "stderr_tail": "Note: switching to 'e09fdf954d86a1b757b63505343d8f6cfd0e49e7'.\n\nYou are in 'detached HEAD' state. You can look around, make experimental\nchanges and commit them, and you can discard any commits you make in this\nstate without impacting any branches by switching back to a branch.\n\nIf you want to create a new branch to retain commits you create, you may\ndo so (now or later) by using -c with the switch command. Example:\n\n  git switch -c <new-branch-name>\n\nOr undo this operation with:\n\n  git switch -\n\nTurn off this advice by setting config variable advice.detachedHead to false\n\nHEAD is now at e09fdf9 feat(p1): integrate 80-worker T4 evidence and quota-aware handoff\n"
+  },
+  {
+    "label": "venv",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "venv",
+      "/content/p1-report-env"
+    ],
+    "cwd": null,
+    "started_at_utc": "2026-10-19T06:53:40.029424+00:00",
+    "finished_at_utc": "2026-10-19T06:53:40.330025+00:00",
+    "returncode": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "730ef324c8b1bbf31a9ef8ab86e971a4858701ed2c38394fa0d2de5ede65e1a3",
+    "stdout_tail": "",
+    "stderr_tail": "Error: Command '['/content/p1-report-env/bin/python3', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.\n"
+  },
+  {
+    "label": "dependencies-system-python",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "pip",
+      "install",
+      "-e",
+      ".",
+      "-r",
+      "requirements-analysis.txt"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:07:30.822498+00:00",
+    "finished_at_utc": "2026-10-19T07:08:15.220889+00:00",
+    "returncode": 0,
+    "stdout_sha256": "4c65d589019bf220b2a6d1928feb37e41572bca85c641495c4ca7e99acbd6453",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "3.11/dist-packages (from reportlab==4.4.4->-r requirements-analysis.txt (line 3)) (3.4.2)\nRequirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.7->matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (1.17.0)\nDownloading matplotlib-3.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (8.6 MB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 8.6/8.6 MB 60.7 MB/s eta 0:00:00\nDownloading reportlab-4.4.4-py3-none-any.whl (2.0 MB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 2.0/2.0 MB 50.3 MB/s eta 0:00:00\nDownloading pypdf-5.9.0-py3-none-any.whl (313 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 313.2/313.2 kB 25.9 MB/s eta 0:00:00\nBuilding wheels for collected packages: kv-cache-scaling\n  Building editable for kv-cache-scaling (pyproject.toml): started\n  Building editable for kv-cache-scaling (pyproject.toml): finished with status 'done'\n  Created wheel for kv-cache-scaling: filename=kv_cache_scaling-0.1.0-0.editable-py3-none-any.whl size=1634 sha256=5fecc20c482dacb6b8e88436d7f1abcd82b89f8da696662587b790d41afd3f56\n  Stored in directory: /tmp/pip-ephem-wheel-cache-dc3cuj3_/wheels/ab/54/b5/639dbb0e18d477a65a039ef8b748f5bb19519943c053b0aa88\nSuccessfully built kv-cache-scaling\nInstalling collected packages: reportlab, pypdf, kv-cache-scaling, matplotlib\n  Attempting uninstall: matplotlib\n    Found existing installation: matplotlib 3.10.0\n    Uninstalling matplotlib-3.10.0:\n      Successfully uninstalled matplotlib-3.10.0\nSuccessfully installed kv-cache-scaling-0.1.0 matplotlib-3.10.1 pypdf-5.9.0 reportlab-4.4.4\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:08:15.245445+00:00",
+    "finished_at_utc": "2026-10-19T07:09:16.646271+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "ca86381c4e76fb51a1f6c264cbcf6c3c0e6846ae6c4d9ea188f0db57ff764b83",
+    "stdout_tail": "",
+    "stderr_tail": "bal_sample_max_after_eviction (test_probe.TelemetryTests.test_sampler_retains_global_sample_max_after_eviction) ... ok\ntest_snapshot_records_acquisition_window_and_same_time_slack (test_probe.TelemetryTests.test_snapshot_records_acquisition_window_and_same_time_slack) ... ok\ntest_storage_deduplicates_views_and_returns_only_metadata (test_probe.TelemetryTests.test_storage_deduplicates_views_and_returns_only_metadata) ... ok\ntest_uuid_mapping_does_not_assume_nvml_index (test_probe.TelemetryTests.test_uuid_mapping_does_not_assume_nvml_index) ... ok\ntest_complete_evidence_has_no_missing_experiment (test_reporting.ReportEvidenceTests.test_complete_evidence_has_no_missing_experiment) ... ok\ntest_held_out_repeats_and_separate_trace_are_required (test_reporting.ReportEvidenceTests.test_held_out_repeats_and_separate_trace_are_required) ... ok\ntest_one_allocator_workspace_controls_are_insufficient (test_reporting.ReportEvidenceTests.test_one_allocator_workspace_controls_are_insufficient) ... ok\ntest_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom (test_reporting.ReportEvidenceTests.test_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom) ... ok\ntest_config_matches_pinned_source_hash (test_scaffold.ScaffoldTests.test_config_matches_pinned_source_hash) ... ok\ntest_gpu_command_fails_closed (test_scaffold.ScaffoldTests.test_gpu_command_fails_closed) ... ok\ntest_prediction_is_explicitly_draft (test_scaffold.ScaffoldTests.test_prediction_is_explicitly_draft) ... ok\n\n----------------------------------------------------------------------\nRan 109 tests in 60.622s\n\nOK\n"
+  },
+  {
+    "label": "compile",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "compileall",
+      "-q",
+      "src",
+      "scripts"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:09:16.653554+00:00",
+    "finished_at_utc": "2026-10-19T07:09:16.803604+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "label": "saved-checkpoint-integrity",
+    "command": [
+      "/usr/bin/python3",
+      "-c",
+      "import hashlib,json,subprocess,sys,tempfile,zipfile\nfrom collections import Counter\nfrom datetime import datetime,timezone\nfrom pathlib import Path\nsys.path.insert(0,str(Path.cwd()/'src'))\nfrom kv_cache_scaling.analysis import read_capsules,write_analysis\nfrom kv_cache_scaling.reporting import evidence_gaps\ncapsule=Path('artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip')\nassert hashlib.sha256(capsule.read_bytes()).hexdigest()=='cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389'\nrecords,runs,sources=read_capsules([capsule]);raw=[r['record'] for r in records]\nassert len(raw)==len({r['pid'] for r in raw})==80\nassert all(r['status']=='success' for r in raw)\nassert len({(r['manifest']['gpu_uuid'],r['manifest']['environment_fingerprint'],r['manifest']['usable_bytes']) for r in runs.values()})==1\ncounts={};completion={}\nfor run_id,run in runs.items():\n events=run['events'];scope=run['manifest']['execution_scope'];results=[e for e in events if e['event']=='probe_result']\n counts[scope]=len(results);completion[scope]=events[-1]['event']=='run_finished'\n idle={e['probe_id'] for e in events if e['event']=='idle_verified'}\n assert all(e['probe_id'] in idle for e in results)\nassert counts=={'primary_sweep':48,'diagnostics':28,'calibrated_validation':4}\nassert completion=={'primary_sweep':True,'diagnostics':True,'calibrated_validation':False}\ncode_commit={r['manifest']['code_commit'] for r in runs.values()};assert code_commit=={'ce227af40476676238cbef9126807fd1d42be76b'}\ndef blob(commit,path):return subprocess.check_output(['git','show',commit+':'+path])\nreceipt_bytes=blob(next(iter(code_commit)),'prereg/final-2026-10-19/receipt.json');receipt=json.loads(receipt_bytes)\nassert all(hashlib.sha256(receipt_bytes).hexdigest()==r['manifest']['receipt_sha256'] for r in runs.values())\nprediction_bytes=blob(receipt['prediction_commit_sha'],receipt['prediction_path']);assert hashlib.sha256(prediction_bytes).hexdigest()==receipt['prediction_sha256']\nprediction=json.loads(prediction_bytes)\nfor path,digest in prediction['execution_sha256'].items():assert hashlib.sha256(blob(next(iter(code_commit)),path)).hexdigest()==digest\nexpected={name:prediction['execution_sha256']['src/kv_cache_scaling/'+name] for name in ('probe.py','telemetry.py')}\nassert all(r['code_sha256']==expected for r in raw)\nassert all(r['started_unix_ns']/1e9>datetime.fromisoformat(receipt['remote_receipt_observed_at_utc']).timestamp() for r in raw)\nwith zipfile.ZipFile(capsule) as z:\n assert 'state/global_deliberate_attempt.json' not in z.namelist()\n frozen=json.loads(z.read('audit/heldout-reference.json'))\n acknowledgements=[json.loads(line) for line in z.read('audit/external-checkpoint-receipts.jsonl').splitlines()]\n validation=next(r for r in runs.values() if r['manifest']['execution_scope']=='calibrated_validation')\n assert validation['manifest']['reference_sweep']==frozen['reference']\n assert any(a['sha256']==frozen['parent_checkpoint_sha256'] for a in acknowledgements)\n prefix='state/runs/'+frozen['reference']['run_id']+'/'\n for filename,key in [('manifest.json','manifest_sha256'),('events.jsonl','journal_sha256')]:assert hashlib.sha256(z.read(prefix+filename)).hexdigest()==frozen['reference'][key]\nheldout=[r['record'] for r in records if r['manifest']['execution_scope']=='calibrated_validation']\nassert datetime.fromisoformat(frozen['frozen_at_utc']).timestamp()<min(r['started_unix_ns'] for r in heldout)/1e9\nwith tempfile.TemporaryDirectory() as d:\n write_analysis([capsule],Path(d)/'analysis');a=json.loads((Path(d)/'analysis/analysis.json').read_text())\nassert all(a['acceptance'].values())\nmissing=evidence_gaps(a);assert len(missing)==2\nresult=dict(status='PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE',verified_at_utc=datetime.now(timezone.utc).isoformat(),sources=sources,successful_workers=80,unique_worker_pids=80,execution_counts=counts,completed_journals=completion,prospective_receipt_source_and_heldout_freeze_verified=True,deliberate_attempt_consumed=False,empirical_checks=a['acceptance'],research_signoff=False,missing_evidence=missing,interruption='Colab runtime removed; GPU quota prevented reconnection')\nprint(json.dumps(result,indent=2))\n"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:09:16.811790+00:00",
+    "finished_at_utc": "2026-10-19T07:09:22.046701+00:00",
+    "returncode": 0,
+    "stdout_sha256": "50413621f9602e5464c311788c4f80aa1f8d1b98cc26b770dc8edcfe2965953e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "{\n  \"status\": \"PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE\",\n  \"verified_at_utc\": \"2026-10-19T07:09:21.695842+00:00\",\n  \"sources\": [\n    {\n      \"path\": \"artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip\",\n      \"sha256\": \"cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389\",\n      \"verified_members\": 1090\n    }\n  ],\n  \"successful_workers\": 80,\n  \"unique_worker_pids\": 80,\n  \"execution_counts\": {\n    \"calibrated_validation\": 4,\n    \"diagnostics\": 28,\n    \"primary_sweep\": 48\n  },\n  \"completed_journals\": {\n    \"calibrated_validation\": false,\n    \"diagnostics\": true,\n    \"primary_sweep\": true\n  },\n  \"prospective_receipt_source_and_heldout_freeze_verified\": true,\n  \"deliberate_attempt_consumed\": false,\n  \"empirical_checks\": {\n    \"five_length_paired_primary_complete\": true,\n    \"cache_slope_pass\": true,\n    \"discrepancy_coverage_pass\": true,\n    \"discrepancy_closure_pass\": true\n  },\n  \"research_signoff\": false,\n  \"missing_evidence\": [\n    \"Paired prospective held-out validation at L=114688.\",\n    \"Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.\"\n  ],\n  \"interruption\": \"Colab runtime removed; GPU quota prevented reconnection\"\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "reproduction",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/reproduce_results.py",
+      "--capsule",
+      "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+      "--output",
+      "/content/p1-reproduced-results"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:09:22.053196+00:00",
+    "finished_at_utc": "2026-10-19T07:09:32.396556+00:00",
+    "returncode": 0,
+    "stdout_sha256": "bdb18e0496987dbf078e8b3de7a51325c478816d7842816a64693585b345c4ac",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "Reproduced saved evidence: /content/p1-reproduced-results\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "dependencies-system-python",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "pip",
+      "install",
+      "-e",
+      ".",
+      "-r",
+      "requirements-analysis.txt"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:10:44.411827+00:00",
+    "finished_at_utc": "2026-10-19T07:11:15.944599+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e5b9d1e2289f1ef443009af6a562866855679601dda580954c62ffbeb84c43cd",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "kages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (11.2.1)\nRequirement already satisfied: pyparsing>=2.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (3.2.3)\nRequirement already satisfied: python-dateutil>=2.7 in /usr/local/lib/python3.11/dist-packages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (2.9.0.post0)\nRequirement already satisfied: charset-normalizer in /usr/local/lib/python3.11/dist-packages (from reportlab==4.4.4->-r requirements-analysis.txt (line 3)) (3.4.2)\nRequirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.7->matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (1.17.0)\nBuilding wheels for collected packages: kv-cache-scaling\n  Building editable for kv-cache-scaling (pyproject.toml): started\n  Building editable for kv-cache-scaling (pyproject.toml): finished with status 'done'\n  Created wheel for kv-cache-scaling: filename=kv_cache_scaling-0.1.0-0.editable-py3-none-any.whl size=1634 sha256=27e8862038206e6d1518c0c6c8d50a5b046153d57b1e9ab8cb88028f13da6ca6\n  Stored in directory: /tmp/pip-ephem-wheel-cache-swl_c_ae/wheels/ab/54/b5/639dbb0e18d477a65a039ef8b748f5bb19519943c053b0aa88\nSuccessfully built kv-cache-scaling\nInstalling collected packages: kv-cache-scaling\n  Attempting uninstall: kv-cache-scaling\n    Found existing installation: kv-cache-scaling 0.1.0\n    Uninstalling kv-cache-scaling-0.1.0:\n      Successfully uninstalled kv-cache-scaling-0.1.0\nSuccessfully installed kv-cache-scaling-0.1.0\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:11:15.957490+00:00",
+    "finished_at_utc": "2026-10-19T07:12:21.419420+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "6774dd01c21361e981cc0cf90439f60da3a3129e87a1e16c9ac99aa3e4caad1f",
+    "stdout_tail": "",
+    "stderr_tail": "bal_sample_max_after_eviction (test_probe.TelemetryTests.test_sampler_retains_global_sample_max_after_eviction) ... ok\ntest_snapshot_records_acquisition_window_and_same_time_slack (test_probe.TelemetryTests.test_snapshot_records_acquisition_window_and_same_time_slack) ... ok\ntest_storage_deduplicates_views_and_returns_only_metadata (test_probe.TelemetryTests.test_storage_deduplicates_views_and_returns_only_metadata) ... ok\ntest_uuid_mapping_does_not_assume_nvml_index (test_probe.TelemetryTests.test_uuid_mapping_does_not_assume_nvml_index) ... ok\ntest_complete_evidence_has_no_missing_experiment (test_reporting.ReportEvidenceTests.test_complete_evidence_has_no_missing_experiment) ... ok\ntest_held_out_repeats_and_separate_trace_are_required (test_reporting.ReportEvidenceTests.test_held_out_repeats_and_separate_trace_are_required) ... ok\ntest_one_allocator_workspace_controls_are_insufficient (test_reporting.ReportEvidenceTests.test_one_allocator_workspace_controls_are_insufficient) ... ok\ntest_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom (test_reporting.ReportEvidenceTests.test_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom) ... ok\ntest_config_matches_pinned_source_hash (test_scaffold.ScaffoldTests.test_config_matches_pinned_source_hash) ... ok\ntest_gpu_command_fails_closed (test_scaffold.ScaffoldTests.test_gpu_command_fails_closed) ... ok\ntest_prediction_is_explicitly_draft (test_scaffold.ScaffoldTests.test_prediction_is_explicitly_draft) ... ok\n\n----------------------------------------------------------------------\nRan 109 tests in 64.751s\n\nOK\n"
+  },
+  {
+    "label": "compile",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "compileall",
+      "-q",
+      "src",
+      "scripts"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:12:21.424588+00:00",
+    "finished_at_utc": "2026-10-19T07:12:21.558391+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "label": "saved-checkpoint-integrity",
+    "command": [
+      "/usr/bin/python3",
+      "-c",
+      "import hashlib,json,subprocess,sys,tempfile,zipfile\nfrom collections import Counter\nfrom datetime import datetime,timezone\nfrom pathlib import Path\nsys.path.insert(0,str(Path.cwd()/'src'))\nfrom kv_cache_scaling.analysis import read_capsules,write_analysis\nfrom kv_cache_scaling.reporting import evidence_gaps\ncapsule=Path('artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip')\nassert hashlib.sha256(capsule.read_bytes()).hexdigest()=='cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389'\nrecords,runs,sources=read_capsules([capsule]);raw=[r['record'] for r in records]\nassert len(raw)==len({r['pid'] for r in raw})==80\nassert all(r['status']=='success' for r in raw)\nassert len({(r['manifest']['gpu_uuid'],r['manifest']['environment_fingerprint'],r['manifest']['usable_bytes']) for r in runs.values()})==1\ncounts={};completion={}\nfor run_id,run in runs.items():\n events=run['events'];scope=run['manifest']['execution_scope'];results=[e for e in events if e['event']=='probe_result']\n counts[scope]=len(results);completion[scope]=events[-1]['event']=='run_finished'\n idle={e['probe_id'] for e in events if e['event']=='idle_verified'}\n assert all(e['probe_id'] in idle for e in results)\nassert counts=={'primary_sweep':48,'diagnostics':28,'calibrated_validation':4}\nassert completion=={'primary_sweep':True,'diagnostics':True,'calibrated_validation':False}\ncode_commit={r['manifest']['code_commit'] for r in runs.values()};assert code_commit=={'ce227af40476676238cbef9126807fd1d42be76b'}\ndef blob(commit,path):return subprocess.check_output(['git','show',commit+':'+path])\nreceipt_bytes=blob(next(iter(code_commit)),'prereg/final-2026-10-19/receipt.json');receipt=json.loads(receipt_bytes)\nassert all(hashlib.sha256(receipt_bytes).hexdigest()==r['manifest']['receipt_sha256'] for r in runs.values())\nprediction_bytes=blob(receipt['prediction_commit_sha'],receipt['prediction_path']);assert hashlib.sha256(prediction_bytes).hexdigest()==receipt['prediction_sha256']\nprediction=json.loads(prediction_bytes)\nfor path,digest in prediction['execution_sha256'].items():assert hashlib.sha256(blob(next(iter(code_commit)),path)).hexdigest()==digest\nexpected={name:prediction['execution_sha256']['src/kv_cache_scaling/'+name] for name in ('probe.py','telemetry.py')}\nassert all(r['code_sha256']==expected for r in raw)\nassert all(r['started_unix_ns']/1e9>datetime.fromisoformat(receipt['remote_receipt_observed_at_utc']).timestamp() for r in raw)\nwith zipfile.ZipFile(capsule) as z:\n assert 'state/global_deliberate_attempt.json' not in z.namelist()\n frozen=json.loads(z.read('audit/heldout-reference.json'))\n acknowledgements=[json.loads(line) for line in z.read('audit/external-checkpoint-receipts.jsonl').splitlines()]\n validation=next(r for r in runs.values() if r['manifest']['execution_scope']=='calibrated_validation')\n assert validation['manifest']['reference_sweep']==frozen['reference']\n assert any(a['sha256']==frozen['parent_checkpoint_sha256'] for a in acknowledgements)\n prefix='state/runs/'+frozen['reference']['run_id']+'/'\n for filename,key in [('manifest.json','manifest_sha256'),('events.jsonl','journal_sha256')]:assert hashlib.sha256(z.read(prefix+filename)).hexdigest()==frozen['reference'][key]\nheldout=[r['record'] for r in records if r['manifest']['execution_scope']=='calibrated_validation']\nassert datetime.fromisoformat(frozen['frozen_at_utc']).timestamp()<min(r['started_unix_ns'] for r in heldout)/1e9\nwith tempfile.TemporaryDirectory() as d:\n write_analysis([capsule],Path(d)/'analysis');a=json.loads((Path(d)/'analysis/analysis.json').read_text())\nassert all(a['acceptance'].values())\nmissing=evidence_gaps(a);assert len(missing)==2\nresult=dict(status='PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE',verified_at_utc=datetime.now(timezone.utc).isoformat(),sources=sources,successful_workers=80,unique_worker_pids=80,execution_counts=counts,completed_journals=completion,prospective_receipt_source_and_heldout_freeze_verified=True,deliberate_attempt_consumed=False,empirical_checks=a['acceptance'],research_signoff=False,missing_evidence=missing,interruption='Colab runtime removed; GPU quota prevented reconnection')\nprint(json.dumps(result,indent=2))\n"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:12:21.563366+00:00",
+    "finished_at_utc": "2026-10-19T07:12:26.572465+00:00",
+    "returncode": 0,
+    "stdout_sha256": "6e4ed6b80c334111322d464792b65409d97578bd0884aa06589b5508a75ab664",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "{\n  \"status\": \"PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE\",\n  \"verified_at_utc\": \"2026-10-19T07:12:26.151705+00:00\",\n  \"sources\": [\n    {\n      \"path\": \"artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip\",\n      \"sha256\": \"cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389\",\n      \"verified_members\": 1090\n    }\n  ],\n  \"successful_workers\": 80,\n  \"unique_worker_pids\": 80,\n  \"execution_counts\": {\n    \"calibrated_validation\": 4,\n    \"diagnostics\": 28,\n    \"primary_sweep\": 48\n  },\n  \"completed_journals\": {\n    \"calibrated_validation\": false,\n    \"diagnostics\": true,\n    \"primary_sweep\": true\n  },\n  \"prospective_receipt_source_and_heldout_freeze_verified\": true,\n  \"deliberate_attempt_consumed\": false,\n  \"empirical_checks\": {\n    \"five_length_paired_primary_complete\": true,\n    \"cache_slope_pass\": true,\n    \"discrepancy_coverage_pass\": true,\n    \"discrepancy_closure_pass\": true\n  },\n  \"research_signoff\": false,\n  \"missing_evidence\": [\n    \"Paired prospective held-out validation at L=114688.\",\n    \"Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.\"\n  ],\n  \"interruption\": \"Colab runtime removed; GPU quota prevented reconnection\"\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "reproduction",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/reproduce_results.py",
+      "--capsule",
+      "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+      "--output",
+      "/content/p1-reproduced-results"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:12:26.577728+00:00",
+    "finished_at_utc": "2026-10-19T07:12:26.717706+00:00",
+    "returncode": 2,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "eb00f6cfa0ea7502e4fb85388047178fe0558704692b46bde7faef5004bdbcbb",
+    "stdout_tail": "",
+    "stderr_tail": "usage: reproduce_results.py [-h] --capsule CAPSULE [--run-id RUN_ID] --output\n                            OUTPUT\nreproduce_results.py: error: Refusing to overwrite a reproduction directory\n"
+  },
+  {
+    "label": "dependencies-system-python",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "pip",
+      "install",
+      "-e",
+      ".",
+      "-r",
+      "requirements-analysis.txt"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:13:38.011292+00:00",
+    "finished_at_utc": "2026-10-19T07:14:01.375635+00:00",
+    "returncode": 0,
+    "stdout_sha256": "9b12303498f939bbf3d48d885b8d3028873a91ffa165dde8fdf30f20454e1928",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "kages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (11.2.1)\nRequirement already satisfied: pyparsing>=2.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (3.2.3)\nRequirement already satisfied: python-dateutil>=2.7 in /usr/local/lib/python3.11/dist-packages (from matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (2.9.0.post0)\nRequirement already satisfied: charset-normalizer in /usr/local/lib/python3.11/dist-packages (from reportlab==4.4.4->-r requirements-analysis.txt (line 3)) (3.4.2)\nRequirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.7->matplotlib==3.10.1->-r requirements-analysis.txt (line 2)) (1.17.0)\nBuilding wheels for collected packages: kv-cache-scaling\n  Building editable for kv-cache-scaling (pyproject.toml): started\n  Building editable for kv-cache-scaling (pyproject.toml): finished with status 'done'\n  Created wheel for kv-cache-scaling: filename=kv_cache_scaling-0.1.0-0.editable-py3-none-any.whl size=1634 sha256=1b0a2f531f5d5cca0553192f042ed1e46711ac9704f448ae79c66a24f282e0f0\n  Stored in directory: /tmp/pip-ephem-wheel-cache-anuf5hwo/wheels/ab/54/b5/639dbb0e18d477a65a039ef8b748f5bb19519943c053b0aa88\nSuccessfully built kv-cache-scaling\nInstalling collected packages: kv-cache-scaling\n  Attempting uninstall: kv-cache-scaling\n    Found existing installation: kv-cache-scaling 0.1.0\n    Uninstalling kv-cache-scaling-0.1.0:\n      Successfully uninstalled kv-cache-scaling-0.1.0\nSuccessfully installed kv-cache-scaling-0.1.0\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:14:01.383487+00:00",
+    "finished_at_utc": "2026-10-19T07:15:02.517791+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b2fa86da7b7f0467c35363128177ef2cdfab62913c603e66e421bd4074268c61",
+    "stdout_tail": "",
+    "stderr_tail": "bal_sample_max_after_eviction (test_probe.TelemetryTests.test_sampler_retains_global_sample_max_after_eviction) ... ok\ntest_snapshot_records_acquisition_window_and_same_time_slack (test_probe.TelemetryTests.test_snapshot_records_acquisition_window_and_same_time_slack) ... ok\ntest_storage_deduplicates_views_and_returns_only_metadata (test_probe.TelemetryTests.test_storage_deduplicates_views_and_returns_only_metadata) ... ok\ntest_uuid_mapping_does_not_assume_nvml_index (test_probe.TelemetryTests.test_uuid_mapping_does_not_assume_nvml_index) ... ok\ntest_complete_evidence_has_no_missing_experiment (test_reporting.ReportEvidenceTests.test_complete_evidence_has_no_missing_experiment) ... ok\ntest_held_out_repeats_and_separate_trace_are_required (test_reporting.ReportEvidenceTests.test_held_out_repeats_and_separate_trace_are_required) ... ok\ntest_one_allocator_workspace_controls_are_insufficient (test_reporting.ReportEvidenceTests.test_one_allocator_workspace_controls_are_insufficient) ... ok\ntest_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom (test_reporting.ReportEvidenceTests.test_safe_budget_or_inconsistent_bracket_cannot_substitute_for_oom) ... ok\ntest_config_matches_pinned_source_hash (test_scaffold.ScaffoldTests.test_config_matches_pinned_source_hash) ... ok\ntest_gpu_command_fails_closed (test_scaffold.ScaffoldTests.test_gpu_command_fails_closed) ... ok\ntest_prediction_is_explicitly_draft (test_scaffold.ScaffoldTests.test_prediction_is_explicitly_draft) ... ok\n\n----------------------------------------------------------------------\nRan 109 tests in 60.718s\n\nOK\n"
+  },
+  {
+    "label": "compile",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "compileall",
+      "-q",
+      "src",
+      "scripts"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:15:02.523683+00:00",
+    "finished_at_utc": "2026-10-19T07:15:02.673427+00:00",
+    "returncode": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  {
+    "label": "saved-checkpoint-integrity",
+    "command": [
+      "/usr/bin/python3",
+      "-c",
+      "import hashlib,json,subprocess,sys,tempfile,zipfile\nfrom collections import Counter\nfrom datetime import datetime,timezone\nfrom pathlib import Path\nsys.path.insert(0,str(Path.cwd()/'src'))\nfrom kv_cache_scaling.analysis import read_capsules,write_analysis\nfrom kv_cache_scaling.reporting import evidence_gaps\ncapsule=Path('artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip')\nassert hashlib.sha256(capsule.read_bytes()).hexdigest()=='cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389'\nrecords,runs,sources=read_capsules([capsule]);raw=[r['record'] for r in records]\nassert len(raw)==len({r['pid'] for r in raw})==80\nassert all(r['status']=='success' for r in raw)\nassert len({(r['manifest']['gpu_uuid'],r['manifest']['environment_fingerprint'],r['manifest']['usable_bytes']) for r in runs.values()})==1\ncounts={};completion={}\nfor run_id,run in runs.items():\n events=run['events'];scope=run['manifest']['execution_scope'];results=[e for e in events if e['event']=='probe_result']\n counts[scope]=len(results);completion[scope]=events[-1]['event']=='run_finished'\n idle={e['probe_id'] for e in events if e['event']=='idle_verified'}\n assert all(e['probe_id'] in idle for e in results)\nassert counts=={'primary_sweep':48,'diagnostics':28,'calibrated_validation':4}\nassert completion=={'primary_sweep':True,'diagnostics':True,'calibrated_validation':False}\ncode_commit={r['manifest']['code_commit'] for r in runs.values()};assert code_commit=={'ce227af40476676238cbef9126807fd1d42be76b'}\ndef blob(commit,path):return subprocess.check_output(['git','show',commit+':'+path])\nreceipt_bytes=blob(next(iter(code_commit)),'prereg/final-2026-10-19/receipt.json');receipt=json.loads(receipt_bytes)\nassert all(hashlib.sha256(receipt_bytes).hexdigest()==r['manifest']['receipt_sha256'] for r in runs.values())\nprediction_bytes=blob(receipt['prediction_commit_sha'],receipt['prediction_path']);assert hashlib.sha256(prediction_bytes).hexdigest()==receipt['prediction_sha256']\nprediction=json.loads(prediction_bytes)\nfor path,digest in prediction['execution_sha256'].items():assert hashlib.sha256(blob(next(iter(code_commit)),path)).hexdigest()==digest\nexpected={name:prediction['execution_sha256']['src/kv_cache_scaling/'+name] for name in ('probe.py','telemetry.py')}\nassert all(r['code_sha256']==expected for r in raw)\nassert all(r['started_unix_ns']/1e9>datetime.fromisoformat(receipt['remote_receipt_observed_at_utc']).timestamp() for r in raw)\nwith zipfile.ZipFile(capsule) as z:\n assert 'state/global_deliberate_attempt.json' not in z.namelist()\n frozen=json.loads(z.read('audit/heldout-reference.json'))\n acknowledgements=[json.loads(line) for line in z.read('audit/external-checkpoint-receipts.jsonl').splitlines()]\n validation=next(r for r in runs.values() if r['manifest']['execution_scope']=='calibrated_validation')\n assert validation['manifest']['reference_sweep']==frozen['reference']\n assert any(a['sha256']==frozen['parent_checkpoint_sha256'] for a in acknowledgements)\n prefix='state/runs/'+frozen['reference']['run_id']+'/'\n for filename,key in [('manifest.json','manifest_sha256'),('events.jsonl','journal_sha256')]:assert hashlib.sha256(z.read(prefix+filename)).hexdigest()==frozen['reference'][key]\nheldout=[r['record'] for r in records if r['manifest']['execution_scope']=='calibrated_validation']\nassert datetime.fromisoformat(frozen['frozen_at_utc']).timestamp()<min(r['started_unix_ns'] for r in heldout)/1e9\nwith tempfile.TemporaryDirectory() as d:\n write_analysis([capsule],Path(d)/'analysis');a=json.loads((Path(d)/'analysis/analysis.json').read_text())\nassert all(a['acceptance'].values())\nmissing=evidence_gaps(a);assert len(missing)==2\nresult=dict(status='PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE',verified_at_utc=datetime.now(timezone.utc).isoformat(),sources=sources,successful_workers=80,unique_worker_pids=80,execution_counts=counts,completed_journals=completion,prospective_receipt_source_and_heldout_freeze_verified=True,deliberate_attempt_consumed=False,empirical_checks=a['acceptance'],research_signoff=False,missing_evidence=missing,interruption='Colab runtime removed; GPU quota prevented reconnection')\nprint(json.dumps(result,indent=2))\n"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:15:02.678926+00:00",
+    "finished_at_utc": "2026-10-19T07:15:08.984330+00:00",
+    "returncode": 0,
+    "stdout_sha256": "ff6da166366242ac05d352686b6820aec42cfc4bfaa64904b66f751fc310b619",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "{\n  \"status\": \"PASS_SAVED_CHECKPOINT_INTEGRITY_RESEARCH_INCOMPLETE\",\n  \"verified_at_utc\": \"2026-10-19T07:15:08.632480+00:00\",\n  \"sources\": [\n    {\n      \"path\": \"artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip\",\n      \"sha256\": \"cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389\",\n      \"verified_members\": 1090\n    }\n  ],\n  \"successful_workers\": 80,\n  \"unique_worker_pids\": 80,\n  \"execution_counts\": {\n    \"calibrated_validation\": 4,\n    \"diagnostics\": 28,\n    \"primary_sweep\": 48\n  },\n  \"completed_journals\": {\n    \"calibrated_validation\": false,\n    \"diagnostics\": true,\n    \"primary_sweep\": true\n  },\n  \"prospective_receipt_source_and_heldout_freeze_verified\": true,\n  \"deliberate_attempt_consumed\": false,\n  \"empirical_checks\": {\n    \"five_length_paired_primary_complete\": true,\n    \"cache_slope_pass\": true,\n    \"discrepancy_coverage_pass\": true,\n    \"discrepancy_closure_pass\": true\n  },\n  \"research_signoff\": false,\n  \"missing_evidence\": [\n    \"Paired prospective held-out validation at L=114688.\",\n    \"Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.\"\n  ],\n  \"interruption\": \"Colab runtime removed; GPU quota prevented reconnection\"\n}\n",
+    "stderr_tail": ""
+  },
+  {
+    "label": "reproduction",
+    "command": [
+      "/usr/bin/python3",
+      "scripts/reproduce_results.py",
+      "--capsule",
+      "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+      "--output",
+      "/content/p1-reproduced-results"
+    ],
+    "cwd": "/content/p1-delivery-verification",
+    "started_at_utc": "2026-10-19T07:15:08.989423+00:00",
+    "finished_at_utc": "2026-10-19T07:15:16.318281+00:00",
+    "returncode": 0,
+    "stdout_sha256": "bdb18e0496987dbf078e8b3de7a51325c478816d7842816a64693585b345c4ac",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_tail": "Reproduced saved evidence: /content/p1-reproduced-results\n",
+    "stderr_tail": ""
+  }
+]

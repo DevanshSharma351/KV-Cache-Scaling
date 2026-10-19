@@ -1,0 +1,270 @@
+{
+  "cloud_notebook": "https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS",
+  "original_sha256": "a47bcb60d2e9813d3db38937f3f24892aa74e5cb7a234170da52032b15311f56",
+  "original_bytes": 81710544,
+  "archived_sha256": "9641fa02ba202d7b7fa102b476917bd1c80fb0b6278d3895570e1a0e50b6e636",
+  "archived_bytes": 2973723,
+  "source_cells_unchanged": true,
+  "output_policy": "Only duplicate ZIP base64 transport encodings removed from stream outputs; adjacent same-channel stream chunks merged. All code, metrics, errors, figures, metadata and execution fields preserved.",
+  "omitted_transfer_blocks": [
+    {
+      "original_cell_index": 15,
+      "start_marker": "EVIDENCE_ARCHIVE_BASE64_BEGIN",
+      "base64_characters": 37608
+    },
+    {
+      "original_cell_index": 21,
+      "start_marker": "BEGIN_PREPARATION_BASE64",
+      "base64_characters": 24616
+    },
+    {
+      "original_cell_index": 26,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 63412
+    },
+    {
+      "original_cell_index": 28,
+      "start_marker": "BEGIN_FAILED_PREFLIGHT_BASE64",
+      "base64_characters": 63412
+    },
+    {
+      "original_cell_index": 32,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 78244
+    },
+    {
+      "original_cell_index": 33,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 166700
+    },
+    {
+      "original_cell_index": 35,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 243784
+    },
+    {
+      "original_cell_index": 36,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 320824
+    },
+    {
+      "original_cell_index": 37,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 397736
+    },
+    {
+      "original_cell_index": 38,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 474268
+    },
+    {
+      "original_cell_index": 39,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 550984
+    },
+    {
+      "original_cell_index": 40,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 640356
+    },
+    {
+      "original_cell_index": 41,
+      "start_marker": "BEGIN_CHECKPOINT_BASE64",
+      "base64_characters": 642004
+    },
+    {
+      "original_cell_index": 49,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 103412
+    },
+    {
+      "original_cell_index": 50,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 180036
+    },
+    {
+      "original_cell_index": 52,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 256816
+    },
+    {
+      "original_cell_index": 54,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 412604
+    },
+    {
+      "original_cell_index": 55,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 490920
+    },
+    {
+      "original_cell_index": 56,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 569400
+    },
+    {
+      "original_cell_index": 57,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 648192
+    },
+    {
+      "original_cell_index": 58,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 726796
+    },
+    {
+      "original_cell_index": 59,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 807872
+    },
+    {
+      "original_cell_index": 60,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 888660
+    },
+    {
+      "original_cell_index": 62,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 969484
+    },
+    {
+      "original_cell_index": 63,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1056164
+    },
+    {
+      "original_cell_index": 64,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1142964
+    },
+    {
+      "original_cell_index": 66,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1229724
+    },
+    {
+      "original_cell_index": 67,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1331576
+    },
+    {
+      "original_cell_index": 68,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1433000
+    },
+    {
+      "original_cell_index": 69,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1534716
+    },
+    {
+      "original_cell_index": 70,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1679160
+    },
+    {
+      "original_cell_index": 71,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1822896
+    },
+    {
+      "original_cell_index": 72,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 1968096
+    },
+    {
+      "original_cell_index": 73,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 2246780
+    },
+    {
+      "original_cell_index": 74,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 2525652
+    },
+    {
+      "original_cell_index": 75,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 2802676
+    },
+    {
+      "original_cell_index": 76,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 2882284
+    },
+    {
+      "original_cell_index": 77,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 2960592
+    },
+    {
+      "original_cell_index": 78,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3038672
+    },
+    {
+      "original_cell_index": 79,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3117268
+    },
+    {
+      "original_cell_index": 80,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3196356
+    },
+    {
+      "original_cell_index": 81,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3275068
+    },
+    {
+      "original_cell_index": 82,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3355308
+    },
+    {
+      "original_cell_index": 83,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3436828
+    },
+    {
+      "original_cell_index": 84,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3518596
+    },
+    {
+      "original_cell_index": 85,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3601044
+    },
+    {
+      "original_cell_index": 86,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3683136
+    },
+    {
+      "original_cell_index": 87,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3765136
+    },
+    {
+      "original_cell_index": 88,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 3852880
+    },
+    {
+      "original_cell_index": 94,
+      "start_marker": "CHECKPOINT_BASE64_BEGIN",
+      "base64_characters": 4486976
+    }
+  ],
+  "final_cpu_commit": "e09fdf954d86a1b757b63505343d8f6cfd0e49e7",
+  "final_cpu_commands_passed": [
+    "tests",
+    "compile",
+    "saved-checkpoint-integrity",
+    "reproduction"
+  ],
+  "preserved_cpu_setup_failure": "venv ensurepip failed; subsequent recorded system-Python path passed",
+  "gpu_status": "80 successful saved workers; Colab quota blocked remaining GPU work; no OOM observed"
+}

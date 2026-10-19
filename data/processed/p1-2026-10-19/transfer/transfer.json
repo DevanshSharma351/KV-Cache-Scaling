@@ -1,0 +1,309 @@
+{
+  "schema_version": "transfer-v1",
+  "predictions": [
+    {
+      "model_id": "Qwen/Qwen2.5-3B",
+      "gpu": "A100-40GB",
+      "prediction_kind": "UNRUN_CONFIG_DERIVED_TRANSFER",
+      "weights_loaded": false,
+      "target_gpu_measured": false,
+      "model_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+      "config_sha256": "27467e2fc311a7656c09a43ae9c3d408211e1f212bbddbc93c8596a06423826f",
+      "unique_parameters": 3085938688,
+      "weight_bytes_fp16": 6171877376,
+      "kv_bytes_per_token": 36864,
+      "naive_gqa_overestimate_factor": 8.0,
+      "usable_vram_bytes": {
+        "min": 39728447488,
+        "central": 40802189312,
+        "max": 41875931136
+      },
+      "budget_origin": "Hypothetical sensitivity budgets; nominal GPU labels are not measurements of usable memory",
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "activation_bytes_per_token": 68608,
+          "fixed_headroom_bytes": 268435456
+        },
+        {
+          "name": "central",
+          "activation_bytes_per_token": 98816,
+          "fixed_headroom_bytes": 536870912
+        },
+        {
+          "name": "conservative",
+          "activation_bytes_per_token": 153600,
+          "fixed_headroom_bytes": 1073741824
+        }
+      ],
+      "parametric_limit": "max(0, floor((U-W-H0)/(B*(kv_B1+a))))",
+      "uncapped_limit_tokens": {
+        "min": 170545,
+        "central": 251278,
+        "max": 335971
+      },
+      "config_capped_limit_tokens": {
+        "min": 32768,
+        "central": 32768,
+        "max": 32768
+      },
+      "config_ceiling_tokens": 32768,
+      "quality_domain_limit_tokens": 32768,
+      "config_censored_central": true,
+      "central_budget_bytes_at_required_lengths": {
+        "512": 6778216448,
+        "1024": 6847684608,
+        "2048": 6986620928,
+        "4096": 7264493568,
+        "8192": 7820238848
+      },
+      "uncertainty": "VRAM plus architecture-shaped activation assumptions, not a confidence interval or validated GPU boundary"
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-3B",
+      "gpu": "RTX-4090-24GB",
+      "prediction_kind": "UNRUN_CONFIG_DERIVED_TRANSFER",
+      "weights_loaded": false,
+      "target_gpu_measured": false,
+      "model_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+      "config_sha256": "27467e2fc311a7656c09a43ae9c3d408211e1f212bbddbc93c8596a06423826f",
+      "unique_parameters": 3085938688,
+      "weight_bytes_fp16": 6171877376,
+      "kv_bytes_per_token": 36864,
+      "naive_gqa_overestimate_factor": 8.0,
+      "usable_vram_bytes": {
+        "min": 23622320128,
+        "central": 24696061952,
+        "max": 25232932864
+      },
+      "budget_origin": "Hypothetical sensitivity budgets; nominal GPU labels are not measurements of usable memory",
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "activation_bytes_per_token": 68608,
+          "fixed_headroom_bytes": 268435456
+        },
+        {
+          "name": "central",
+          "activation_bytes_per_token": 98816,
+          "fixed_headroom_bytes": 536870912
+        },
+        {
+          "name": "conservative",
+          "activation_bytes_per_token": 153600,
+          "fixed_headroom_bytes": 1073741824
+        }
+      ],
+      "parametric_limit": "max(0, floor((U-W-H0)/(B*(kv_B1+a))))",
+      "uncapped_limit_tokens": {
+        "min": 85983,
+        "central": 132571,
+        "max": 178176
+      },
+      "config_capped_limit_tokens": {
+        "min": 32768,
+        "central": 32768,
+        "max": 32768
+      },
+      "config_ceiling_tokens": 32768,
+      "quality_domain_limit_tokens": 32768,
+      "config_censored_central": true,
+      "central_budget_bytes_at_required_lengths": {
+        "512": 6778216448,
+        "1024": 6847684608,
+        "2048": 6986620928,
+        "4096": 7264493568,
+        "8192": 7820238848
+      },
+      "uncertainty": "VRAM plus architecture-shaped activation assumptions, not a confidence interval or validated GPU boundary"
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-7B",
+      "gpu": "A100-40GB",
+      "prediction_kind": "UNRUN_CONFIG_DERIVED_TRANSFER",
+      "weights_loaded": false,
+      "target_gpu_measured": false,
+      "model_revision": "d149729398750b98c0af14eb82c78cfe92750796",
+      "config_sha256": "267ce68584c5f24c3b267d934db2de68dd21d1ca677fb78ed809eb60067f7642",
+      "unique_parameters": 7615616512,
+      "weight_bytes_fp16": 15231233024,
+      "kv_bytes_per_token": 57344,
+      "naive_gqa_overestimate_factor": 7.0,
+      "usable_vram_bytes": {
+        "min": 39728447488,
+        "central": 40802189312,
+        "max": 41875931136
+      },
+      "budget_origin": "Hypothetical sensitivity budgets; nominal GPU labels are not measurements of usable memory",
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "activation_bytes_per_token": 118784,
+          "fixed_headroom_bytes": 268435456
+        },
+        {
+          "name": "central",
+          "activation_bytes_per_token": 171008,
+          "fixed_headroom_bytes": 536870912
+        },
+        {
+          "name": "conservative",
+          "activation_bytes_per_token": 266240,
+          "fixed_headroom_bytes": 1073741824
+        }
+      ],
+      "parametric_limit": "max(0, floor((U-W-H0)/(B*(kv_B1+a))))",
+      "uncapped_limit_tokens": {
+        "min": 72387,
+        "central": 109629,
+        "max": 149756
+      },
+      "config_capped_limit_tokens": {
+        "min": 72387,
+        "central": 109629,
+        "max": 131072
+      },
+      "config_ceiling_tokens": 131072,
+      "quality_domain_limit_tokens": 32768,
+      "config_censored_central": false,
+      "central_budget_bytes_at_required_lengths": {
+        "512": 15885020160,
+        "1024": 16001936384,
+        "2048": 16235768832,
+        "4096": 16703433728,
+        "8192": 17638763520
+      },
+      "uncertainty": "VRAM plus architecture-shaped activation assumptions, not a confidence interval or validated GPU boundary"
+    },
+    {
+      "model_id": "Qwen/Qwen2.5-7B",
+      "gpu": "RTX-4090-24GB",
+      "prediction_kind": "UNRUN_CONFIG_DERIVED_TRANSFER",
+      "weights_loaded": false,
+      "target_gpu_measured": false,
+      "model_revision": "d149729398750b98c0af14eb82c78cfe92750796",
+      "config_sha256": "267ce68584c5f24c3b267d934db2de68dd21d1ca677fb78ed809eb60067f7642",
+      "unique_parameters": 7615616512,
+      "weight_bytes_fp16": 15231233024,
+      "kv_bytes_per_token": 57344,
+      "naive_gqa_overestimate_factor": 7.0,
+      "usable_vram_bytes": {
+        "min": 23622320128,
+        "central": 24696061952,
+        "max": 25232932864
+      },
+      "budget_origin": "Hypothetical sensitivity budgets; nominal GPU labels are not measurements of usable memory",
+      "scenarios": [
+        {
+          "name": "optimistic",
+          "activation_bytes_per_token": 118784,
+          "fixed_headroom_bytes": 268435456
+        },
+        {
+          "name": "central",
+          "activation_bytes_per_token": 171008,
+          "fixed_headroom_bytes": 536870912
+        },
+        {
+          "name": "conservative",
+          "activation_bytes_per_token": 266240,
+          "fixed_headroom_bytes": 1073741824
+        }
+      ],
+      "parametric_limit": "max(0, floor((U-W-H0)/(B*(kv_B1+a))))",
+      "uncapped_limit_tokens": {
+        "min": 22613,
+        "central": 39097,
+        "max": 55262
+      },
+      "config_capped_limit_tokens": {
+        "min": 22613,
+        "central": 39097,
+        "max": 55262
+      },
+      "config_ceiling_tokens": 131072,
+      "quality_domain_limit_tokens": 32768,
+      "config_censored_central": false,
+      "central_budget_bytes_at_required_lengths": {
+        "512": 15885020160,
+        "1024": 16001936384,
+        "2048": 16235768832,
+        "4096": 16703433728,
+        "8192": 17638763520
+      },
+      "uncertainty": "VRAM plus architecture-shaped activation assumptions, not a confidence interval or validated GPU boundary"
+    }
+  ],
+  "calibration_status": "Only retained KV scaling is analytically established; target peak envelopes remain unvalidated",
+  "published_verification": {
+    "status": "KV_SUBMODEL_COMPARISON_WITH_UNIT_CAVEAT",
+    "source": {
+      "schema_version": 1,
+      "source_url": "https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html",
+      "source_title": "Inside vLLM\u2019s New KV Offloading Connector: Smarter Memory Transfer for Maximizing Inference Throughput",
+      "publisher": "vLLM team",
+      "published_date": "2026-01-08",
+      "source_section": "Changing vLLM\u2019s Memory Layout, physical block size table",
+      "tokens_per_block": 16,
+      "element_bytes_assumption": 2,
+      "tensor_parallel_size": 1,
+      "quantity": "Physical K+V bytes for one token block across all layers; not a prefill peak or a GPU context boundary",
+      "rows": [
+        {
+          "model_id": "Qwen/Qwen2.5-3B-Instruct",
+          "base_model_id": "Qwen/Qwen2.5-3B",
+          "reported_new_block_MB": "0.56",
+          "reported_old_block_KB": "8"
+        },
+        {
+          "model_id": "Qwen/Qwen2.5-7B-Instruct",
+          "base_model_id": "Qwen/Qwen2.5-7B",
+          "reported_new_block_MB": "0.87",
+          "reported_old_block_KB": "16"
+        }
+      ],
+      "caveats": [
+        "The publication labels its units MB/KB without explicitly defining decimal versus binary units. Both interpretations must be reported.",
+        "The 2-byte cache dtype is an explicit compatibility assumption; fp16 and bf16 have the same byte width. The comparison does not validate cache quantization.",
+        "Base and Instruct KV architecture fields are checked against separately pinned official configs before comparison.",
+        "The table is rounded/truncated; percentage error against displayed values is not measurement uncertainty.",
+        "External evidence checks only the KV submodel. It cannot validate transferred HF efficient-SDPA peak context limits."
+      ]
+    },
+    "comparisons": [
+      {
+        "base_model_id": "Qwen/Qwen2.5-3B",
+        "published_model_id": "Qwen/Qwen2.5-3B-Instruct",
+        "predicted_block_bytes": 589824,
+        "predicted_block_MiB": 0.5625,
+        "published_display_MB": "0.56",
+        "display_error_percent_if_binary": 0.44642857142857145,
+        "display_error_percent_if_decimal": 5.325714285714286,
+        "kv_architecture_matches": true,
+        "source_url": "https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html",
+        "verifies": "KV block byte scaling under a 2-byte dtype assumption only",
+        "does_not_verify": "HF prefill peak, activation envelope, usable VRAM or transferred context threshold"
+      },
+      {
+        "base_model_id": "Qwen/Qwen2.5-7B",
+        "published_model_id": "Qwen/Qwen2.5-7B-Instruct",
+        "predicted_block_bytes": 917504,
+        "predicted_block_MiB": 0.875,
+        "published_display_MB": "0.87",
+        "display_error_percent_if_binary": 0.5747126436781609,
+        "display_error_percent_if_decimal": 5.460229885057471,
+        "kv_architecture_matches": true,
+        "source_url": "https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html",
+        "verifies": "KV block byte scaling under a 2-byte dtype assumption only",
+        "does_not_verify": "HF prefill peak, activation envelope, usable VRAM or transferred context threshold"
+      }
+    ],
+    "full_peak_threshold_externally_validated": false
+  },
+  "provenance": {
+    "created_at_utc": "2026-10-19T06:52:57.606707+00:00",
+    "generator_sha256": "f715f4c494f6c0a181be2df2f10dd6d7038a1e7650b1423a28aac404df4f46e2",
+    "config_inventory_sha256": "6fa6ae043c72539aca064937b2af1d1bbf90ab17dff090f9cb024332bb02fdea",
+    "published_evidence_sha256": "9ea4e3dca9380c08593fa40fec318932b6c335fe8650d1b1b25e09a8a355a9fe"
+  }
+}

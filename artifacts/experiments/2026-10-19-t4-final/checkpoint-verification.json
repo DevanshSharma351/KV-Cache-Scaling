@@ -33,5 +33,9 @@
     "Paired prospective held-out validation at L=114688.",
     "Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold."
   ],
-  "interruption": "Colab runtime removed; GPU quota prevented reconnection"
+  "interruption": "Colab runtime removed; GPU quota prevented reconnection",
+  "strict_final_signoff_gate": {
+    "partial_cohort_rejected": true,
+    "reason": "Exactly four completed execution scopes are required"
+  }
 }

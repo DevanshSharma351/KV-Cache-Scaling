@@ -29,3 +29,11 @@ telemetry, coordinator journals and external checkpoint acknowledgements are in
 
 [Final report](../../reports/p1-2026-10-19/report.pdf) ·
 [delivery and continuation](../../../docs/P1_HANDOFF.md).
+
+## Final CPU verification
+
+All 109 tests, checkpoint integrity and complete saved-data reproduction passed
+in Colab Python 3.11. [Actual command audit](colab-cpu-verification.json) includes
+timestamps, return codes, log hashes and the preserved venv setup failure.
+The subsequent system-Python path passed. Local clean-commit reproduction and
+GitHub Actions also passed. [Archived executed notebook](../../../notebooks/03_p1_executed_t4_2026-10-19.ipynb).
