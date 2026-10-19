@@ -13,6 +13,38 @@ from xml.sax.saxutils import escape
 
 ROOT=Path(__file__).resolve().parents[2]
 
+PREDICTION_COMMIT='7baff5121ed643f27ba06959065855a8913f8e8c'
+PHASE_FLOW=[
+    ('1. Derive and preregister','Read pinned architecture; count tied weights and GQA cache; commit the prediction before model work.'),
+    ('2. Build isolated probes','Use one cold prefill per fresh process, explicit cache/backend/logits policy and synchronized peak counters.'),
+    ('3. Coordinate and preserve','Checkpoint every worker, verify external copies, enforce safe admission and a single OOM allowance.'),
+    ('4. Explain the measurements','Fit inspected KV separately from total peaks; plot both; close signed discrepancy tables with explicit unknowns.'),
+    ('5. Generalize and present','Predict two unrun models on two unrun GPUs; compare published KV figures; provide a CPU-replayable notebook and report.'),
+]
+DELIVERABLE_MAP=[
+    ('1. Derivation with symbols','Section 1; docs/DERIVATION.md; config-derived weights and KV equation.'),
+    ('2. Timestamped advance prediction','Section 2; prereg/formal-2026-10-18-t4/prediction.json and original Git commit.'),
+    ('3. Checkpointing sweep harness','Section 3; src/kv_cache_scaling/sweep.py, probe.py and coordinator_store.py; raw checkpoint capsule.'),
+    ('4. Measured / analytical plots','Sections 4-6; six standalone PNG/PDF figures in artifacts/figures/project-results/.'),
+    ('5. Quantified discrepancy','Section 7; data/processed/project-results/discrepancy.csv; signed components, closure and unaccounted bytes.'),
+    ('6. Cross-model / cross-GPU predictions','Section 8; data/processed/project-results/transfer/; four scenarios and published KV-only verification.'),
+]
+
+
+def report_context():
+    """Read the unchanged advance prediction; use its original Git timestamp."""
+    rel='prereg/formal-2026-10-18-t4/prediction.json'
+    frozen=subprocess.check_output(['git','-C',str(ROOT),'show',f'{PREDICTION_COMMIT}:{rel}'])
+    if (ROOT/rel).read_bytes()!=frozen:
+        raise ValueError('Original prediction differs from its committed preregistration')
+    timestamp=subprocess.check_output(['git','-C',str(ROOT),'show','-s','--format=%cI',PREDICTION_COMMIT],text=True).strip()
+    prediction=json.loads(frozen)
+    rows=[]
+    for point in prediction['memory_predictions']:
+        central=next(x for x in point['scenarios'] if x['name']=='central')
+        rows.append((point['length_tokens'],point['kv_bytes'],central['tensor_peak_bytes'],central['budget_bytes']))
+    return dict(prediction=prediction,commit_timestamp=timestamp,prediction_rows=rows)
+
 
 def evidence_gaps(a):
     """Check required evidence without promoting partial grids to completion."""
@@ -45,6 +77,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     analysis_dir,transfer_dir,out=map(Path,(analysis_dir,transfer_dir,output_dir))
     if out.exists():raise ValueError("Refusing to overwrite a report")
     a=json.loads((analysis_dir/'analysis.json').read_text());t=json.loads((transfer_dir/'transfer.json').read_text())
+    context=report_context()
     primary=[p for p in a['probes'] if p['measurement']=='primary']
     cohorts={json.dumps({k:v for k,v in g['identity'].items() if k!='allocator'},sort_keys=True)
              for g in a['groups'] if g['identity']['measurement']=='primary'}
@@ -142,9 +175,29 @@ def build_report(analysis_dir, transfer_dir, output_dir):
          '- [vLLM published KV block table](https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html)',
          '- [PyTorch 2.6 cuBLAS workspace source](https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp)',
          '- Official pinned transfer config URLs and hashes: configs/transfer/provenance.json.','']
+    md+=['','## Deliverable guide','',
+         '| Required output | Where to show it |','| --- | --- |']
+    md+=['| '+' | '.join(row)+' |' for row in DELIVERABLE_MAP]
+    md+=['','## Five-phase project flow','',
+         '| Phase | What we built |','| --- | --- |']
+    md+=['| '+' | '.join(row)+' |' for row in PHASE_FLOW]
+    md+=['','## Original five-length commitment','',
+         f'Original Git commit: {PREDICTION_COMMIT}. Original commit timestamp: {context["commit_timestamp"]}.',
+         'Tensor envelope excludes fixed headroom; admission budget includes it. Values come from the unchanged original JSON, not fitted observations.','',
+         '| L tokens | KV bytes | Central tensor peak bytes | Central budget bytes |','| ---: | ---: | ---: | ---: |']
+    md+=['| '+' | '.join(str(v) for v in row)+' |' for row in context['prediction_rows']]
+    representative=max((p for p in primary if p['allocator']=='default'),key=lambda p:(p['length'],-p['repeat']))
+    gap=next(g for g in a['discrepancy_tables'] if g['probe_id']==representative['probe_id'])
+    md+=['','## Representative byte-level discrepancy','',
+         f"Default allocator, L={representative['length']}, repeat={representative['repeat']}. Signed peak gap={gap['signed_gap_bytes']} bytes; closure={gap['closure_error_bytes']} bytes; absolute unaccounted={gap['unaccounted_absolute_bytes']} bytes.",'',
+         '| Component | Signed bytes | Signed MiB | Evidence |','| --- | ---: | ---: | --- |']
+    md+=['| '+' | '.join(str(v) for v in (r['component'],r['signed_bytes'],f"{r['signed_bytes']/1024**2:.6f}",r['evidence']))+' |' for r in gap['rows']]
+    md+=['','## Presenting the deliverables','',
+         'Open notebooks/FINAL_PRESENTATION.ipynb or artifacts/presentation/PROJECT_PRESENTATION.html to show all six deliverables, figures, tables and downloads. Run All in the clean notebook regenerates saved-data results on CPU. See docs/LIVE_DEMO.md and docs/DECISIONS_AND_PHASE_GUIDE.md.',
+         'The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.','']
     (out/'report.md').write_text('\n'.join(md))
     (out/'requirements.json').write_text(json.dumps([dict(requirement=k,status=v,criterion=c) for k,v,c in criteria],indent=2)+'\n')
-    _build_pdf(out/'report.pdf',a,t,criteria,metric_rows,gap_rows,analysis_dir/'figures',status,evidence_summary,required,controlled)
+    _build_pdf(out/'report.pdf',a,t,criteria,metric_rows,gap_rows,analysis_dir/'figures',status,evidence_summary,required,controlled,context)
     deps={}
     for dist in ('matplotlib','numpy','reportlab','pypdf'):
         try:deps[dist]=version(dist)
@@ -162,7 +215,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     return {'status':status,'report':str(out/'report.pdf'),'requirements':criteria}
 
 
-def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_summary,required,controlled):
+def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_summary,required,controlled,context):
     from reportlab.lib import colors
     from reportlab.lib.enums import TA_LEFT
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -207,15 +260,42 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         ('Transfer','Four config-only model/GPU predictions; conditional published KV-only comparison')],[135,width-135])
     p('The project followed five phases: derivation and preregistration, isolated probes, checkpointing and safety, empirical analysis, and transfer with reproducible presentation. Drive remained disconnected; review provenance is preserved in the original frozen records.')
     if evidence_gaps(a):p('Unmet evidence: '+' '.join(evidence_gaps(a)))
-    page();h('1. Model, derivation and committed prediction')
+    page();h('Project purpose and deliverable guide')
+    p('The question is how much context fits before an LLM exhausts usable GPU memory, and why observed peaks differ from an advance equation. We built a predictor and a reproducible experiment: derive first, commit a numerical prediction, measure isolated peaks, and explain the difference.')
+    table(['Required deliverable','Report and repository evidence'],DELIVERABLE_MAP,[150,width-150],padding=6)
+    p('All six output types are available. Their scientific scope differs: the saved curve and KV verification are established; the final hardware OOM bracket and transferred HF context thresholds are not yet validated.')
+    h('The five phases followed')
+    table(['Phase','Implementation decision'],PHASE_FLOW,[140,width-140],padding=5)
+    page();h('1. Derivation with defined symbols')
     p('Primary model: Qwen/Qwen2.5-1.5B, FP16, batch size 1. Sequence length L is one cold prefill of L tokens with an empty DynamicCache and logits_to_keep=1. HF SDPA is forced to the efficient backend. No generation-to-L, eager fallback or FlashAttention-2 is used.')
-    table(['Symbol','Meaning','Value'],[('N','Transformer layers','28'),('H / I','Hidden / intermediate width','1536 / 8960'),('Q / K / D','Query heads / KV heads / head dimension','12 / 2 / 128'),('V','Vocabulary','151936'),('s','Bytes per FP16 cache element','2')],[55,265,width-320])
+    p('Single prefill models prompt admission: the full input is processed at once, making transient peaks observable. Generation-to-L would mix a different token-by-token workload and cache-update history into the comparison. We keep it outside the primary contract.')
+    p('We chose Qwen2.5-1.5B because its roughly 3.09 GB FP16 weights leave room for cache and transient memory on a T4. Its grouped-query attention and tied embeddings also make both architecture-counting pitfalls testable. A larger measured model would leave less room for the phenomenon under study.')
+    table(['Symbol','Meaning','Value'],[('L / B','Input tokens / batch size','variable / 1 measured'),('P / W','Unique parameters / FP16 weight bytes','1543714304 / 3087428608'),('U','Usable context-only GPU memory, bytes','15527116800'),('a / H0','Assumed transient bytes per token / fixed budget reserve','78336 / 536870912'),('N','Transformer layers','28'),('H / I','Hidden / intermediate width','1536 / 8960'),('Q / K / D','Query heads / KV heads / head dimension','12 / 2 / 128'),('V','Vocabulary','151936'),('s','Bytes per FP16 cache element','2')],[55,265,width-320])
     p('q=QD; k=KD. Unique parameters P = VH + N[Hq + 2Hk + qH + q + 2k + 3HI + 2H] + H. The tied input/output embedding is counted once.')
     p('W=2P=3087428608 bytes. KV(L,B)=2BLNKDs=28672BL bytes. Using Q in place of K overestimates KV by 6x; duplicating the tied embedding adds 466747392 bytes.')
     p('Advance budget model: M(L,B)=W+BL(28672+a)+H0. The central assumption is a=78336 bytes/token and H0=536870912 bytes. L(U,B)=max(0,floor((U-W-H0)/(B(28672+a)))). U is usable memory after context, before weights; context must not be subtracted again.')
     p('Original T4 usable budget: 15527116800 bytes. Central estimate: 111232 tokens; assumption range: 76024-131072 after the config cap. This is not a measured confidence interval or an OOM observation. The model-card quality limit is 32768; larger lengths are synthetic memory stress.')
-    p('Prediction commit 7baff5121ed643f27ba06959065855a8913f8e8c and later receipt 976158c82ccb10f12817af2ee16b76ade13f0cf3 preceded model work. Full package inventories, the GPU UUID and source fingerprints remain in raw evidence.')
-    page();h('2. What the saved GPU data establishes')
+    p('P sums embeddings, attention projections and Q/K/V biases, gated MLP weights and RMSNorm scales from the pinned config. M_weights=W; M_kv=28672BL; M_activations is approximated by aBL; M_overhead is budgeted with H0. H0 is an admission reserve, not a measured tensor allocation. One GiB is 1073741824 bytes; one MiB is 1048576 bytes.')
+    page();h('2. Original preregistered prediction')
+    p('Original commit: '+PREDICTION_COMMIT+'. Original Git timestamp: '+context['commit_timestamp']+'. The prediction JSON remains byte-identical to that commit. The later receipt 976158c82ccb10f12817af2ee16b76ade13f0cf3 and updated environment receipts preserve execution provenance without rewriting the advance prediction.')
+    table(['L tokens','KV bytes','Central tensor peak bytes','Central budget bytes'],context['prediction_rows'],[65,115,155,width-335])
+    p('The tensor envelope is W+BL(28672+a). The budget adds H0, so it must not be compared to allocated tensor peaks as though it were another tensor. The central limit is 111232 tokens at U=15527116800 bytes; the assumption range is 76024-131072, capped by config. This sensitivity range is not a confidence interval.')
+    p('A later fit was frozen after the primary sweep and before L=114688 validation. It is assessed separately below; it never replaces this original prediction or its timestamp.')
+    h('Hardware and runtime identity')
+    p('Measured cohort: Tesla T4, GPU-89f781af-1ec0-992b-3dc3-46ef2d0941de; Python 3.11.13, PyTorch 2.6.0+cu124, CUDA runtime 12.4, Transformers 4.51.3, driver 580.82.07. Total GPU bytes: 15637086208; context-only usable bytes: 15527116800. The original preliminary Python 3.13 / torch 2.11 snapshot is not pooled into this cohort.')
+    p('GPU execution source: ce227af40476676238cbef9126807fd1d42be76b. Model revision: 8faed761d45a263340a0528343f099c05c9a4323. Measurements are grouped by hardware, runtime and protocol identity before analysis.')
+    page();h('3. Checkpointed measurement harness')
+    table(['Step','Operational rule'],[
+        ('Isolate','A new worker process loads the FP16 model for each point. Measure post-load allocation before any forward pass; compare it with unique-weight bytes.'),
+        ('Measure peak','Synchronize CUDA, reset_peak_memory_stats(), allocate probe inputs/cache, run the prefill and synchronize again. Read max_memory_allocated() and max_memory_reserved(); retain allocated/reserved snapshots and sampled NVML/free-memory telemetry.'),
+        ('Separate lifetimes','Inspect actual cache tensors, then release outputs/cache and measure retained allocation. Fit KV bytes separately; total peak slope also contains transient activations and workspace.'),
+        ('Pin the backend','Force efficient SDPA. Eager attention materializes head-wise L-by-L scores and invalidates the linear transient envelope. FlashAttention-2 is unsupported on this T4 path; no silent fallback is accepted.'),
+        ('Pin cache and allocator','Primary uses empty DynamicCache in a single prefill. Chunked DynamicCache and StaticCache are diagnostics. Set expandable_segments before CUDA initialization in each fresh worker; record version support and effective settings.'),
+        ('Preserve and approach','Write typed results and a fsynced journal after every worker; verify an external checkpoint before continuing. Sweep upward, then use conservative admission and bisection. One deliberate final OOM attempt is allowed; none has been dispatched.')
+    ],[110,width-110],padding=6)
+    p('DynamicCache concatenation during chunked updates can create transient copies. StaticCache changes preallocation and, in pinned HF, causal-mask behavior. Neither diagnostic is substituted for the primary contract. Driver peaks from NVML remain sampled, while PyTorch peak counters record allocator high-water marks.')
+    p('Drive stayed disconnected. The raw checkpoint capsule preserves commands, worker records, package inventories, source fingerprints and coordinator state. Recovery of saved files was tested; restoration of an entire cloud session on the same physical GPU is not claimed.')
+    page();h('4. Saved GPU measurements and KV slope')
     table(['Allocator','L','n','Peak allocated bytes','Peak reserved bytes','Cache bytes'],metric_rows,[65,45,22,120,120,width-372],padding=5)
     p('Repeated points use fresh worker processes. The cache contains 14680064 bytes at L=512 and reduced logits are FP16 (1,1,151936). Per-length medians and ranges come from the recorded repeats. Kernel traces remain separate diagnostics.')
     if a['probes']:
@@ -227,12 +307,12 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         if group['identity']['measurement']=='primary':
             fit=group['fits']['cache_bytes']
             p(f"{group['identity']['allocator']}: directly inspected KV slope = {fit['slope_bytes_per_token']} bytes/token; R-squared = {fit['r_squared']}. Total-peak fits remain separate.")
-    page();h('3. Memory curves and retained KV')
+    page();h('5. Memory curves and retained KV')
     plot('01_peak_vs_length.png','The band is an advance tensor-envelope assumption, not measured uncertainty. Points are observations; the unmeasured curve remains visibly labelled.')
     plot('02_cache_scaling.png','Direct cache and corrected retained allocation are separate quantities. Fits require multiple distinct lengths.')
-    page();h('4. Allocator slack and boundary status')
+    page();h('6. Allocator slack and boundary status')
     plot('03_allocator_slack.png','Same-snapshot reserved minus allocated is allocator slack. It is not, by itself, fragmentation.')
-    page();h('4. Boundary evidence (continued)')
+    page();h('6. Boundary evidence (continued)')
     plot('04_boundary_status.png','Observed success, safe-budget bracket, actual OOM upper bound and advance prediction remain distinct. No hardware threshold is fabricated.')
     for b in a.get('allocator_boundary_deltas',[]):
         p(f"Expandable-minus-default conservative safe-limit interval: {b['safe_bracket_delta_min_tokens']} to {b['safe_bracket_delta_max_tokens']} tokens; observed-success delta {b['observed_success_delta_tokens']}. A common analytical admission ceiling can censor both allocators; this is not a hardware-limit delta.")
@@ -240,7 +320,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         p(f"{b['allocator']}: observed success {b['largest_observed_success_tokens']} tokens; OOM upper point {b['smallest_observed_oom_tokens']}; original prediction error interval {b['prediction_error_percent_interval']} percent. The interval assumes monotone feasibility and does not identify an exact threshold.")
     for x in a.get('held_out_validation',[]):
         p(f"Held-out {x['allocator']} L={x['length']}, n={x['repeats']}: frozen post-sweep fit predicted {x['prospective_fit_peak_bytes']:.0f} bytes; observed median {x['observed_peak_median_bytes']:.0f}; error {x['prospective_fit_error_percent']:.4f}%. This is a later validation, not a replacement advance prediction.")
-    page();h('5. Signed prediction discrepancy')
+    page();h('7. Signed prediction discrepancy')
     # Keep the PDF readable; all repeat-level rows remain in report.md and CSV.
     grouped_gaps={}
     for row in gap_rows:
@@ -255,7 +335,18 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     p('Summary uses median signed gaps and worst-case absolute closure/unaccounted bytes across repeats. Every repeat-level row is preserved in the accompanying Markdown report and discrepancy CSV.')
     p('The signed identity telescopes across post-load, after-forward, retained and released counters. Arithmetic closure is separate from explaining causes. Unknown baseline storage and persistent post-forward growth are retained as unaccounted, even if a plausible source-level hypothesis exists.')
     p('For a material gap (at least 10 MiB), supported attribution must reach 90% under both gap and absolute-contribution denominators. Smaller gaps require at most 1 MiB unaccounted and an ill-conditioned-ratio label. Computed coverage status: '+str(a['acceptance']['discrepancy_coverage_pass'])+'.')
-    page();h('5. Discrepancy components (continued)')
+    page();h('7. Byte-level discrepancy example')
+    primary=[probe for probe in a['probes'] if probe['measurement']=='primary' and probe['allocator']=='default']
+    representative=max(primary,key=lambda probe:(probe['length'],-probe['repeat']))
+    gap=next(g for g in a['discrepancy_tables'] if g['probe_id']==representative['probe_id'])
+    p(f"Default allocator, L={representative['length']}, repeat={representative['repeat']}. Predicted tensor peak: {gap['predicted_tensor_peak_bytes']} bytes. Measured peak: {gap['measured_peak_bytes']} bytes. Signed difference: {gap['signed_gap_bytes']} bytes. Positive components add memory; negative components reduce the advance envelope.")
+    table(['Component','Signed bytes','Signed MiB','Interpretation'],[
+        (row['component'].replace('_',' '),row['signed_bytes'],f"{row['signed_bytes']/1024**2:.6f}",
+         'Unaccounted' if not row['supported'] else ('Fixed-size inference from L=512 controls' if row['component']=='controlled_cublas_workspace' else ('Descriptive lifetime/counter difference' if row['component']=='transient_envelope_difference' else 'Measured storage/counter evidence')))
+        for row in gap['rows']],[155,100,85,width-340],padding=6)
+    p(f"Sum of components: {sum(row['signed_bytes'] for row in gap['rows'])} bytes; closure error: {gap['closure_error_bytes']} bytes; absolute unaccounted: {gap['unaccounted_absolute_bytes']} bytes. The separate fixed planning reserve is {gap['budget_table']['fixed_headroom_bytes']} bytes and is not included in this tensor-peak comparison.")
+    p('The large negative transient-envelope component means the advance tensor envelope was conservative at this length. It is a measured counter/lifetime residual relative to an assumed envelope, not a direct causal measurement of pure activations. Zero unaccounted bytes here therefore establishes this accounting identity, not a complete physical decomposition of allocator fragmentation or an unmeasured OOM gap.')
+    page();h('7. Discrepancy components (continued)')
     plot('05_discrepancy_default.png','Default allocator. Red components remain unaccounted. Transient counter deltas do not establish pure activation memory.')
     plot('05_discrepancy_expandable.png','Expandable allocator. The same signed accounting and explanatory-coverage rules apply.')
     if a.get('diagnostic_comparisons'):
@@ -265,7 +356,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         p('Diagnostic minus matching primary median. Chunking and static caching change execution semantics. Workspace interventions change GEMM workspace policy. All are excluded from the primary cache slope and hardware-boundary observations.')
         p('Pinned HF 4.51.3 creates an explicit query-by-capacity causal mask for StaticCache. A full-prefill mask is L by L even with efficient SDPA; chunking bounds the query dimension. Peak deltas include this mask behavior, not solely cache storage.')
     p('PyTorch 2.6 source allocates 8519680 default cuBLAS workspace bytes on a non-Hopper CUDA GPU. '+('Three matched same-allocator zero-workspace controls directly support L=512 rows. Other lengths use labelled source-supported fixed-size inference only when their persistent delta matches exactly.' if controlled else 'A matching persistent delta remains a hypothesis until matched intervention evidence exists.'))
-    page();h('6. Transfer to two unrun models and GPUs')
+    page();h('8. Transfer to two unrun models and GPUs')
     transfer_rows=[]
     for x in t['predictions']:
         c=x['config_capped_limit_tokens'];u=x['usable_vram_bytes']
@@ -278,13 +369,19 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     table(['Matching KV architecture','Predicted block bytes','Shown MB','Error if MiB','Error if decimal MB'],ext,[135,115,65,85,width-400])
     p('The vLLM team publishes physical 16-token KV blocks across all layers. Base/Instruct KV fields agree in pinned configs. Under a two-byte cache assumption the comparison checks retained KV scaling only. The source labels MB without defining decimal versus binary units, so both displayed-value errors are reported.')
     p('The published serving engine has different attention, allocation and scheduling semantics. This evidence does not validate the transferred HF single-prefill peak thresholds, activation envelopes or target usable VRAM.')
-    page();h('7. Acceptance status and reproducibility')
-    table(['ID','Status','Criterion'],criteria,[35,145,width-180])
+    page();h('9. Acceptance status and reproducibility')
+    table(['ID','Status','Criterion'],[(k,v.replace('_',' '),c) for k,v,c in criteria],[35,145,width-180])
     p('Regeneration is CPU-only: install the package with requirements-analysis.txt, run kvcache analyze on the immutable capsule, run kvcache generalize, and invoke scripts/build_report.py. Every output directory must be new. Full command lines appear in report.md and the reproduction guide.')
     p('Historical acceptance preserved an import-time torchao preflight failure and verified restoration after deleting both Colab checkpoint copies. Removing unused torchao restored cold imports. That bounded acceptance consumed no OOM allowance; full cloud-session restoration of the same GPU identity is not claimed.')
     p('The requirement table is computed from saved evidence. Safe-budget boundaries remain distinct from actual hardware OOM thresholds. Unsupported causes remain unaccounted. The original prediction is preserved; the prospective implementation amendment and later receipt record the changed GPU/source before extended probes.')
+    page();h('10. Presenting the deliverables')
+    p('Open notebooks/FINAL_PRESENTATION.ipynb in Colab and Run All. It replays the verified saved evidence on CPU, displays six scientific figures, the derivation, the original prediction and timestamp, harness/checkpointing evidence, discrepancy tables and all four transfer predictions. It also offers individual artifact downloads. No model download, CUDA allocation or Drive mount is needed for this presentation.')
+    p('Use artifacts/presentation/PROJECT_PRESENTATION.html as the standalone presentation if Colab output scripts fail to load. It contains the same saved-data presentation and embedded graphs. The live-demo guide explains both routes; the decisions and phase guide explains the project in plain language.')
+    h('What is established, and what remains')
+    p('There are 80 verified successful workers: 48 primary sweep points, 28 diagnostics and four held-out validation points. Both allocators successfully reached 114688 tokens. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified following the GPU quota interruption. No deliberate OOM attempt was dispatched; no hardware OOM upper bound or exact threshold error is claimed.')
+    p('The discrepancy tables explain fixed-length tracked tensor peak differences under stated accounting assumptions. They do not quantify an unmeasured OOM-threshold gap. The published comparison verifies KV block arithmetic, not the unrun target systems’ full context limits. These limitations are part of the deliverable, not hidden exceptions.')
     h('Primary sources')
-    for title,url in [('Executed audit notebook','https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS'),('Official vLLM KV block table','https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html'),('PyTorch v2.6.0 workspace source','https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp'),('Pinned HF 4.51.3 Qwen2 masking source','https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/models/qwen2/modeling_qwen2.py')]:
+    for title,url in [('Clean presentation notebook','https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb'),('Five-phase decisions guide','https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/main/docs/DECISIONS_AND_PHASE_GUIDE.md'),('Original prediction commit','https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/'+PREDICTION_COMMIT),('Executed audit notebook','https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS'),('Official vLLM KV block table','https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html'),('PyTorch v2.6.0 workspace source','https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp'),('Pinned HF 4.51.3 Qwen2 masking source','https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/models/qwen2/modeling_qwen2.py')]:
         story.append(Paragraph(f'<link href="{escape(url)}" color="#2563a6">{escape(title)}</link>',styles['SmallKV']))
     p('Official transfer config URLs/revisions/hashes: configs/transfer/provenance.json. Source capsule hashes, analysis code hashes and report package versions are in provenance and manifest files.')
     def footer(canvas,doc):

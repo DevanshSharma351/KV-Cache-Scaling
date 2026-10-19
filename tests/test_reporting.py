@@ -40,4 +40,48 @@ class ReportEvidenceTests(unittest.TestCase):
             self.assertIn('Paired safe-budget boundary search.',gaps)
             self.assertTrue(any('Actual OOM boundary unobserved' in item for item in gaps))
 
+
+
+class ReportAlignmentTests(unittest.TestCase):
+    def test_original_commitment_is_read_without_rewriting(self):
+        from kv_cache_scaling.reporting import report_context
+        context=report_context()
+        self.assertEqual(context['commit_timestamp'],'2026-10-18T19:54:52+05:30')
+        self.assertEqual([r[0] for r in context['prediction_rows']],[512,1024,2048,4096,8192])
+        self.assertEqual(context['prediction_rows'][0],(512,14680064,3142216704,3679087616))
+        self.assertEqual(context['prediction_rows'][-1],(8192,234881024,3964038144,4500909056))
+
+    def test_generated_pdf_covers_deliverables_and_preserves_incomplete_status(self):
+        import importlib.util
+        if not all(importlib.util.find_spec(name) for name in ('reportlab','pypdf','PIL')):
+            self.skipTest('PDF dependencies are exercised in the full report environment')
+        import json
+        from pathlib import Path
+        import shutil
+        import tempfile
+        from pypdf import PdfReader
+        from kv_cache_scaling.reporting import build_report,ROOT,DELIVERABLE_MAP,PHASE_FLOW
+        with tempfile.TemporaryDirectory() as temporary:
+            staging=Path(temporary)/'analysis';staging.mkdir()
+            source=ROOT/'data/processed/project-results'
+            shutil.copy2(source/'analysis.json',staging/'analysis.json')
+            (staging/'figures').symlink_to(ROOT/'artifacts/figures/project-results',target_is_directory=True)
+            output=Path(temporary)/'report'
+            result=build_report(staging,source/'transfer',output)
+            self.assertEqual(result['status'],'RESEARCH_CRITERIA_PENDING')
+            text=' '.join(' '.join(page.extract_text() for page in PdfReader(output/'report.pdf').pages).split())
+            for title,_ in DELIVERABLE_MAP+PHASE_FLOW:
+                self.assertIn(title,text)
+                self.assertIn(title,(output/'report.md').read_text())
+            for evidence in ('2026-10-18T19:54:52+05:30','3679087616','4500909056',
+                             'reset_peak_memory_stats()', 'max_memory_allocated()',
+                             'FINAL_PRESENTATION.ipynb','No deliberate OOM attempt was dispatched',
+                             'transferred HF context thresholds are not yet validated',
+                             'Byte-level discrepancy example', '-1339293184', '-1350870016'):
+                self.assertIn(evidence,text)
+            for ownership in ('Person 1','Person 2','55%','45%'):
+                self.assertNotIn(ownership,text)
+            self.assertEqual(json.loads((output/'provenance.json').read_text())['status'],result['status'])
+
+
 if __name__=='__main__':unittest.main()
