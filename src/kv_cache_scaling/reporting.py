@@ -14,25 +14,51 @@ from xml.sax.saxutils import escape
 ROOT=Path(__file__).resolve().parents[2]
 
 
+def evidence_gaps(a):
+    """Check required evidence without promoting partial grids to completion."""
+    missing=[]
+    if not a['acceptance']['five_length_paired_primary_complete']:
+        missing.append('Full primary grid with five lengths and three repeats per allocator.')
+    if not a.get('allocator_boundary_deltas'):
+        missing.append('Paired safe-budget boundary search.')
+    if not a['acceptance']['discrepancy_coverage_pass']:
+        missing.append('The 90% explanatory-coverage criterion remains unmet; inspect explicit unaccounted rows.')
+    rows=a.get('diagnostic_comparisons',[])
+    for mode,grid,allocators in [('chunked_dynamic',[512,2048,8192,32768],['default']),
+                                  ('static_cache',[512,2048,8192],['default']),
+                                  ('workspace_control',[512],['default','expandable'])]:
+        if not all(any(r['measurement']==mode and r['length']==n and r['allocator']==allocator
+                       and r['diagnostic_repeats']>=3 for r in rows) for n in grid for allocator in allocators):
+            missing.append(mode+' diagnostic grid incomplete.')
+    if not any(p['measurement']=='kernel_trace' for p in a['probes']):
+        missing.append('Separate efficient-SDPA kernel trace.')
+    if not all(any(r['allocator']==allocator and r['length']==114688 and r['repeats']>=3
+                   for r in a.get('held_out_validation',[])) for allocator in ('default','expandable')):
+        missing.append('Paired prospective held-out validation at L=114688.')
+    if not any(b.get('smallest_observed_oom_tokens') and b.get('consistent_monotone_bracket')
+               for b in a.get('hardware_brackets',[])):
+        missing.append('Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.')
+    return missing
+
+
 def build_report(analysis_dir, transfer_dir, output_dir):
     analysis_dir,transfer_dir,out=map(Path,(analysis_dir,transfer_dir,output_dir))
     if out.exists():raise ValueError("Refusing to overwrite a report")
     a=json.loads((analysis_dir/'analysis.json').read_text());t=json.loads((transfer_dir/'transfer.json').read_text())
-    out.mkdir(parents=True)
     primary=[p for p in a['probes'] if p['measurement']=='primary']
+    cohorts={json.dumps({k:v for k,v in g['identity'].items() if k!='allocator'},sort_keys=True)
+             for g in a['groups'] if g['identity']['measurement']=='primary'}
+    if len(cohorts)>1:raise ValueError('Select one scientific cohort before reporting; incompatible hardware cannot be pooled')
+    out.mkdir(parents=True)
     required=a['acceptance']['five_length_paired_primary_complete']
     coverage=a['acceptance']['discrepancy_coverage_pass']
     lengths=sorted({p['length'] for p in primary})
     evidence_summary=f"{len(primary)} primary probes across {len(lengths)} measured lengths ({min(lengths,default=0)}-{max(lengths,default=0)} tokens)"
     controlled=any(row['component']=='controlled_cublas_workspace' for gap in a['discrepancy_tables'] for row in gap['rows'])
     diagnostic_rows=a.get('diagnostic_comparisons',[])
-    remaining=[]
-    if not required: remaining.append('Full primary grid with five lengths and three repeats per allocator.')
-    if not any(b.get('safe_budget_upper_tokens') for b in a.get('boundaries',[])): remaining.append('Paired safe-budget boundary search.')
-    if not coverage: remaining.append('The 90% explanatory-coverage criterion remains unmet; inspect explicit unaccounted rows.')
-    for mode,grid in [('chunked_dynamic',[512,2048,8192,32768]),('static_cache',[512,2048,8192]),('workspace_control',[512])]:
-        if not all(any(row['measurement']==mode and row['length']==n and row['diagnostic_repeats']>=3 for row in diagnostic_rows) for n in grid): remaining.append(mode+' diagnostic grid incomplete.')
-    if not any(b.get('observed_oom_upper_tokens') for b in a.get('boundaries',[])): remaining.append('Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.')
+    remaining=evidence_gaps(a)
+    pending=bool(remaining)
+    observed_oom=any(b.get('smallest_observed_oom_tokens') and b.get('consistent_monotone_bracket') for b in a.get('hardware_brackets',[]))
     remaining.append('Transferred HF peak thresholds remain unvalidated; published comparison checks KV bytes only.')
     criteria=[
         ('FR1','PASS','Pinned config, KV heads and tied-weight arithmetic'),
@@ -40,11 +66,11 @@ def build_report(analysis_dir, transfer_dir, output_dir):
         ('FR3','PASS_FOR_SAVED_ACCEPTANCE','Original prediction 7baff51 and later receipt 976158c precede model work'),
         ('FR4','CHECKPOINTED_GRID_PASS' if required else 'BOUNDED_PASS_BULK_PENDING','Fresh workers and per-probe external checkpoint barriers; original acceptance restoration verified'),
         ('FR5','PASS' if required and a['acceptance']['cache_slope_pass'] else 'NOT_MET','Five lengths, three repeats and retained-cache slope required'),
-        ('FR6','BOUNDARY_UNMEASURED' if not any(b.get('safe_budget_upper_tokens') for b in a.get('boundaries',[])) else 'SAFE_BUDGET_CENSORED','Allocator capability is verified; safe-budget and OOM boundaries remain distinct'),
+        ('FR6','OBSERVED_OOM_BRACKET_ALLOCATOR_DELTA_CENSORED' if observed_oom else ('SAFE_BUDGET_CENSORED' if a.get('allocator_boundary_deltas') else 'BOUNDARY_UNMEASURED'),'One-use OOM bracket and paired safe-budget delta are distinct; an exact hardware-limit delta is not established'),
         ('FR7','PASS' if coverage and a['acceptance']['discrepancy_closure_pass'] else 'NOT_MET','Closed signed table; unsupported bytes remain unaccounted'),
         ('FR8','CONDITIONAL_KV_COMPARISON','Four unrun transfer cells; published KV block comparison with dtype/unit caveats'),
     ]
-    status='RESEARCH_CRITERIA_PENDING' if any(v in ('NOT_MET','BOUNDARY_UNMEASURED','BOUNDED_PASS_BULK_PENDING') for _,v,_ in criteria) else 'REVIEW_REQUIRED'
+    status='RESEARCH_CRITERIA_PENDING' if pending or any(v=='NOT_MET' for _,v,_ in criteria) else 'P1_EVIDENCE_COMPLETE_WITH_LIMITATIONS'
     md=['# KV-Cache Scaling: integrated evidence report','',f'Status: **{status}**. No missing experiment is presented as a successful result.','',
         '## What we built','',
         'A config-derived memory predictor, preregistration gate, fresh-process CUDA probes, checkpointed coordinator, immutable-data analysis, reproducible scientific plots, and config-only transfer predictions. The measurement coverage below is computed from verified records.','',
@@ -86,7 +112,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
         p=lookup[gap['probe_id']];label=f"{p['allocator']} / {p['length']} / {p['repeat']}"
         row=(label,gap['signed_gap_bytes'],gap['closure_error_bytes'],gap['unaccounted_absolute_bytes'],'PASS' if gap['coverage_pass'] else 'NOT MET')
         gap_rows.append(row);md.append('| '+' | '.join(str(x) for x in row)+' |')
-    md+=['','The signed table closes using measured lifetime/counter deltas. Closure does not establish causal attribution. Post-load unknown storage and post-forward persistent growth remain unaccounted. For material gaps, both signed-gap and absolute-contribution coverage must reach 90%; for gaps below 10 MiB, the unaccounted amount must be <=1 MiB.','',
+    md+=['','The signed table closes using measured lifetime/counter deltas. Closure does not establish causal attribution. Any unsupported post-load storage or post-forward persistent growth remains explicitly unaccounted. For material gaps, both signed-gap and absolute-contribution coverage must reach 90%; for gaps below 10 MiB, the unaccounted amount must be <=1 MiB.','',
          ('Matched L=512 zero-workspace controls support the attributed cuBLAS row where present. Other lengths use explicitly labelled fixed-size inference from the pinned PyTorch source, only for the same allocator/runtime and exact persistent delta.' if controlled else 'A source-level hypothesis is that 8519680 persistent bytes correspond to PyTorch 2.6 cuBLAS workspace. A matched intervention is still required before counting that hypothesis as explained memory.'),'',
          '## Transfer predictions','']
     transfer_md=(transfer_dir/'transfer.md').read_text();md.append(transfer_md.replace('# Config-derived transfer predictions','### Unrun target models and GPUs'))
@@ -195,7 +221,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         if fractions:p(f'Retained residual fraction: {min(fractions):.6%} to {max(fractions):.6%} of retained allocation across primary points.')
     p('All snapshots respect reserved >= allocated and forward peaks cover synchronized post-forward allocation. Retained-minus-released allocation matches inspected cache bytes. Driver samples are sampled observations, not exact driver high-water marks.')
     p('The initial attempt stopped before model loading because optional torchao initialized CUDA during imports. The failed run was preserved. Removing unused torchao restored cold imports without weakening the guard or changing the original numerical budget.')
-    p('Every acceptance point was externally persisted before the next worker. Both Colab copies were deleted and restored from a verified local archive; completed point keys were skipped on resume. No OOM attempt was consumed. A full cloud session restart was not tested.')
+    p('During the original bounded acceptance, every point was externally persisted before the next worker. Both Colab copies were deleted and restored from a verified local archive; completed point keys were skipped on resume. That acceptance consumed no OOM attempt. Later boundary evidence is reported separately below; a full cloud-session restoration of the same GPU identity is not claimed.')
     p('Both allocators cover the five required lengths with three repeats.' if required else 'The required paired five-length grid is incomplete. Missing observations do not establish a complete cache slope or hardware context limit.')
     for group in a['groups']:
         if group['identity']['measurement']=='primary':
