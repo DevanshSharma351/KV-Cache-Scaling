@@ -1,6 +1,6 @@
 # Person 1 progress
 
-Updated 18 October 2026. Person 1 owns 55%; work is organized by
+Updated 19 October 2026. Person 1 owns 55%; work is organized by
 [DevP1_phases.md](../DevP1_phases.md). Names and work-duration estimates are not
 used in the allocation.
 
@@ -9,10 +9,15 @@ used in the allocation.
 | 1 — Analytical foundation | Accepted under user-authorized delegated review | Pinned T4 runtime, formal prediction 7baff51 and later receipt 976158c pushed before model work |
 | 2 — Primary probe/telemetry | Bounded real-GPU acceptance passed | Six fresh L=512 primary probes; exact weights/cache/logits; separate SM75 efficient-SDPA CUDA trace |
 | 3 — Coordinator/safety | Bounded external-checkpoint acceptance passed | Seven unique worker PIDs, checkpoint before each next step, loss of both Colab copies restored, no duplicate point or OOM token use; continuous bulk B2 integration remains a handoff |
-| 4 — Empirical analysis | Planned | Full length sweep, slope, boundary and discrepancy results remain open |
-| 5 — Transfer/integration | Planned | Transfer validation and final research report remain open |
+| 4 — Empirical analysis | In progress; 42 bulk probes verified | Paired five-length grid and exact KV slope pass; expandable high-length points, controls and hardware boundary remain open |
+| 5 — Transfer/integration | CPU pipeline implemented and reproduced | Four config-only transfer cases, published KV-only comparison, plots and report generate; final integrated GPU evidence remains open |
 
-Current evidence: [acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md),
+Latest bulk evidence: [42-probe interim checkpoint](../artifacts/experiments/2026-10-19-t4-interim/README.md).
+104 CPU tests pass. Browser approval review capacity currently blocks retrieval of
+primary-043; its cell must be inspected before any new dispatch. New local commits
+remain unpushed while the active run requires remote HEAD `16e5005`.
+
+Historical acceptance evidence: [acceptance report](../artifacts/acceptance/2026-10-18-t4/README.md),
 [verified raw capsule summary](../artifacts/acceptance/2026-10-18-t4/verification.json).
 83 CPU tests passed locally and in Colab. Later sections preserve the historical
 implementation sequence; their earlier open gates are superseded by the final

@@ -1,0 +1,296 @@
+{
+  "status": "INTERIM_NOT_FINAL",
+  "checkpoint": {
+    "label": "primary-042",
+    "sha256": "3f78bba590aef474d7e638b6d66c2e23c921d992e338b37504a00685b53bb33c",
+    "bytes": 3254752,
+    "members": 578
+  },
+  "run_id": "5c95c53f-1dbe-4112-8d49-d8291acd94f4",
+  "verified_primary_probes": 42,
+  "acceptance": {
+    "five_length_paired_primary_complete": true,
+    "cache_slope_pass": true,
+    "discrepancy_coverage_pass": false,
+    "discrepancy_closure_pass": true
+  },
+  "boundaries": [
+    {
+      "run_id": "5c95c53f-1dbe-4112-8d49-d8291acd94f4",
+      "allocator": "default",
+      "execution_scope": "primary_sweep",
+      "largest_observed_success_tokens": 65536,
+      "observed_oom_upper_tokens": null,
+      "safe_budget_lower_tokens": 65536,
+      "safe_budget_upper_tokens": 65792,
+      "status": "SAFE_BUDGET_CENSORED"
+    },
+    {
+      "run_id": "5c95c53f-1dbe-4112-8d49-d8291acd94f4",
+      "allocator": "expandable",
+      "execution_scope": "primary_sweep",
+      "largest_observed_success_tokens": 16384,
+      "observed_oom_upper_tokens": null,
+      "safe_budget_lower_tokens": null,
+      "safe_budget_upper_tokens": null,
+      "status": "NO_BOUNDARY_MEASURED"
+    }
+  ],
+  "fits": [
+    {
+      "identity": {
+        "protocol_sha256": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+        "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+        "gpu_uuid": "GPU-50c9760c-d3ab-6d00-dde4-95288250a589",
+        "driver": "580.82.07",
+        "environment_fingerprint": "df87ea2e1f72f01a8eeb6fecdd893f05c18eb6888de580b8de2bf365f8ad4d63",
+        "usable_bytes": 15527116800,
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "transformers": "4.51.3",
+        "runtime_sources": {
+          "qwen2_class": {
+            "filename": "modeling_qwen2.py",
+            "sha256": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff"
+          },
+          "dynamic_cache": {
+            "filename": "cache_utils.py",
+            "sha256": "254b573d6390e9ac5909b6e7d37b09aa5b37f6b17ec12555a597798c17957738"
+          },
+          "qwen2_forward": {
+            "filename": "modeling_qwen2.py",
+            "sha256": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff"
+          },
+          "sdpa_adapter": {
+            "filename": "sdpa_attention.py",
+            "sha256": "5a2d607459531430503dd3cb1adc8778885037c1d0be7e6ca0e82a1a852f4d8b"
+          }
+        },
+        "package_inventory_sha256": "2abb4503debd9c7bae447912c02b21f55bf2b9d351d384d710f8711156195aac",
+        "execution_sha256": {
+          "probe.py": "1419fd80654d2b5804fc2848c6375200bfcf6cb5cdf6c09c541ffa57ceacde3f",
+          "telemetry.py": "a7748ab8b3581d9e763e0428182b44471096bc0389c4e3b5a1bc8e544d7eacd9"
+        },
+        "policy": {
+          "protocol_version": "prefill-v1",
+          "model_id": "Qwen/Qwen2.5-1.5B",
+          "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+          "dtype": "float16",
+          "batch_size": 1,
+          "mode": "single_prefill",
+          "attention_implementation": "sdpa",
+          "sdpa_backend": "EFFICIENT_ATTENTION",
+          "cache_type": "DynamicCache",
+          "logits_to_keep": 1,
+          "seed": 42,
+          "warmup": false,
+          "allocator_backend": "native"
+        },
+        "measurement": "primary",
+        "allocator": "default"
+      },
+      "coverage": {
+        "512": [
+          1,
+          2,
+          3
+        ],
+        "1024": [
+          1,
+          2,
+          3
+        ],
+        "2048": [
+          1,
+          2,
+          3
+        ],
+        "4096": [
+          1,
+          2,
+          3
+        ],
+        "8192": [
+          1,
+          2,
+          3
+        ],
+        "16384": [
+          1,
+          2,
+          3
+        ],
+        "32768": [
+          1,
+          2,
+          3
+        ],
+        "65536": [
+          1,
+          2,
+          3
+        ]
+      },
+      "fits": {
+        "cache_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 0.0,
+          "r_squared": 1.0,
+          "length_count": 8,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "cache_lifetime_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 0.0,
+          "r_squared": 1.0,
+          "length_count": 8,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "retained_minus_postload_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 8519680.0,
+          "r_squared": 1.0,
+          "length_count": 8,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "peak_allocated_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 95226.44406980452,
+          "intercept_bytes": 3097873456.7807903,
+          "r_squared": 0.999999785694904,
+          "length_count": 8,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        }
+      }
+    },
+    {
+      "identity": {
+        "protocol_sha256": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+        "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+        "gpu_uuid": "GPU-50c9760c-d3ab-6d00-dde4-95288250a589",
+        "driver": "580.82.07",
+        "environment_fingerprint": "df87ea2e1f72f01a8eeb6fecdd893f05c18eb6888de580b8de2bf365f8ad4d63",
+        "usable_bytes": 15527116800,
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "transformers": "4.51.3",
+        "runtime_sources": {
+          "qwen2_class": {
+            "filename": "modeling_qwen2.py",
+            "sha256": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff"
+          },
+          "dynamic_cache": {
+            "filename": "cache_utils.py",
+            "sha256": "254b573d6390e9ac5909b6e7d37b09aa5b37f6b17ec12555a597798c17957738"
+          },
+          "qwen2_forward": {
+            "filename": "modeling_qwen2.py",
+            "sha256": "1760c628019995d3564c8572be6c5149f488b6c3aa95ceda16099c2516e146ff"
+          },
+          "sdpa_adapter": {
+            "filename": "sdpa_attention.py",
+            "sha256": "5a2d607459531430503dd3cb1adc8778885037c1d0be7e6ca0e82a1a852f4d8b"
+          }
+        },
+        "package_inventory_sha256": "2abb4503debd9c7bae447912c02b21f55bf2b9d351d384d710f8711156195aac",
+        "execution_sha256": {
+          "probe.py": "1419fd80654d2b5804fc2848c6375200bfcf6cb5cdf6c09c541ffa57ceacde3f",
+          "telemetry.py": "a7748ab8b3581d9e763e0428182b44471096bc0389c4e3b5a1bc8e544d7eacd9"
+        },
+        "policy": {
+          "protocol_version": "prefill-v1",
+          "model_id": "Qwen/Qwen2.5-1.5B",
+          "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+          "dtype": "float16",
+          "batch_size": 1,
+          "mode": "single_prefill",
+          "attention_implementation": "sdpa",
+          "sdpa_backend": "EFFICIENT_ATTENTION",
+          "cache_type": "DynamicCache",
+          "logits_to_keep": 1,
+          "seed": 42,
+          "warmup": false,
+          "allocator_backend": "native"
+        },
+        "measurement": "primary",
+        "allocator": "expandable"
+      },
+      "coverage": {
+        "512": [
+          1,
+          2,
+          3
+        ],
+        "1024": [
+          1,
+          2,
+          3
+        ],
+        "2048": [
+          1,
+          2,
+          3
+        ],
+        "4096": [
+          1,
+          2,
+          3
+        ],
+        "8192": [
+          1,
+          2,
+          3
+        ],
+        "16384": [
+          1,
+          2,
+          3
+        ]
+      },
+      "fits": {
+        "cache_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 0.0,
+          "r_squared": 1.0,
+          "length_count": 6,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "cache_lifetime_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 0.0,
+          "r_squared": 1.0,
+          "length_count": 6,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "retained_minus_postload_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 28672.0,
+          "intercept_bytes": 8519680.0,
+          "r_squared": 1.0,
+          "length_count": 6,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        },
+        "peak_allocated_bytes": {
+          "status": "FIT",
+          "slope_bytes_per_token": 95248.0,
+          "intercept_bytes": 3095948800.0,
+          "r_squared": 1.0,
+          "length_count": 6,
+          "fit_method": "OLS on per-length medians; no statistical CI claimed"
+        }
+      }
+    }
+  ],
+  "pending_dispatched_probe": {
+    "label": "primary-043",
+    "notebook_cell": 94,
+    "retrieved": false
+  },
+  "deliberate_oom_dispatched": false,
+  "cpu_tests_passed": 104
+}
