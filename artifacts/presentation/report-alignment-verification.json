@@ -1,0 +1,26 @@
+{
+  "status": "REPORT_ALIGNED_WITH_PROJECT_AND_SIX_DELIVERABLES",
+  "verified_at_utc": "2026-10-19T12:06:44.279915+00:00",
+  "source_commit": "bbbb6163c4f4c1622a9bd63ff964063339e9e367",
+  "pages": 16,
+  "all_pages_rendered_and_visually_inspected": true,
+  "original_prediction_git_timestamp": "2026-10-18T19:54:52+05:30",
+  "original_prediction_unchanged": true,
+  "unified_project_phases": 5,
+  "deliverable_sections": 6,
+  "full_environment_tests_passed": 120,
+  "executed_notebook_cells": 12,
+  "embedded_scientific_figures": 6,
+  "embedded_download_matches_published_pdf": true,
+  "research_status": "RESEARCH_CRITERIA_PENDING",
+  "remaining_evidence": [
+    "Two compatible expandable held-out repeats",
+    "Registered final boundary attempt"
+  ],
+  "files": {
+    "artifacts/reports/project-report/report.pdf": "fe14930f92498086f97cfb4a579f247f67686db926a3eb9e16211b82e3593ee4",
+    "artifacts/reports/project-report/report.md": "1b38972566d1fb34fc4dbdd9ab95ee7967c89467dc240237c3773c5ba268feac",
+    "notebooks/FINAL_PRESENTATION.ipynb": "2302b9385c9bdbb4c497427fc837aa2513567eca4c0fb96169a8199850aa5bfa",
+    "artifacts/presentation/PROJECT_PRESENTATION.html": "acbcb984d2cec8495ea05c736cd03b88d044da22aa9fb075c9091e95cb8bf741"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "status": "ANALYZED_SAVED_OBSERVATIONS",
-  "output": "/private/tmp/kv-project-presentation-release/reproduction/analysis",
+  "output": "/private/tmp/kv-report-aligned-published/reproduction/analysis",
   "acceptance": {
     "five_length_paired_primary_complete": true,
     "cache_slope_pass": true,

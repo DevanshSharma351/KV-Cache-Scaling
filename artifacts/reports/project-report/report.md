@@ -210,3 +210,59 @@ The user authorized a delegated one-contributor review and kept Google Drive dis
 - [vLLM published KV block table](https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html)
 - [PyTorch 2.6 cuBLAS workspace source](https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp)
 - Official pinned transfer config URLs and hashes: configs/transfer/provenance.json.
+
+
+## Deliverable guide
+
+| Required output | Where to show it |
+| --- | --- |
+| 1. Derivation with symbols | Section 1; docs/DERIVATION.md; config-derived weights and KV equation. |
+| 2. Timestamped advance prediction | Section 2; prereg/formal-2026-10-18-t4/prediction.json and original Git commit. |
+| 3. Checkpointing sweep harness | Section 3; src/kv_cache_scaling/sweep.py, probe.py and coordinator_store.py; raw checkpoint capsule. |
+| 4. Measured / analytical plots | Sections 4-6; six standalone PNG/PDF figures in artifacts/figures/project-results/. |
+| 5. Quantified discrepancy | Section 7; data/processed/project-results/discrepancy.csv; signed components, closure and unaccounted bytes. |
+| 6. Cross-model / cross-GPU predictions | Section 8; data/processed/project-results/transfer/; four scenarios and published KV-only verification. |
+
+## Five-phase project flow
+
+| Phase | What we built |
+| --- | --- |
+| 1. Derive and preregister | Read pinned architecture; count tied weights and GQA cache; commit the prediction before model work. |
+| 2. Build isolated probes | Use one cold prefill per fresh process, explicit cache/backend/logits policy and synchronized peak counters. |
+| 3. Coordinate and preserve | Checkpoint every worker, verify external copies, enforce safe admission and a single OOM allowance. |
+| 4. Explain the measurements | Fit inspected KV separately from total peaks; plot both; close signed discrepancy tables with explicit unknowns. |
+| 5. Generalize and present | Predict two unrun models on two unrun GPUs; compare published KV figures; provide a CPU-replayable notebook and report. |
+
+## Original five-length commitment
+
+Original Git commit: 7baff5121ed643f27ba06959065855a8913f8e8c. Original commit timestamp: 2026-10-18T19:54:52+05:30.
+Tensor envelope excludes fixed headroom; admission budget includes it. Values come from the unchanged original JSON, not fitted observations.
+
+| L tokens | KV bytes | Central tensor peak bytes | Central budget bytes |
+| ---: | ---: | ---: | ---: |
+| 512 | 14680064 | 3142216704 | 3679087616 |
+| 1024 | 29360128 | 3197004800 | 3733875712 |
+| 2048 | 58720256 | 3306580992 | 3843451904 |
+| 4096 | 117440512 | 3525733376 | 4062604288 |
+| 8192 | 234881024 | 3964038144 | 4500909056 |
+
+## Representative byte-level discrepancy
+
+Default allocator, L=114688, repeat=1. Signed peak gap=-1339293184 bytes; closure=0 bytes; absolute unaccounted=0 bytes.
+
+| Component | Signed bytes | Signed MiB | Evidence |
+| --- | ---: | ---: | --- |
+| unique_weight_difference | 0 | 0.000000 | Deduplicated parameter storage vs config-derived weights |
+| loaded_model_buffer_storage | 256 | 0.000244 | Unique loaded model storage excluding parameters |
+| postload_allocator_internal_padding | 917760 | 0.875244 | Same-snapshot allocated minus requested bytes |
+| unaccounted_postload_storage | 0 | 0.000000 | Unclassified post-load allocation; not assumed to be framework overhead |
+| controlled_cublas_workspace | 8519680 | 8.125000 | Source-supported fixed-size inference from same-allocator L=512 controls; not a direct intervention at this length; pinned PyTorch 2.6 fixed non-Hopper workspace; controls: 258f7320-7005-421e-a768-900f82727dcc,84065451-393c-4ffa-9aea-3e0385da962d,ab101abe-710e-4861-88c9-f7fa22042a87 |
+| unaccounted_postforward_persistent_growth | 0 | 0.000000 | Measured released-minus-postload allocation; physical cause unconfirmed |
+| cache_lifetime_difference | 0 | 0.000000 | Controlled cache release delta minus analytical retained KV |
+| output_and_input_lifetime | 2139136 | 2.040039 | Controlled output/input release delta |
+| transient_envelope_difference | -1350870016 | -1288.290039 | Exact peak excess above synchronized endpoint minus assumed envelope; descriptive, not pure-activation attribution |
+
+## Presenting the deliverables
+
+Open notebooks/FINAL_PRESENTATION.ipynb or artifacts/presentation/PROJECT_PRESENTATION.html to show all six deliverables, figures, tables and downloads. Run All in the clean notebook regenerates saved-data results on CPU. See docs/LIVE_DEMO.md and docs/DECISIONS_AND_PHASE_GUIDE.md.
+The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.
