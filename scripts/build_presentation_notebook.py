@@ -137,7 +137,13 @@ else:
         '### Final deliverable files',
         '[Report PDF]('+base+'artifacts/reports/project-report/report.pdf) · [All figures]('+base+'artifacts/figures/project-results/) · [Discrepancy CSV]('+base+'data/processed/project-results/discrepancy.csv) · [Transfer table]('+base+'data/processed/project-results/transfer/transfer.md) · [Decision guide]('+base+'docs/DECISIONS_AND_PHASE_GUIDE.md).',
         'Five phases: derive/preregister → isolated probes → checkpoint/safety → measured accounting → transfer/presentation. The resource-bounded delivery is complete; original exact-OOM objectives are explicitly unfulfilled. For offline display, use the standalone HTML with embedded images.']
-    md('\n\n'.join(board))
+    board_text=''
+    previous=''
+    for block in board:
+        if board_text:board_text += '\n' if block.startswith('|') and previous.startswith('|') else '\n\n'
+        board_text += block
+        previous=block
+    md(board_text)
     return {'nbformat':4,'nbformat_minor':5,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'language_info':{'name':'python'},'colab':{'name':'KV_Cache_Final_Presentation.ipynb','toc_visible':True},'project_source_commit':source_commit,'execution_mode':'CPU replay of verified measurements; no model/GPU calls'},'cells':cells}
 
 

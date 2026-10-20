@@ -17,7 +17,12 @@
     "One final deliberate boundary attempt"
   ],
   "files": {
-    "FINAL_PRESENTATION.ipynb": "9ef8be6da3b1632d6c5ebea77a6833f119ec80bb80224aeef52e2bbe5fdabbc8",
+    "FINAL_PRESENTATION.ipynb": "3fa55fe6b78e7da2cc4d3aaef12f4e0a4570eac45dc343772f01ae491e8fdafa",
     "PROJECT_PRESENTATION.html": "55ca180fc39aac8b911fa03973866960d729261b64c7f8a51b6414fec27d0986"
+  },
+  "markdown_only_table_layout_update": {
+    "updated_at_utc": "2026-10-20T14:43:04.380720+00:00",
+    "executed_code_cells_and_outputs_unchanged": true,
+    "generator_sha256": "54a40ed0ce3db07e0990345ccb9401147d6f27bd7ec64a3b2ec220bb935ee963"
   }
 }
