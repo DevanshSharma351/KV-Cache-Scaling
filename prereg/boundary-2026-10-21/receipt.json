@@ -1,0 +1,34 @@
+{
+  "status": "COMPLETE_PREREGISTRATION_RECEIPT",
+  "prediction_path": "prereg/boundary-2026-10-21/prediction.json",
+  "prediction_commit_sha": "a7ac3457f99f909d3ad9c8f86b0ac3e1e5b83f48",
+  "remote_commit_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/a7ac3457f99f909d3ad9c8f86b0ac3e1e5b83f48",
+  "remote_receipt_evidence_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/a7ac3457f99f909d3ad9c8f86b0ac3e1e5b83f48/prereg/boundary-2026-10-21/prediction.json",
+  "remote_receipt_observed_at_utc": "2026-10-20T19:10:54.795838+00:00",
+  "protocol_sha256": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+  "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+  "reviewers": [
+    {
+      "role": "Project reviewer",
+      "reviewed_at_utc": "2026-10-20T19:10:33.734190+00:00",
+      "performed_by": "Codex delegated technical review",
+      "authorization": "Standing user authorization to review on their behalf; not independent human review",
+      "review_path": "prereg/boundary-2026-10-21/REVIEW.md"
+    }
+  ],
+  "first_model_measurement_at_utc": null,
+  "note": "Two-point informed boundary continuation, new allocation; same global one-use allowance; Drive disconnected.",
+  "prediction_sha256": "ecc9f8fd1bc1f44dc423ee7bdd3b799352cc1ef0c70bbdddc12121de92974366",
+  "experiment_id": "049a79af-d48a-4837-84c6-75e077b4a5a0",
+  "persistent_state_root": "/content/kv-boundary-state",
+  "remote_branch": "main",
+  "storage_policy": {
+    "colab_path_kind": "ephemeral checkpoint staging",
+    "actual_durable_location": "User local filesystem; complete capsule verified and fsynced before each next point",
+    "required_flags": [
+      "--checkpoint-each-probe"
+    ],
+    "bulk_authorized_with_this_storage": true,
+    "unattended_bulk_authorized": false
+  }
+}
