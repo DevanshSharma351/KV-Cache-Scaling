@@ -423,7 +423,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
             (131072,'Typed forward CUDA OOM','Partial counters below','Partial counters below')],[65,145,135,width-345])
         p('Failure counters (bytes): '+json.dumps(b['failure_counters'],sort_keys=True))
         p('Original prediction error interval: '+str(b['prediction_error_percent_interval'])+' percent. Negative error means the advance prediction was conservative.')
-        p('Raw OOM message: '+b['oom_error']['message'])
+        story.append(para('Typed OOM excerpt: '+b['oom_error']['message'].split(' Including non-PyTorch')[0]+' Full raw error is preserved in the boundary verification JSON and capsule.','SmallKV'))
         p('Evidence capsule: '+b['capsule']+'. SHA-256: '+b['sha256'])
         p('The external dispatch intent was fsynced before launch, the worker consumed its internal one-use token, the raw typed error was checkpointed, the worker exited, and GPU idle was verified. No generic runtime failure was relabelled OOM and no second attempt was made.')
     page();h('Primary sources and evidence links')
