@@ -1,0 +1,34 @@
+{
+  "status": "COMPLETE_PREREGISTRATION_RECEIPT",
+  "prediction_path": "prereg/continuation-2026-10-20/prediction.json",
+  "prediction_commit_sha": "39ecab7d061836337f746aa359dc4790b812d3b7",
+  "remote_commit_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/39ecab7d061836337f746aa359dc4790b812d3b7",
+  "remote_receipt_evidence_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/39ecab7d061836337f746aa359dc4790b812d3b7/prereg/continuation-2026-10-20/prediction.json",
+  "remote_receipt_observed_at_utc": "2026-10-20T14:00:39.239982+00:00",
+  "protocol_sha256": "7198d509c816c58c36a1e16f62a325d3ec4a2a6cb3c8a249d8b1ac10add31f1b",
+  "config_sha256": "0e8c8aa86468aba09c9d32157ff4bc2301c7e6c50e4398960425b2ea71e66f77",
+  "reviewers": [
+    {
+      "role": "Project reviewer",
+      "reviewed_at_utc": "2026-10-20T14:00:08.717666+00:00",
+      "performed_by": "Codex delegated technical review",
+      "authorization": "Standing user authorization to review on their behalf; not independent human review",
+      "review_path": "prereg/continuation-2026-10-20/REVIEW.md"
+    }
+  ],
+  "first_model_measurement_at_utc": null,
+  "note": "New-allocation continuation after loss of the 80-worker cohort. Original commitment unchanged; earlier results disclosed. Same project-wide one-use allowance. External verified/fsynced complete capsule before each next worker. Drive disconnected.",
+  "prediction_sha256": "b06ceefd85cb088c803e4635569d87c9e1a92785d5e3dad164a7f692383422c5",
+  "experiment_id": "049a79af-d48a-4837-84c6-75e077b4a5a0",
+  "persistent_state_root": "/content/kv-continuation-state",
+  "remote_branch": "main",
+  "storage_policy": {
+    "colab_path_kind": "ephemeral checkpoint staging",
+    "actual_durable_location": "User local filesystem; complete capsule verified and fsynced before each next point",
+    "required_flags": [
+      "--checkpoint-each-probe"
+    ],
+    "bulk_authorized_with_this_storage": true,
+    "unattended_bulk_authorized": false
+  }
+}
