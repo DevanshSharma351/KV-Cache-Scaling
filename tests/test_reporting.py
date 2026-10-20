@@ -75,8 +75,8 @@ class ReportAlignmentTests(unittest.TestCase):
                 self.assertIn(title,(output/'report.md').read_text())
             for evidence in ('2026-10-18T19:54:52+05:30','3679087616','4500909056',
                              'reset_peak_memory_stats()', 'max_memory_allocated()',
-                             'FINAL_PRESENTATION.ipynb','No deliberate OOM attempt was dispatched',
-                             'transferred HF context thresholds are not yet validated',
+                             'FINAL_PRESENTATION.ipynb','Completed targeted OOM boundary',
+                             'transferred HF context thresholds are unvalidated',
                              'Byte-level discrepancy example', '-1339293184', '-1350870016'):
                 self.assertIn(evidence,text)
             for ownership in ('Person 1','Person 2','55%','45%'):

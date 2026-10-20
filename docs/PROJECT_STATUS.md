@@ -1,36 +1,15 @@
 # Final project status
 
-**20 October 2026: final resource-bounded delivery with measurement limitations.**
-The user closed further GPU probing to conserve resources. Implementation,
-saved-data analysis, report generation and the six-deliverable presentation work
-together. No additional GPU run is planned. This does not claim that every
-original research objective was experimentally completed.
+All five implementation phases and six deliverable artifact types are integrated and reproducible. The single deliberate OOM check is now measured and checkpointed.
 
-| Phase | Delivered result | Scientific limit |
-| --- | --- | --- |
-| 1 - Derive and preregister | Unique tied weights/GQA formula; original prediction and timestamp | Original assumptions are preserved, not relabelled fitted results |
-| 2 - Isolated probe | Fresh workers, exact storage, peak counters and SM75 trace | Primary workload is single prefill; diagnostics change semantics |
-| 3 - Checkpoint and recover | Journals, fsync/mirroring, raw schemas and verified external capsules | Original interrupted sweep journals are not fabricated as finished |
-| 4 - Measure and explain | 80 core workers; six figures; exact KV slope; byte-level discrepancy accounting | Exact hardware OOM and allocator-context gain were not measured |
-| 5 - Generalize and present | Four transfer cases, KV publication check, PDF, CPU notebook and HTML | Published comparison validates KV bytes, not unrun HF peak limits |
+Separate T4 boundary confirmation: one cold prefill succeeded at 114,688 tokens and the one deliberate attempt raised torch.cuda.OutOfMemoryError during forward at 131,072 tokens. The largest fitting integer context is bracketed at 114,688–131,071 tokens, assuming monotonicity. The original 111,232-token prediction error is -15.14% to -3.01% using (prediction-limit)/limit. This is an interval, not an exact maximum. The failed forward has partial peak counters, not a completed-forward peak. At L=131,072, the pinned HF mask-elision condition fails at config.sliding_window=131072. The DynamicCache path requests an FP16 [L,L+1] causal mask: 34,360,000,512 bytes (32.00024 GiB), matching the rounded 32.00-GiB OOM request. This is a framework mask cliff before efficient SDPA, not an eager attention score matrix or evidence that the KV cache alone filled VRAM. The attribution is supported by installed source; no separate GPU intervention was run. The new allocation is not pooled into the core curve. No model probes followed the deliberate attempt; the allocator hardware-limit gain and causal split of the threshold error remain unmeasured.
 
-Two new L=512 default-allocator workers on 20 October reproduce the core peak
-and cache bytes exactly. They are a separate cohort, not two extra points in
-the old curve. Total preserved successful workers: **82 across two allocations**.
-The bulk loop stopped at its input prompt after both workers exited and passed
-idle checks; the final closure verified no live GPU process. No deliberate OOM
-attempt was dispatched or consumed. Drive stayed disconnected.
+| Phase | Outcome |
+| --- | --- |
+| 1 — Derive and preregister | Original 18 October commitment and derivation preserved |
+| 2 — Isolated measurement | Pinned runtime, cache, efficient SDPA, reduced logits, fresh workers, exact peak counters |
+| 3 — Durable orchestration | Per-probe journals, external verified checkpoints, one-use OOM ledger |
+| 4 — Explain memory | Core curve, direct KV slope, diagnostics, signed discrepancy table, separate observed OOM bracket |
+| 5 — Generalize and present | Four transfer predictions, published KV comparison, report PDF, offline HTML and Colab board |
 
-The [final scope](FINAL_SCOPE.md) records the user's change and all limitations.
-The strict original full-experiment verifier is preserved and is not claimed to
-pass. `python scripts/verify_final_delivery.py` verifies the agreed final evidence
-scope and explicitly reports that all original research objectives are not met.
-
-[Five phases](../PHASES.md) · [Decision guide](DECISIONS_AND_PHASE_GUIDE.md) ·
-[Presentation notebook](../notebooks/FINAL_PRESENTATION.ipynb) ·
-[Report](../artifacts/reports/project-report/report.pdf) · [Live demo](LIVE_DEMO.md).
-
-The clean notebook executes 12 CPU code cells and embeds six scientific figures.
-The standalone HTML is the fallback for Colab's intermittent output-renderer
-login/cookie error. A CPU replay demonstrates saved-data reproducibility and
-requires no model load, CUDA allocation or Drive mount.
+84 successful workers and one deliberate OOM are preserved across four separate allocations. See [final scope](FINAL_SCOPE.md) for experimental limits and [boundary evidence](OOM_BOUNDARY.md) for raw outcomes. No further GPU probes are planned.

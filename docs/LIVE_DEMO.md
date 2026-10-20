@@ -3,7 +3,7 @@
 ## The reliable demo route
 
 1. Open [FINAL_PRESENTATION.ipynb in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb).
-2. For immediate presentation, scroll to **Final presentation board — no runtime needed**. Its six pinned graph images and tables are ordinary notebook Markdown. No connection or execution is needed.
+2. For immediate presentation, scroll to **Final presentation board — no runtime needed**. Its seven pinned graph images and tables are ordinary notebook Markdown. No connection or execution is needed.
 3. For an optional reproduction demo, select a **CPU** runtime, leave Drive disconnected and use **Run all**.
 4. Setup checks out the notebook's pinned source commit, verifies the original
    GPU capsule and regenerates every plot/table/report. It does not load model
@@ -43,17 +43,14 @@ PyTorch's efficient SDPA backend and preserve an actual SM75 kernel trace.
 inputs, output/workspace and temporary copies. StaticCache diagnostics additionally
 include this HF version's explicit causal mask. We measure KV storage directly.
 
-**Did you find the exact context limit?** No. Both allocators succeeded at
-114,688. The original allocation was lost and the user later closed further
-probing to conserve resources. Exact OOM evidence is unmeasured; this limitation
-is explicit in the final resource-bounded delivery.
+**Did you find OOM?** Yes: 114,688 tokens succeeded and 131,072 raised typed forward CUDA OOM on the same final T4. The exact maximum lies in an interval, assuming monotonicity. At 131,072 the pinned HF masking path tries to allocate an FP16 [L,L+1] causal mask (32.00024 GiB). This is a framework mask cliff; the KV cache remains linear. See docs/OOM_BOUNDARY.md.
 
 **What happens if Colab has no GPU during the demo?** Nothing essential breaks:
 the clean demo runs on CPU from the immutable saved measurements. Use the cached
 notebook outputs or standalone HTML if a runtime/network is unavailable.
 
 **Can we run a GPU example live?** The final demo is deliberately CPU-only.
-The user closed further GPU probing. Any future GPU experiment requires a new
+The one permitted OOM allowance is consumed. Any future independent experiment requires new
 explicitly authorized, prospectively registered continuation. The presentation's live calculations and checkpoint demo are safe
 CPU operations; the historical GPU audit is the measurement trail.
 
@@ -85,3 +82,10 @@ was verified in the browser. Cached notebook outputs are also in GitHub. Do not
 change security/cookie settings merely to demonstrate the science. A CPU
 re-execution regenerates the artifacts, but cannot itself repair browser login
 or blocked frontend scripts.
+
+
+## Completed boundary check
+
+Separate T4 boundary confirmation: one cold prefill succeeded at 114,688 tokens and the one deliberate attempt raised torch.cuda.OutOfMemoryError during forward at 131,072 tokens. The largest fitting integer context is bracketed at 114,688–131,071 tokens, assuming monotonicity. The original 111,232-token prediction error is -15.14% to -3.01% using (prediction-limit)/limit. This is an interval, not an exact maximum. The failed forward has partial peak counters, not a completed-forward peak. At L=131,072, the pinned HF mask-elision condition fails at config.sliding_window=131072. The DynamicCache path requests an FP16 [L,L+1] causal mask: 34,360,000,512 bytes (32.00024 GiB), matching the rounded 32.00-GiB OOM request. This is a framework mask cliff before efficient SDPA, not an eager attention score matrix or evidence that the KV cache alone filled VRAM. The attribution is supported by installed source; no separate GPU intervention was run. The new allocation is not pooled into the core curve. No model probes followed the deliberate attempt; the allocator hardware-limit gain and causal split of the threshold error remain unmeasured.
+
+The final board and report show this independent allocation separately from the six core-study figures. The seventh figure shows the measured success/OOM interval. The CPU demo never repeats the consumed OOM attempt.

@@ -61,10 +61,12 @@ def verify_final_scope(root=ROOT):
     for name in ('probe.py','telemetry.py'):
         digest=prediction['execution_sha256']['src/kv_cache_scaling/'+name]
         _require(all(r['code_sha256'][name]==digest for r in raw),'Worker execution fingerprint mismatch')
-    return {'status':config['status'],'bounded_delivery_complete':True,'all_original_research_objectives_met':False,
-            'sources':sources,'total_successful_workers':sum(s['workers'] for s in sources.values()),
+    from .boundary import verify_boundary
+    boundary=verify_boundary(root)
+    return {'boundary':boundary,'status':config['status'],'bounded_delivery_complete':True,'all_original_research_objectives_met':False,
+            'sources':sources,'total_successful_workers':sum(s['workers'] for s in sources.values())+(boundary['successful_workers'] if boundary else 0),
             'cohorts_pooled':False,'replication':rows,'closure':closure,'additional_gpu_runs_planned':False,
             'exact_oom_threshold_measured':False,'original_prediction_commit':config['original_prediction_commit'],
-            'limitations':['Hardware OOM threshold and its exact prediction error are unobserved.',
+            'limitations':[('The default-allocator OOM threshold is bracketed; the exact token limit is unmeasured.' if boundary else 'Hardware OOM threshold and its exact prediction error are unobserved.'),
                            'Original L=114688 validation remains default n=3, expandable n=1.',
                            'Published transfer verification checks KV bytes, not unrun HF context limits.']}

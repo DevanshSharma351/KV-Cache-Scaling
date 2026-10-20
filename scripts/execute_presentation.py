@@ -37,7 +37,7 @@ def main():
     code=[c for c in notebook.cells if c.cell_type=='code']
     assert all(isinstance(c.execution_count,int) and not any(o.output_type=='error' for o in c.outputs) for c in code)
     images=sum('image/png' in o.get('data',{}) for c in code for o in c.outputs)
-    assert images==6,images
+    assert images==7,images
     notebook_path=out/'FINAL_PRESENTATION.ipynb';nbformat.write(notebook,notebook_path)
     exporter=HTMLExporter(exclude_markdown=True,exclude_input=True,exclude_input_prompt=True,exclude_output_prompt=True)
     body,_=exporter.from_notebook_node(notebook)
@@ -45,7 +45,9 @@ def main():
     body=body.replace('</head>',style+'</head>')
     assert body.count('data:image/png;base64,')>=6
     html_path=out/'PROJECT_PRESENTATION.html';html_path.write_text(body)
-    provenance={'status':'FINAL_CPU_PRESENTATION_VERIFIED_WITH_MEASUREMENT_LIMITATIONS','executed_at_utc':datetime.now(timezone.utc).isoformat(),'source_commit':commit,'source_tree_dirty':bool(subprocess.check_output(['git','-C',str(ROOT),'status','--porcelain'],text=True).strip()),'python':sys.version,'executed_code_cells':len(code),'embedded_scientific_figures':images,'model_or_cuda_calls':False,'original_prediction_commit':'7baff5121ed643f27ba06959065855a8913f8e8c','saved_gpu_workers':82,'primary_study_workers':80,'separate_replication_workers':2,'additional_gpu_runs_planned':False,'missing_gpu_evidence':['Two expandable held-out repeats','One final deliberate boundary attempt'],'files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (notebook_path,html_path)}}
+    from kv_cache_scaling.delivery import verify_final_scope
+    delivery=verify_final_scope(ROOT)
+    provenance={'status':'FINAL_CPU_PRESENTATION_VERIFIED_WITH_MEASUREMENT_LIMITATIONS','executed_at_utc':datetime.now(timezone.utc).isoformat(),'source_commit':commit,'source_tree_dirty':bool(subprocess.check_output(['git','-C',str(ROOT),'status','--porcelain'],text=True).strip()),'python':sys.version,'executed_code_cells':len(code),'embedded_scientific_figures':images,'model_or_cuda_calls':False,'original_prediction_commit':'7baff5121ed643f27ba06959065855a8913f8e8c','saved_gpu_workers':delivery['total_successful_workers'],'observed_boundary':delivery.get('boundary'),'primary_study_workers':80,'separate_replication_workers':2,'additional_gpu_runs_planned':False,'missing_gpu_evidence':['Two original-allocation expandable held-out repeats','Paired allocator hardware-limit gain','Exact per-token threshold and causal threshold-error decomposition'],'files':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (notebook_path,html_path)}}
     (out/'presentation-verification.json').write_text(json.dumps(provenance,indent=2)+'\n')
     print(json.dumps(provenance,indent=2));print('Results:',out)
 

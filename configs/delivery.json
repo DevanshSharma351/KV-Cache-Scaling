@@ -12,5 +12,9 @@
   "pool_cohorts": false,
   "additional_gpu_runs_planned": false,
   "exact_oom_threshold_measured": false,
-  "all_original_research_objectives_met": false
+  "all_original_research_objectives_met": false,
+  "boundary_capsule": "artifacts/experiments/2026-10-21-boundary/checkpoint.zip",
+  "boundary_sha256": "aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b",
+  "observed_oom_bracket": true,
+  "deliberate_attempt_consumed": true
 }

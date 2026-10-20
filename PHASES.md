@@ -128,3 +128,10 @@ their original bytes and attribution as evidence. New GPU allocations require
 reconciliation and prospective registration before model work. See
 [the decision guide](docs/DECISIONS_AND_PHASE_GUIDE.md),
 [current status](docs/PROJECT_STATUS.md) and [remaining work](docs/REMAINING_WORK.md).
+
+
+## Final boundary completion
+
+Separate T4 boundary confirmation: one cold prefill succeeded at 114,688 tokens and the one deliberate attempt raised torch.cuda.OutOfMemoryError during forward at 131,072 tokens. The largest fitting integer context is bracketed at 114,688–131,071 tokens, assuming monotonicity. The original 111,232-token prediction error is -15.14% to -3.01% using (prediction-limit)/limit. This is an interval, not an exact maximum. The failed forward has partial peak counters, not a completed-forward peak. At L=131,072, the pinned HF mask-elision condition fails at config.sliding_window=131072. The DynamicCache path requests an FP16 [L,L+1] causal mask: 34,360,000,512 bytes (32.00024 GiB), matching the rounded 32.00-GiB OOM request. This is a framework mask cliff before efficient SDPA, not an eager attention score matrix or evidence that the KV cache alone filled VRAM. The attribution is supported by installed source; no separate GPU intervention was run. The new allocation is not pooled into the core curve. No model probes followed the deliberate attempt; the allocator hardware-limit gain and causal split of the threshold error remain unmeasured.
+
+See docs/OOM_BOUNDARY.md for raw evidence and scientific limits.

@@ -63,8 +63,8 @@ class PresentationTests(unittest.TestCase):
         self.assertIn('Final presentation board',board)
         self.assertIn('| L tokens | KV bytes | Central tensor peak bytes | Central admission budget bytes |\n| ---:',board)
         self.assertNotIn('\n\n| ---:',board)
-        self.assertEqual(board.count('https://raw.githubusercontent.com/DevanshSharma351/KV-Cache-Scaling/'+commit+'/'),6)
+        self.assertEqual(board.count('https://raw.githubusercontent.com/DevanshSharma351/KV-Cache-Scaling/'+commit+'/'),7)
         self.assertIn('2026-10-18T19:54:52+05:30',board)
-        self.assertIn('exact-OOM objectives are explicitly unfulfilled',board)
+        self.assertIn('exact per-token OOM objectives remain interval-valued',board)
 
 if __name__=='__main__':unittest.main()

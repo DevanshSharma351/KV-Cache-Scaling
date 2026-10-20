@@ -1,0 +1,54 @@
+{
+  "status": "OBSERVED_FORWARD_CUDA_OOM_BRACKET",
+  "gpu_uuid": "GPU-8fd0487b-72ce-c076-4966-c694a52185f8",
+  "run_id": "377efc55-6346-476f-bf1d-9bc3fba217f0",
+  "successful_length": 114688,
+  "failed_oom_length": 131072,
+  "largest_fitting_integer_interval": [
+    114688,
+    131071
+  ],
+  "original_prediction": 111232,
+  "prediction_error_percent_interval": [
+    -15.136071289606397,
+    -3.013392857142857
+  ],
+  "exact_threshold_measured": false,
+  "successful_workers": 2,
+  "current_allocation_successful_workers": 1,
+  "prior_allocation_anchor_successes": 1,
+  "deliberate_oom_attempts": 1,
+  "cohorts_pooled": false,
+  "success_peak_allocated_bytes": 14020668928,
+  "success_peak_reserved_bytes": 15319695360,
+  "failure_counters": {
+    "allocated_bytes": 3493096960,
+    "reserved_bytes": 3690987520,
+    "partial_peak_allocated_bytes": 3493096960,
+    "partial_peak_reserved_bytes": 3690987520,
+    "scope": "prefill_inputs_through_forward"
+  },
+  "oom_error": {
+    "type": "OutOfMemoryError",
+    "message": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 14.56 GiB of which 11.01 GiB is free. Including non-PyTorch memory, this process has 3.55 GiB memory in use. Of the allocated memory 3.25 GiB is allocated by PyTorch, and 188.72 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)"
+  },
+  "mask_edge": {
+    "length": 131072,
+    "shape": [
+      131072,
+      131073
+    ],
+    "dtype": "float16",
+    "requested_tensor_bytes": 34360000512,
+    "GiB": 32.000244140625,
+    "evidence": "Installed pinned HF source and matching rounded OOM request; source-supported attribution, not a separate intervention"
+  },
+  "assumption": "Monotone fit/failure boundary for this fixed cold-prefill workload; interval, not exact maximum",
+  "limitations": [
+    "One deliberate attempt bounds the threshold; no repeated OOM search.",
+    "Allocator hardware-limit delta is unmeasured.",
+    "Failed-forward counters are partial peaks, not the peak of a completed forward."
+  ],
+  "capsule": "artifacts/experiments/2026-10-21-boundary/checkpoint.zip",
+  "sha256": "aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b"
+}

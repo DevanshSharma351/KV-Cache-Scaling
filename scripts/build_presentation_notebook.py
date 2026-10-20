@@ -77,12 +77,14 @@ else:
     elif DOWNLOAD_ARTIFACT=='all_deliverables_zip':
         export_root=RESULTS.parent/'all-deliverables'
         shutil.copytree(RESULTS,export_root,dirs_exist_ok=True)
-        for relative in ['docs/DERIVATION.md','docs/DECISIONS_AND_PHASE_GUIDE.md','PHASES.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','prereg/formal-2026-10-18-t4/receipt.json','requirements-analysis.txt','docs/FINAL_SCOPE.md','configs/delivery.json','artifacts/experiments/2026-10-20-continuation/verification.json']:
+        for relative in ['docs/DERIVATION.md','docs/DECISIONS_AND_PHASE_GUIDE.md','PHASES.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','prereg/formal-2026-10-18-t4/receipt.json','requirements-analysis.txt','docs/FINAL_SCOPE.md','configs/delivery.json','artifacts/experiments/2026-10-20-continuation/verification.json','docs/OOM_BOUNDARY.md','artifacts/experiments/2026-10-21-boundary/verification.json']:
             target=export_root/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/relative,target)
         shutil.copytree(ROOT/'src',export_root/'src',dirs_exist_ok=True)
         shutil.copytree(ROOT/'configs',export_root/'configs',dirs_exist_ok=True)
         shutil.copyfile(ROOT/'artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip',export_root/'gpu-checkpoint-080.zip')
         shutil.copyfile(ROOT/'artifacts/experiments/2026-10-20-continuation/closed-scope-checkpoint.zip',export_root/'replication-checkpoint.zip')
+        shutil.copytree(ROOT/'artifacts/experiments/2026-10-21-boundary',export_root/'boundary-evidence')
+        shutil.copytree(ROOT/'artifacts/experiments/2026-10-20-boundary-anchor',export_root/'prior-anchor-evidence')
         (export_root/'ORIGINAL_COMMIT.json').write_text(json.dumps({'commit':presentation.receipt['prediction_commit_sha'],'original_git_timestamp':presentation.commit_timestamp,'prediction_sha256':presentation.receipt['prediction_sha256']},indent=2))
         selected=Path(shutil.make_archive(str(RESULTS.parent/'kv-cache-deliverables'),'zip',export_root))
     else:raise ValueError('Unknown download choice')
@@ -137,6 +139,17 @@ else:
         '### Final deliverable files',
         '[Report PDF]('+base+'artifacts/reports/project-report/report.pdf) · [All figures]('+base+'artifacts/figures/project-results/) · [Discrepancy CSV]('+base+'data/processed/project-results/discrepancy.csv) · [Transfer table]('+base+'data/processed/project-results/transfer/transfer.md) · [Decision guide]('+base+'docs/DECISIONS_AND_PHASE_GUIDE.md).',
         'Five phases: derive/preregister → isolated probes → checkpoint/safety → measured accounting → transfer/presentation. The resource-bounded delivery is complete; original exact-OOM objectives are explicitly unfulfilled. For offline display, use the standalone HTML with embedded images.']
+    from kv_cache_scaling.boundary import verify_boundary,explanation
+    boundary=verify_boundary(ROOT)
+    if boundary:
+        board=[text.replace('Exact OOM threshold is unmeasured.','The exact token threshold remains interval-valued; a typed OOM bracket is now measured.').replace('No deliberate OOM attempt was dispatched.','One deliberate forward CUDA OOM was later recorded on a separate allocation.').replace('original exact-OOM objectives are explicitly unfulfilled','exact per-token OOM objectives remain interval-valued') for text in board]
+        board[2]='**Final scope:** core curve and replication are preserved separately; the completed targeted OOM check is below. No more model probes follow the deliberate attempt.'
+        board[3:3]=['### Completed boundary experiment',explanation(boundary),
+            '| Length tokens | Outcome | Allocation |','| ---: | --- | --- |',
+            '| 114688 | Successful cold prefill | '+boundary['gpu_uuid']+' |',
+            '| 131072 | torch.cuda.OutOfMemoryError during forward | Same allocation |',
+            '![Observed same-allocation OOM bracket]('+raw+'artifacts/figures/project-results/06_observed_oom_boundary.png)']
+        cells[0]['source']=['# KV-Cache Scaling — final deliverables\n\nThe final presentation board below shows all six deliverables without a runtime. A separate targeted check now records a successful 114,688-token prefill and typed forward CUDA OOM at 131,072. The original core curve remains separate. Run All on CPU only to regenerate the evidence.\n']
     board_text=''
     previous=''
     for block in board:
@@ -144,6 +157,7 @@ else:
         board_text += block
         previous=block
     md(board_text)
+    cells[-1]['id']='a9d9306e'
     return {'nbformat':4,'nbformat_minor':5,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'language_info':{'name':'python'},'colab':{'name':'KV_Cache_Final_Presentation.ipynb','toc_visible':True},'project_source_commit':source_commit,'execution_mode':'CPU replay of verified measurements; no model/GPU calls'},'cells':cells}
 
 

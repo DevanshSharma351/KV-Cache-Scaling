@@ -4,18 +4,14 @@
 We built a config-derived memory model, a checkpointing GPU harness and a
 reproducible analysis/presentation pipeline in [five phases](PHASES.md).
 
-**Final resource-bounded delivery:** 80 core-study workers plus two separate
-replication checks are preserved. Both allocators reached 114,688 tokens in the
-core study; inspected KV grows by exactly 28,672 bytes/token. On 20 October the
-user closed further GPU probing to conserve resources. The six artifact types
-and five-phase implementation are delivered; the exact OOM threshold and full
-original hardware acceptance remain unmeasured. No additional GPU run is planned.
-[Final scope and limits](docs/FINAL_SCOPE.md) · [Current status](docs/PROJECT_STATUS.md).
+**Final delivery:** 84 successful GPU workers and one deliberate forward CUDA OOM are preserved across four separate allocations. **114,688 tokens fits; 131,072 tokens raises CUDA OOM** in the final same-allocation check. The exact limit is bracketed, not guessed. All six deliverable artifact types and five project phases are integrated. [Measured boundary](docs/OOM_BOUNDARY.md) · [Scope and limits](docs/FINAL_SCOPE.md).
+
+**Why it failed:** at the configured 131,072-token edge, pinned Transformers 4.51.3 creates a roughly 32-GiB causal mask before efficient SDPA. This framework allocation is distinct from the linear KV cache.
 
 ## Present the project
 
 [Open the clean presentation notebook in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb).
-Scroll to the **final presentation board** to show all six saved graphs and tables
+Scroll to the **final presentation board** to show all seven saved graphs and tables
 without a runtime. For optional regeneration, choose a **CPU runtime** and **Run all**. It regenerates the saved-data results
 and presents each required deliverable; no GPU, model download or Drive mount
 is needed. Change usable VRAM/batch size for an analytical live demo, or run the
@@ -35,7 +31,7 @@ temporary-filesystem checkpoint recovery demo. Downloads are optional.
 | Original prediction and commit timestamp | [Unchanged commitment](prereg/formal-2026-10-18-t4/prediction.md), [original commit](https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/7baff5121ed643f27ba06959065855a8913f8e8c); section 2 |
 | Checkpointing sweep harness | [Coordinator](src/kv_cache_scaling/sweep.py), [persistence API](src/kv_cache_scaling/journal.py), [contract](docs/DATA_CONTRACT.md); section 3 |
 | Memory curves with analytical overlays | [Separate PNG/PDF figures](artifacts/figures/project-results/); section 4 |
-| Discrepancy table in bytes / MiB | [CSV](data/processed/project-results/discrepancy.csv); section 5. Fixed-length peak accounting is available; OOM-threshold error is unmeasured |
+| Discrepancy table in bytes / MiB | [CSV](data/processed/project-results/discrepancy.csv); section 5. Fixed-length peak accounting is available; OOM-threshold prediction error is now interval-valued; see the boundary document |
 | Cross-model / cross-GPU predictions with verification | [Transfer table](data/processed/project-results/transfer/transfer.md); section 6. Published comparison validates KV blocks, not unrun HF peak limits |
 
 Some immutable evidence paths retain their historical names. Current docs and

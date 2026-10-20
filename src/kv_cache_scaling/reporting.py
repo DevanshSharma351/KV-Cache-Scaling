@@ -95,7 +95,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     diagnostic_rows=a.get('diagnostic_comparisons',[])
     remaining=evidence_gaps(a)
     pending=bool(remaining)
-    observed_oom=any(b.get('smallest_observed_oom_tokens') and b.get('consistent_monotone_bracket') for b in a.get('hardware_brackets',[]))
+    observed_oom=bool(delivery.get('boundary')) or any(b.get('smallest_observed_oom_tokens') and b.get('consistent_monotone_bracket') for b in a.get('hardware_brackets',[]))
     remaining.append('Transferred HF peak thresholds remain unvalidated; published comparison checks KV bytes only.')
     criteria=[
         ('FR1','PASS','Pinned config, KV heads and tied-weight arithmetic'),
@@ -206,8 +206,17 @@ def build_report(analysis_dir, transfer_dir, output_dir):
          '| Allocator | L | Repeat | Peak allocated bytes | Peak reserved bytes |','| --- | ---: | ---: | ---: | ---: |']+[
          '| '+' | '.join(str(row[k]) for k in ('allocator','length','repeat','peak_allocated_bytes','peak_reserved_bytes'))+' |' for row in delivery['replication']]+['']
     md=[line.replace('Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption.','The user deferred the two original expandable held-out repeats and final boundary attempt under the resource-bounded scope.').replace('The user authorized a delegated one-contributor review and kept Google Drive disconnected.','Technical review was delegated by the user; Google Drive stayed disconnected.') for line in md]
+    if delivery.get('boundary'):
+        from .boundary import explanation
+        md=[line.replace('On 20 October 2026 the user closed further GPU work to conserve resources. This final delivery presents 80 core-study workers and two separate new-allocation L=512 replication workers. The cohorts are not pooled. All six artifact types and five phases are delivered; the exact OOM boundary and two original held-out repeats remain unmeasured, so all original research objectives are not claimed complete.',
+                         'The user reopened the boundary objective after the initial resource limit. The core curve, L=512 replication, and targeted boundary continuation are separate GPU allocations. The deliberate OOM check is now completed; the exact per-token threshold and allocator hardware-limit gain remain bounded or unmeasured.').replace('No deliberate OOM attempt was dispatched.','No deliberate OOM was dispatched in the core cohort; the independent continuation below completed the one permitted attempt.').replace('The user deferred the two original expandable held-out repeats and final boundary attempt under the resource-bounded scope.','Two original expandable held-out repeats remain absent from the core allocation; the final boundary attempt was completed independently.') for line in md]
+        md[4:4]=['## Completed targeted OOM check','',explanation(delivery['boundary']),'',
+                  'Raw evidence: '+delivery['boundary']['capsule']+'; SHA-256 '+delivery['boundary']['sha256']+'.','']
     (out/'report.md').write_text('\n'.join(md))
     (out/'requirements.json').write_text(json.dumps([dict(requirement=k,status=v,criterion=c) for k,v,c in criteria],indent=2)+'\n')
+    if delivery.get('boundary'):
+        from .boundary import plot_boundary
+        plot_boundary(delivery['boundary'],out/'boundary_status.png')
     _build_pdf(out/'report.pdf',a,t,criteria,metric_rows,gap_rows,analysis_dir/'figures',status,evidence_summary,required,controlled,context,delivery)
     deps={}
     for dist in ('matplotlib','numpy','reportlab','pypdf'):
@@ -238,7 +247,8 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     styles.add(ParagraphStyle(name='SmallKV',parent=styles['BodyText'],fontSize=8,leading=11,spaceAfter=6))
     styles.add(ParagraphStyle(name='HeroKV',parent=styles['Title'],fontSize=27,leading=32,alignment=TA_LEFT,textColor=colors.HexColor('#183d67'),spaceAfter=20))
     story=[];width=A4[0]-94
-    report_date=datetime.now(timezone.utc).strftime('%d %B %Y')
+    from zoneinfo import ZoneInfo
+    report_date=datetime.now(timezone.utc).astimezone(ZoneInfo('Asia/Kolkata')).strftime('%d %B %Y')
     def para(text,style='BodyKV'):return Paragraph(escape(str(text)).replace('\n','<br/>'),styles[style])
     def p(text):story.append(para(text))
     def h(text):story.append(Paragraph(escape(text),styles['Heading1']));story.append(Spacer(1,6))
@@ -262,7 +272,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     p('Predicting the context limit before reaching it')
     p('Integrated scientific implementation and evidence report | '+report_date)
     p('Status: '+status.replace('_',' '))
-    p('Final scope: the user closed additional GPU work on 20 October 2026 to conserve resources. This report delivers the available evidence with explicit measurement limitations; it does not claim every original research objective is experimentally complete.')
+    p('Final scope: the one permitted deliberate forward OOM check is completed on a separate T4 allocation. The threshold is an observed interval, not an exact token maximum. No additional model probes are planned.' if delivery.get('boundary') else 'Final scope: resource-bounded delivery with explicit measurement limitations.')
     p('The analysis, plots and transfer calculations are integrated and reproducible. Verified coverage: '+evidence_summary+'. Requirement status below distinguishes completed measurements from unmet scientific criteria.')
     table(['Built capability','Evidence / limit'],[
         ('Memory model','Unique tied weights and GQA-aware KV equation; original numerical prediction preserved'),
@@ -271,12 +281,15 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         ('Analysis','Validated immutable capsules; regressions require multiple lengths; unexplained bytes remain explicit'),
         ('Transfer','Four config-only model/GPU predictions; conditional published KV-only comparison')],[135,width-135])
     p('The project followed five phases: derivation and preregistration, isolated probes, checkpointing and safety, empirical analysis, and transfer with reproducible presentation. Drive remained disconnected; review provenance is preserved in the original frozen records.')
-    if evidence_gaps(a):p('Original experimental limits: '+' '.join(evidence_gaps(a)))
+    if evidence_gaps(a):p('Core-cohort limits, before the separate boundary continuation: '+' '.join(evidence_gaps(a)))
+    if delivery.get('boundary'):
+        from .boundary import explanation
+        p(explanation(delivery['boundary']))
     p('A separate new T4 allocation produced two successful L=512 replication workers. They match the core-study peaks and cache bytes but are excluded from its fitted curve and repeat counts. See the final appendix and docs/FINAL_SCOPE.md.')
     page();h('Project purpose and deliverable guide')
     p('The question is how much context fits before an LLM exhausts usable GPU memory, and why observed peaks differ from an advance equation. We built a predictor and a reproducible experiment: derive first, commit a numerical prediction, measure isolated peaks, and explain the difference.')
     table(['Required deliverable','Report and repository evidence'],DELIVERABLE_MAP,[150,width-150],padding=6)
-    p('All six output types are available. Their scientific scope differs: the saved curve and KV verification are established; the final hardware OOM bracket and transferred HF context thresholds are not yet validated.')
+    p('All six output types are available. Their scientific scope differs: the saved curve and KV verification are established; the separate final OOM bracket is reported in the boundary appendix; transferred HF context thresholds are unvalidated.')
     h('The five phases followed')
     table(['Phase','Implementation decision'],PHASE_FLOW,[140,width-140],padding=5)
     page();h('1. Derivation with defined symbols')
@@ -388,16 +401,31 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     p('Historical acceptance preserved an import-time torchao preflight failure and verified restoration after deleting both Colab checkpoint copies. Removing unused torchao restored cold imports. That bounded acceptance consumed no OOM allowance; full cloud-session restoration of the same GPU identity is not claimed.')
     p('The requirement table is computed from saved evidence. Safe-budget boundaries remain distinct from actual hardware OOM thresholds. Unsupported causes remain unaccounted. The original prediction is preserved; the prospective implementation amendment and later receipt record the changed GPU/source before extended probes.')
     page();h('10. Presenting the deliverables')
-    p('Open notebooks/FINAL_PRESENTATION.ipynb in Colab and Run All. It replays the verified saved evidence on CPU, displays six scientific figures, the derivation, the original prediction and timestamp, harness/checkpointing evidence, discrepancy tables and all four transfer predictions. It also offers individual artifact downloads. No model download, CUDA allocation or Drive mount is needed for this presentation.')
+    p('Open notebooks/FINAL_PRESENTATION.ipynb in Colab and Run All. It replays the verified saved evidence on CPU, displays the six core scientific figures and separate boundary graph, the derivation, the original prediction and timestamp, harness/checkpointing evidence, discrepancy tables and all four transfer predictions. It also offers individual artifact downloads. No model download, CUDA allocation or Drive mount is needed for this presentation.')
     p('Use artifacts/presentation/PROJECT_PRESENTATION.html as the standalone presentation if Colab output scripts fail to load. It contains the same saved-data presentation and embedded graphs. The live-demo guide explains both routes; the decisions and phase guide explains the project in plain language.')
     h('What is established, and what remains')
-    p('The core cohort contains 80 successful workers: 48 primary sweep points, 28 diagnostics and four held-out checks. Both allocators reached 114688 tokens. Two new L=512 replication workers bring the preserved total to 82 across two separate allocations. Further repetitions and the final boundary attempt were deferred by the user on 20 October 2026. No deliberate OOM attempt was dispatched; no hardware OOM upper bound or exact threshold error is claimed.')
-    p('The discrepancy tables explain fixed-length tracked tensor peak differences under stated accounting assumptions. They do not quantify an unmeasured OOM-threshold gap. The published comparison verifies KV block arithmetic, not the unrun target systems’ full context limits. These limitations are part of the deliverable, not hidden exceptions.')
+    p('The core cohort contains 80 successful workers: 48 primary sweep points, 28 diagnostics and four held-out checks. Both allocators reached 114688 tokens. The two L=512 replication workers are a separate allocation. A later targeted continuation completed the deliberate boundary check; its same-allocation outcomes and prediction-error interval are shown next. Core curves and repetition counts are unchanged.')
+    p('The discrepancy tables explain fixed-length tracked tensor peak differences under stated accounting assumptions. They do not causally decompose the interval-valued OOM-threshold error. The published comparison verifies KV block arithmetic, not the unrun target systems’ full context limits. These limitations are part of the deliverable, not hidden exceptions.')
     h('Separate 20 October replication')
     table(['Allocator','L','Repeat','Peak allocated bytes','Peak reserved bytes'],[
         tuple(row[k] for k in ('allocator','length','repeat','peak_allocated_bytes','peak_reserved_bytes')) for row in delivery['replication']],[75,45,45,170,width-335])
     p('New allocation: '+delivery['sources']['replication']['gpu_uuid']+'. Both fresh workers match the original default L=512 allocated peak exactly. The coordinator was stopped while waiting in input() after both workers had exited and passed idle checks. No active GPU process remained at closure. The original partial journal was preserved rather than relabelled finished.')
     p('Final resource-bounded verification passes for the delivered scope. The original full-experiment verifier remains strict and is not claimed to pass. No more GPU runs are planned under this scope. Transfer thresholds and the exact OOM threshold remain experimental limitations, not hidden completed results.')
+    if delivery.get('boundary'):
+        from .boundary import explanation
+        b=delivery['boundary']
+        page();h('11. Completed targeted OOM boundary')
+        p(explanation(b))
+        story.append(Image(str(Path(path).parent/'boundary_status.png'),width=width,height=width*0.43))
+        p('GPU UUID: '+b['gpu_uuid']+'. Run: '+b['run_id']+'.')
+        table(['L tokens','Outcome','Peak allocated bytes','Peak reserved bytes'],[
+            (114688,'Success',b['success_peak_allocated_bytes'],b['success_peak_reserved_bytes']),
+            (131072,'Typed forward CUDA OOM','Partial counters below','Partial counters below')],[65,145,135,width-345])
+        p('Failure counters (bytes): '+json.dumps(b['failure_counters'],sort_keys=True))
+        p('Original prediction error interval: '+str(b['prediction_error_percent_interval'])+' percent. Negative error means the advance prediction was conservative.')
+        p('Raw OOM message: '+b['oom_error']['message'])
+        p('Evidence capsule: '+b['capsule']+'. SHA-256: '+b['sha256'])
+        p('The external dispatch intent was fsynced before launch, the worker consumed its internal one-use token, the raw typed error was checkpointed, the worker exited, and GPU idle was verified. No generic runtime failure was relabelled OOM and no second attempt was made.')
     page();h('Primary sources and evidence links')
     for title,url in [('Clean presentation notebook','https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb'),('Five-phase decisions guide','https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/main/docs/DECISIONS_AND_PHASE_GUIDE.md'),('Original prediction commit','https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/'+PREDICTION_COMMIT),('Executed audit notebook','https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS'),('Official vLLM KV block table','https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html'),('PyTorch v2.6.0 workspace source','https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp'),('Pinned HF 4.51.3 Qwen2 masking source','https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/models/qwen2/modeling_qwen2.py')]:
         story.append(Paragraph(f'<link href="{escape(url)}" color="#2563a6">{escape(title)}</link>',styles['SmallKV']))

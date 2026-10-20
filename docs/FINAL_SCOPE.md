@@ -1,69 +1,19 @@
-# Final scope and measurement limits
+# Final scope and evidence
 
-**20 October 2026 - final delivery with measurement limitations.**
+The boundary objective was reopened by the user after the initial resource-bounded delivery. It is now completed with one real typed forward CUDA OOM, preceded by a same-allocation successful long prefill. No further GPU model work is planned.
 
-The user requested that we stop spending resources on repeated GPU probes and
-finish the report and final presentation using the working implementation and
-available evidence. This supersedes the planned full repeat sweep on the new T4.
-No additional GPU work is planned under this delivery scope. The five project
-phases remain intact; contributor names and percentage allocations are absent.
+Separate T4 boundary confirmation: one cold prefill succeeded at 114,688 tokens and the one deliberate attempt raised torch.cuda.OutOfMemoryError during forward at 131,072 tokens. The largest fitting integer context is bracketed at 114,688–131,071 tokens, assuming monotonicity. The original 111,232-token prediction error is -15.14% to -3.01% using (prediction-limit)/limit. This is an interval, not an exact maximum. The failed forward has partial peak counters, not a completed-forward peak. At L=131,072, the pinned HF mask-elision condition fails at config.sliding_window=131072. The DynamicCache path requests an FP16 [L,L+1] causal mask: 34,360,000,512 bytes (32.00024 GiB), matching the rounded 32.00-GiB OOM request. This is a framework mask cliff before efficient SDPA, not an eager attention score matrix or evidence that the KV cache alone filled VRAM. The attribution is supported by installed source; no separate GPU intervention was run. The new allocation is not pooled into the core curve. No model probes followed the deliberate attempt; the allocator hardware-limit gain and causal split of the threshold error remain unmeasured.
 
-## What is delivered
+## Delivered work
 
-All six requested artifact types are present: the symbol-defined derivation;
-original numerical prediction and original Git timestamp; checkpointing harness;
-six scientific figures with analytical overlays; byte-level discrepancy tables;
-and two-model/two-GPU predictions with a published KV-block comparison. The
-clean final notebook and standalone HTML present each item independently of the
-PDF and regenerate the saved-data analysis on CPU.
+All six required artifact types are available: symbol-defined derivation; original timestamped preregistration; checkpointing fresh-process harness; six analytical-overlay scientific figures; signed byte-level discrepancy tables; and four cross-model/GPU predictions with conditional published KV verification. The five phases remain documented. The final notebook presents the raw boundary outcome as well as the original core curves.
 
-The core study retains 80 successful workers from the 19 October T4 allocation:
-48 primary sweep, 28 diagnostics and four held-out checks. Its paired short-length
-curves, exact weights/cache accounting, slope checks and fixed-length discrepancy
-coverage pass. Both allocators succeeded at 114688 tokens. The original central
-prediction was 111232 tokens, so an observed successful input exceeds it by 3456
-tokens; this is not an exact OOM-threshold error.
+## Cohorts and counts
 
-On 20 October, a different T4 was allocated. We restored the pinned environment,
-registered its execution amendment before model work, and completed **two fresh
-L=512 default-allocator replication workers**. Both match the core study's weight,
-cache and allocated-peak bytes. They are a separate reproducibility check and
-are not appended to the old curve or used to fill its missing repeats.
+There are 84 preserved successful GPU workers plus one deliberate forward OOM: 80 core-study successes, two separate L=512 replication successes, one first boundary anchor on the subsequently lost T4, and one success plus the OOM on the final T4. Four physical GPU allocations remain separate. No old repeat counts or regression data were filled with another allocation.
 
-The loop was stopped while waiting for checkpoint acknowledgement after worker
-2. Both results had exited and passed idle checks; no model worker was interrupted.
-The final closure cell verified no live GPU processes and exported the complete
-capsule. Its transport and every member hash were checked and the ZIP was fsynced
-on the user's filesystem. Google Drive remained disconnected.
+## Honest acceptance limits
 
-## What the results do not establish
+The exact per-token limit is bracketed, and the hardware-limit gain from expandable segments is unmeasured. Two original-allocation expandable held-out repetitions remain absent. Fixed-length byte-accounting closure is not a causal decomposition of the threshold error. Cross-system context estimates are conditional; published validation checks KV arithmetic. These limits remain visible in the report and presentation. The original strict 83-worker/cohort verifier has not been weakened; the final-scope verifier additionally verifies the new one-use boundary evidence.
 
-- No deliberate OOM attempt was dispatched. The project-wide allowance is unused.
-- 114688 is a demonstrated successful lower bound, not the exact maximum context.
-- The original cohort has default n=3 and expandable n=1 at L=114688. Additional
-  repeats were deferred; observations from different GPU UUIDs are not pooled.
-- Without a failed upper point, exact OOM-threshold error and a quantitative
-  decomposition of an OOM-limit gap cannot be measured. The discrepancy tables
-  instead explain tracked tensor-peak differences at fixed lengths.
-- Allocator slack/reserved-peak differences do not establish pure fragmentation
-  or an exact gain in hardware context capacity.
-- The published comparison verifies KV block arithmetic, not the transferred
-  Hugging Face peak-context limits on unrun models/GPUs.
-
-This is a completed **resource-bounded evidence delivery**, not a claim that every
-original research objective has been experimentally satisfied. The original
-strict completion verifier and missing-evidence checks are preserved. They must
-not be weakened or reported as passing for this data. A separate final-scope
-verifier checks the delivered evidence and these disclosures.
-
-## Where to present it
-
-- `notebooks/FINAL_PRESENTATION.ipynb`: safe CPU Run All; six figures and separate downloads.
-- `artifacts/presentation/PROJECT_PRESENTATION.html`: standalone offline presentation.
-- `artifacts/reports/project-report/report.pdf`: integrated final report.
-- `docs/DECISIONS_AND_PHASE_GUIDE.md`: plain-language decisions and five-phase story.
-- `configs/delivery.json`: machine-readable evidence sources and scope limits.
-
-Optional future research would require a separately authorized prospective
-continuation. It is not part of the current delivery or a reason to keep running
-GPU workers now. Historical predictions, receipts and raw data remain unchanged.
+See [measured boundary](OOM_BOUNDARY.md), [phase decisions](DECISIONS_AND_PHASE_GUIDE.md), and [live demo](LIVE_DEMO.md).

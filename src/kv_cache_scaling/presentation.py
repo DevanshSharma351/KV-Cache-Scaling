@@ -122,6 +122,26 @@ class Presentation:
         elif section=='conclusions':
             md('## What we can defend in a live demo\n- Unique weights and GQA-aware KV storage match the config equation.\n- Both allocators successfully processed 114,688 tokens.\n- All required short-length curves and diagnostic grids are saved.\n- Original prediction, later validation and transfer estimates remain separate.\n- CPU replay regenerates the plots, tables and report without a GPU.\n\n## Measurement limitations under the final scope\n'+ '\n'.join('- '+m for m in evidence_gaps(a))+'\n\nThe original run lost GPU access; on 20 October the user closed further probing after two independent L=512 replication checks. The two original expandable held-out repeats and final boundary attempt were deferred. The resource-bounded delivery is complete, while these original research objectives remain unmet. No OOM threshold, completed validation journal or independent human review is invented.')
             md('### Presentation and reproduction\nUse **Runtime → Run all** in the clean presentation notebook on a CPU runtime. This replays saved measurements; it does not rerun the historical GPU sweep. For actual new GPU measurements, reconcile identity/runtime/usable memory and freeze a new prospective execution package first. Drive remains disconnected.')
+        if self.delivery.get('boundary'):
+            from .boundary import explanation
+            b=self.delivery['boundary']
+            if section=='overview':
+                blocks=[]
+                md('## KV-Cache Scaling — completed boundary experiment')
+                html(['Evidence','Verified result'],[['Successful GPU workers',self.delivery['total_successful_workers']],['Deliberate CUDA OOM attempts',1],['Separate allocation boundary','114,688 fits; 131,072 fails'],['Original advance prediction','111,232 tokens'],['Interpretation','Bounded threshold interval; no allocation pooling']])
+            elif section=='curves':
+                blocks.append(('image',str(self.results/'report/boundary_status.png' if (self.results/'report/boundary_status.png').exists() else self.root/'artifacts/figures/project-results/06_observed_oom_boundary.png')))
+            elif section=='checkpointing':
+                blocks=[(k,v.replace('Final deliberate boundary attempt</td><td>0</td><td>Deferred under final scope; allowance unused','Final deliberate boundary attempt</td><td>1</td><td>Completed on separate allocation')) for k,v in blocks]
+            elif section=='conclusions':
+                blocks=[]
+                md('## Final conclusions\nThe config-derived weight and KV equations, immutable preregistration, checkpointed GPU sweep, six scientific figures, discrepancy tables and conditional cross-system predictions are complete. The separate targeted boundary check now provides a real typed forward OOM. Exact per-token limits, a paired allocator hardware-limit delta and a causal split of that threshold error are not inferred from one OOM.')
+                md('The original allocation remains default held-out n=3 and expandable n=1. Different GPU allocations do not fill missing repetitions. Published verification checks KV arithmetic, not the target systems’ full HF context limits.')
+            else:
+                blocks=[(k,v.replace('The true OOM-threshold gap remains unmeasured.','A separate boundary interval is reported below; the exact threshold gap remains interval-valued.')) if k!='image' else (k,v) for k,v in blocks]
+            if section in ('overview','checkpointing','curves','discrepancy','conclusions'):
+                md('## Observed OOM boundary — separate allocation\n'+explanation(b))
+                html(['L tokens','Outcome','Peak allocated bytes','Peak reserved bytes'],[[114688,'Successful forward',b['success_peak_allocated_bytes'],b['success_peak_reserved_bytes']],[131072,'Typed forward CUDA OOM','Partial failure counters only','See boundary evidence JSON']])
         return blocks
 
     def show(self,section):
