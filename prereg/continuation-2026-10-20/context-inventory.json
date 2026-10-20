@@ -1,0 +1,24 @@
+{
+  "timestamp_utc": "2026-10-20T13:59:18.631334+00:00",
+  "python": "3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]",
+  "torch": "2.6.0+cu124",
+  "torch_cuda_runtime": "12.4",
+  "transformers": "4.51.3",
+  "gpu_name": "Tesla T4",
+  "gpu_identity_csv": "GPU-440a7ac2-62c4-253c-ba99-111c2f1e8466, Tesla T4, 580.82.07",
+  "cuda_free_bytes": 15527116800,
+  "cuda_total_bytes": 15637086208,
+  "allocated_bytes": 0,
+  "reserved_bytes": 0,
+  "allocator_env": {
+    "PYTORCH_CUDA_ALLOC_CONF": null,
+    "PYTORCH_ALLOC_CONF": null
+  },
+  "current_pid": 235,
+  "gpu_processes": "235, /usr/bin/python3, 102 MiB",
+  "content_folders": [
+    "/content/.config",
+    "/content/sample_data"
+  ],
+  "live_gpu_workers": ""
+}
