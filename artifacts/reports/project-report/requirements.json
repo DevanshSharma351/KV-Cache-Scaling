@@ -26,7 +26,7 @@
   },
   {
     "requirement": "FR6",
-    "status": "SAFE_BUDGET_CENSORED",
+    "status": "OBSERVED_OOM_BRACKET_ALLOCATOR_DELTA_CENSORED",
     "criterion": "One-use OOM bracket and paired safe-budget delta are distinct; an exact hardware-limit delta is not established"
   },
   {

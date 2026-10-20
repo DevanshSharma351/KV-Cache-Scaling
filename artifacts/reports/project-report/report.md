@@ -2,9 +2,15 @@
 
 Status: **FINAL_WITH_MEASUREMENT_LIMITATIONS**. No missing experiment is presented as a successful result.
 
+## Completed targeted OOM check
+
+Separate T4 boundary confirmation: one cold prefill succeeded at 114,688 tokens and the one deliberate attempt raised torch.cuda.OutOfMemoryError during forward at 131,072 tokens. The largest fitting integer context is bracketed at 114,688–131,071 tokens, assuming monotonicity. The original 111,232-token prediction error is -15.14% to -3.01% using (prediction-limit)/limit. This is an interval, not an exact maximum. The failed forward has partial peak counters, not a completed-forward peak. At L=131,072, the pinned HF mask-elision condition fails at config.sliding_window=131072. The DynamicCache path requests an FP16 [L,L+1] causal mask: 34,360,000,512 bytes (32.00024 GiB), matching the rounded 32.00-GiB OOM request. This is a framework mask cliff before efficient SDPA, not an eager attention score matrix or evidence that the KV cache alone filled VRAM. The attribution is supported by installed source; no separate GPU intervention was run. The new allocation is not pooled into the core curve. No model probes followed the deliberate attempt; the allocator hardware-limit gain and causal split of the threshold error remain unmeasured.
+
+Raw evidence: artifacts/experiments/2026-10-21-boundary/checkpoint.zip; SHA-256 aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b.
+
 ## Final resource-bounded scope
 
-On 20 October 2026 the user closed further GPU work to conserve resources. This final delivery presents 80 core-study workers and two separate new-allocation L=512 replication workers. The cohorts are not pooled. All six artifact types and five phases are delivered; the exact OOM boundary and two original held-out repeats remain unmeasured, so all original research objectives are not claimed complete.
+The user reopened the boundary objective after the initial resource limit. The core curve, L=512 replication, and targeted boundary continuation are separate GPU allocations. The deliberate OOM check is now completed; the exact per-token threshold and allocator hardware-limit gain remain bounded or unmeasured.
 See docs/FINAL_SCOPE.md and configs/delivery.json. No additional GPU run is planned.
 
 ### Separate replication checks
@@ -171,7 +177,7 @@ This checks KV-byte scaling only. It does not verify transferred HF single-prefi
 | FR3 | PASS_FOR_SAVED_ACCEPTANCE | Original prediction 7baff51 and later receipt 976158c precede model work |
 | FR4 | CHECKPOINTED_GRID_PASS | Fresh workers and per-probe external checkpoint barriers; original acceptance restoration verified |
 | FR5 | PASS | Five lengths, three repeats and retained-cache slope required |
-| FR6 | SAFE_BUDGET_CENSORED | One-use OOM bracket and paired safe-budget delta are distinct; an exact hardware-limit delta is not established |
+| FR6 | OBSERVED_OOM_BRACKET_ALLOCATOR_DELTA_CENSORED | One-use OOM bracket and paired safe-budget delta are distinct; an exact hardware-limit delta is not established |
 | FR7 | PASS | Closed signed table; unsupported bytes remain unaccounted |
 | FR8 | CONDITIONAL_KV_COMPARISON | Four unrun transfer cells; published KV block comparison with dtype/unit caveats |
 
@@ -277,4 +283,4 @@ Default allocator, L=114688, repeat=1. Signed peak gap=-1339293184 bytes; closur
 ## Presenting the deliverables
 
 Open notebooks/FINAL_PRESENTATION.ipynb or artifacts/presentation/PROJECT_PRESENTATION.html to show all six deliverables, figures, tables and downloads. Run All in the clean notebook regenerates saved-data results on CPU. See docs/LIVE_DEMO.md and docs/DECISIONS_AND_PHASE_GUIDE.md.
-The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. The user deferred the two original expandable held-out repeats and final boundary attempt under the resource-bounded scope. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.
+The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. Two original expandable held-out repeats remain absent from the core allocation; the final boundary attempt was completed independently. No deliberate OOM was dispatched in the core cohort; the independent continuation below completed the one permitted attempt. The maximum successful context is a lower bound, not a completed OOM threshold.

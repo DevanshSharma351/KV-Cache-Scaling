@@ -1,28 +1,82 @@
 {
   "status": "FINAL_CPU_PRESENTATION_VERIFIED_WITH_MEASUREMENT_LIMITATIONS",
-  "executed_at_utc": "2026-10-20T14:39:23.053258+00:00",
-  "source_commit": "6363ac7ef21db69c8b02491a1e481977d9fb1f02",
+  "executed_at_utc": "2026-10-20T19:22:19.395508+00:00",
+  "source_commit": "2edd23fe324ecfe54e7e1894a9f087f3fb1f2e5d",
   "source_tree_dirty": false,
   "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
   "executed_code_cells": 12,
-  "embedded_scientific_figures": 6,
+  "embedded_scientific_figures": 7,
   "model_or_cuda_calls": false,
   "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
-  "saved_gpu_workers": 82,
+  "saved_gpu_workers": 84,
+  "observed_boundary": {
+    "status": "OBSERVED_FORWARD_CUDA_OOM_BRACKET",
+    "gpu_uuid": "GPU-8fd0487b-72ce-c076-4966-c694a52185f8",
+    "run_id": "377efc55-6346-476f-bf1d-9bc3fba217f0",
+    "successful_length": 114688,
+    "failed_oom_length": 131072,
+    "largest_fitting_integer_interval": [
+      114688,
+      131071
+    ],
+    "original_prediction": 111232,
+    "prediction_error_percent_interval": [
+      -15.136071289606397,
+      -3.013392857142857
+    ],
+    "exact_threshold_measured": false,
+    "successful_workers": 2,
+    "current_allocation_successful_workers": 1,
+    "prior_allocation_anchor_successes": 1,
+    "deliberate_oom_attempts": 1,
+    "cohorts_pooled": false,
+    "success_peak_allocated_bytes": 14020668928,
+    "success_peak_reserved_bytes": 15319695360,
+    "failure_counters": {
+      "allocated_bytes": 3493096960,
+      "reserved_bytes": 3690987520,
+      "partial_peak_allocated_bytes": 3493096960,
+      "partial_peak_reserved_bytes": 3690987520,
+      "scope": "prefill_inputs_through_forward"
+    },
+    "oom_error": {
+      "type": "OutOfMemoryError",
+      "message": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 14.56 GiB of which 11.01 GiB is free. Including non-PyTorch memory, this process has 3.55 GiB memory in use. Of the allocated memory 3.25 GiB is allocated by PyTorch, and 188.72 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)"
+    },
+    "mask_edge": {
+      "length": 131072,
+      "shape": [
+        131072,
+        131073
+      ],
+      "dtype": "float16",
+      "requested_tensor_bytes": 34360000512,
+      "GiB": 32.000244140625,
+      "evidence": "Installed pinned HF source and matching rounded OOM request; source-supported attribution, not a separate intervention"
+    },
+    "assumption": "Monotone fit/failure boundary for this fixed cold-prefill workload; interval, not exact maximum",
+    "limitations": [
+      "One deliberate attempt bounds the threshold; no repeated OOM search.",
+      "Allocator hardware-limit delta is unmeasured.",
+      "Failed-forward counters are partial peaks, not the peak of a completed forward."
+    ],
+    "capsule": "artifacts/experiments/2026-10-21-boundary/checkpoint.zip",
+    "sha256": "aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b"
+  },
   "primary_study_workers": 80,
   "separate_replication_workers": 2,
   "additional_gpu_runs_planned": false,
   "missing_gpu_evidence": [
-    "Two expandable held-out repeats",
-    "One final deliberate boundary attempt"
+    "Two original-allocation expandable held-out repeats",
+    "Paired allocator hardware-limit gain",
+    "Exact per-token threshold and causal threshold-error decomposition"
   ],
   "files": {
-    "FINAL_PRESENTATION.ipynb": "3fa55fe6b78e7da2cc4d3aaef12f4e0a4570eac45dc343772f01ae491e8fdafa",
-    "PROJECT_PRESENTATION.html": "55ca180fc39aac8b911fa03973866960d729261b64c7f8a51b6414fec27d0986"
+    "FINAL_PRESENTATION.ipynb": "af5225fa1d1f9fbbd9989602032bfb011efea61ad35c82eff92a91c47b307a83",
+    "PROJECT_PRESENTATION.html": "7df297bdc7eb21074459955b64e1d840a88e6317db6cba9148cfae0d0d3473f3"
   },
-  "markdown_only_table_layout_update": {
-    "updated_at_utc": "2026-10-20T14:43:04.380720+00:00",
-    "executed_code_cells_and_outputs_unchanged": true,
-    "generator_sha256": "54a40ed0ce3db07e0990345ccb9401147d6f27bd7ec64a3b2ec220bb935ee963"
+  "markdown_only_output_link_update": {
+    "executed_code_cells_unchanged": true,
+    "change": "Static PDF link targets the published main output; execution remains pinned to 2edd23fe324ecfe54e7e1894a9f087f3fb1f2e5d"
   }
 }

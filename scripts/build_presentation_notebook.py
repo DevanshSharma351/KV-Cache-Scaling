@@ -137,7 +137,7 @@ else:
         (primary/'transfer/transfer.md').read_text(),
         '**Interpretation:** the published comparison verifies KV block arithmetic only; the target HF context thresholds were not measured.',
         '### Final deliverable files',
-        '[Report PDF]('+base+'artifacts/reports/project-report/report.pdf) · [All figures]('+base+'artifacts/figures/project-results/) · [Discrepancy CSV]('+base+'data/processed/project-results/discrepancy.csv) · [Transfer table]('+base+'data/processed/project-results/transfer/transfer.md) · [Decision guide]('+base+'docs/DECISIONS_AND_PHASE_GUIDE.md).',
+        '[Report PDF](https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/main/artifacts/reports/project-report/report.pdf) · [All figures]('+base+'artifacts/figures/project-results/) · [Discrepancy CSV]('+base+'data/processed/project-results/discrepancy.csv) · [Transfer table]('+base+'data/processed/project-results/transfer/transfer.md) · [Decision guide]('+base+'docs/DECISIONS_AND_PHASE_GUIDE.md).',
         'Five phases: derive/preregister → isolated probes → checkpoint/safety → measured accounting → transfer/presentation. The resource-bounded delivery is complete; original exact-OOM objectives are explicitly unfulfilled. For offline display, use the standalone HTML with embedded images.']
     from kv_cache_scaling.boundary import verify_boundary,explanation
     boundary=verify_boundary(ROOT)

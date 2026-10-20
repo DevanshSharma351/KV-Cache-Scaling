@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-20T14:39:22.219513+00:00",
+  "created_at_utc": "2026-10-20T19:22:18.153633+00:00",
   "python": "3.12.14",
   "packages": {
     "matplotlib": "3.10.1",
@@ -7,20 +7,74 @@
     "reportlab": "4.4.4",
     "pypdf": "5.9.0"
   },
-  "git_commit": "6363ac7ef21db69c8b02491a1e481977d9fb1f02",
+  "git_commit": "2edd23fe324ecfe54e7e1894a9f087f3fb1f2e5d",
   "source_dirty": false,
   "source_sha256": {
-    "src/kv_cache_scaling/reporting.py": "77f317706df022189f088ce3543f04321c34ad31fd9b3ac3d3c4f0241bf97358",
+    "src/kv_cache_scaling/reporting.py": "34dc358d3b63a35abff2bf1dbf36a397a9eddd704b1d738def5985c06935d27f",
     "src/kv_cache_scaling/analysis.py": "164fc8e19d72be54a605c07dbc18db78a8f6f7005e2f922d5f50e43e1cacddbe",
     "src/kv_cache_scaling/generalize.py": "f715f4c494f6c0a181be2df2f10dd6d7038a1e7650b1423a28aac404df4f46e2",
     "src/kv_cache_scaling/plotting.py": "872a6f4bb7047dc8466c8b7eb59b874e3c2f307ccd8cfe51963d2728e7585bc3"
   },
   "input_sha256": {
-    "/private/tmp/kv-final-static-board-release/reproduction/analysis/analysis.json": "9e505f3f90b5bbd323b04f9382c967e6f5c3fdfaf86ed1bb8130e2f5b89fda22",
-    "/private/tmp/kv-final-static-board-release/reproduction/transfer/transfer.json": "547ce3b0239e6e72bb793b116c636850f67f5ee36cbaae03a7d5d4cd9f3597e5"
+    "/private/tmp/kv-oom-delivery/reproduction/analysis/analysis.json": "ee20665de2a5498aa90cc7e4948fa337b9a3db8fc71f8c14ea1f006f7dd4376c",
+    "/private/tmp/kv-oom-delivery/reproduction/transfer/transfer.json": "f9b60a4386ff27d7b70b31c1375c7c2ff74a01c851030aa85f76c2886e0591aa"
   },
   "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
   "delivery_scope": {
+    "boundary": {
+      "status": "OBSERVED_FORWARD_CUDA_OOM_BRACKET",
+      "gpu_uuid": "GPU-8fd0487b-72ce-c076-4966-c694a52185f8",
+      "run_id": "377efc55-6346-476f-bf1d-9bc3fba217f0",
+      "successful_length": 114688,
+      "failed_oom_length": 131072,
+      "largest_fitting_integer_interval": [
+        114688,
+        131071
+      ],
+      "original_prediction": 111232,
+      "prediction_error_percent_interval": [
+        -15.136071289606397,
+        -3.013392857142857
+      ],
+      "exact_threshold_measured": false,
+      "successful_workers": 2,
+      "current_allocation_successful_workers": 1,
+      "prior_allocation_anchor_successes": 1,
+      "deliberate_oom_attempts": 1,
+      "cohorts_pooled": false,
+      "success_peak_allocated_bytes": 14020668928,
+      "success_peak_reserved_bytes": 15319695360,
+      "failure_counters": {
+        "allocated_bytes": 3493096960,
+        "reserved_bytes": 3690987520,
+        "partial_peak_allocated_bytes": 3493096960,
+        "partial_peak_reserved_bytes": 3690987520,
+        "scope": "prefill_inputs_through_forward"
+      },
+      "oom_error": {
+        "type": "OutOfMemoryError",
+        "message": "CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacity of 14.56 GiB of which 11.01 GiB is free. Including non-PyTorch memory, this process has 3.55 GiB memory in use. Of the allocated memory 3.25 GiB is allocated by PyTorch, and 188.72 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)"
+      },
+      "mask_edge": {
+        "length": 131072,
+        "shape": [
+          131072,
+          131073
+        ],
+        "dtype": "float16",
+        "requested_tensor_bytes": 34360000512,
+        "GiB": 32.000244140625,
+        "evidence": "Installed pinned HF source and matching rounded OOM request; source-supported attribution, not a separate intervention"
+      },
+      "assumption": "Monotone fit/failure boundary for this fixed cold-prefill workload; interval, not exact maximum",
+      "limitations": [
+        "One deliberate attempt bounds the threshold; no repeated OOM search.",
+        "Allocator hardware-limit delta is unmeasured.",
+        "Failed-forward counters are partial peaks, not the peak of a completed forward."
+      ],
+      "capsule": "artifacts/experiments/2026-10-21-boundary/checkpoint.zip",
+      "sha256": "aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b"
+    },
     "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
     "bounded_delivery_complete": true,
     "all_original_research_objectives_met": false,
@@ -38,7 +92,7 @@
         "gpu_uuid": "GPU-440a7ac2-62c4-253c-ba99-111c2f1e8466"
       }
     },
-    "total_successful_workers": 82,
+    "total_successful_workers": 84,
     "cohorts_pooled": false,
     "replication": [
       {
@@ -74,7 +128,7 @@
     "exact_oom_threshold_measured": false,
     "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
     "limitations": [
-      "Hardware OOM threshold and its exact prediction error are unobserved.",
+      "The default-allocator OOM threshold is bracketed; the exact token limit is unmeasured.",
       "Original L=114688 validation remains default n=3, expandable n=1.",
       "Published transfer verification checks KV bytes, not unrun HF context limits."
     ]
