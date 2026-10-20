@@ -3,13 +3,14 @@
 ## The reliable demo route
 
 1. Open [FINAL_PRESENTATION.ipynb in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb).
-2. Select a **CPU** runtime. Leave Drive disconnected. Use **Run all**.
-3. Setup checks out the notebook's pinned source commit, verifies the original
+2. For immediate presentation, scroll to **Final presentation board — no runtime needed**. Its six pinned graph images and tables are ordinary notebook Markdown. No connection or execution is needed.
+3. For an optional reproduction demo, select a **CPU** runtime, leave Drive disconnected and use **Run all**.
+4. Setup checks out the notebook's pinned source commit, verifies the original
    GPU capsule and regenerates every plot/table/report. It does not load model
    weights, import CUDA packages or run an OOM attempt.
-4. Present the six numbered sections in order. The table of contents follows the
+5. Present the six numbered sections in order. The table of contents follows the
    deliverables rather than the historical debugging trail.
-5. Download the PDF, a CSV or one complete deliverables ZIP only if needed. The
+6. Download the PDF, a CSV or one complete deliverables ZIP only if needed. The
    download cell defaults to `none`, so replay does not scatter downloads.
 
 The committed notebook has executed outputs for immediate viewing. For a browser

@@ -53,4 +53,16 @@ class PresentationTests(unittest.TestCase):
         self.assertEqual(result['recovered_events'],1)
         subprocess.run([sys.executable,'-c',"import sys;import kv_cache_scaling.presentation;assert 'torch' not in sys.modules and 'pynvml' not in sys.modules"],check=True,cwd=ROOT)
 
+    def test_runtime_free_board_has_all_six_pinned_images_and_original_commitment(self):
+        import importlib.util
+        spec=importlib.util.spec_from_file_location('notebook_builder',ROOT/'scripts/build_presentation_notebook.py')
+        builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
+        commit='0'*40;notebook=builder.build(commit)
+        self.assertEqual(sum(c['cell_type']=='code' for c in notebook['cells']),12)
+        board=''.join(notebook['cells'][-1]['source'])
+        self.assertIn('Final presentation board',board)
+        self.assertEqual(board.count('https://raw.githubusercontent.com/DevanshSharma351/KV-Cache-Scaling/'+commit+'/'),6)
+        self.assertIn('2026-10-18T19:54:52+05:30',board)
+        self.assertIn('exact-OOM objectives are explicitly unfulfilled',board)
+
 if __name__=='__main__':unittest.main()

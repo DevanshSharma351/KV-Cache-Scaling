@@ -39,7 +39,7 @@ def main():
     images=sum('image/png' in o.get('data',{}) for c in code for o in c.outputs)
     assert images==6,images
     notebook_path=out/'FINAL_PRESENTATION.ipynb';nbformat.write(notebook,notebook_path)
-    exporter=HTMLExporter(exclude_input=True,exclude_input_prompt=True,exclude_output_prompt=True)
+    exporter=HTMLExporter(exclude_markdown=True,exclude_input=True,exclude_input_prompt=True,exclude_output_prompt=True)
     body,_=exporter.from_notebook_node(notebook)
     style='<style>body{font-family:system-ui,sans-serif}main{max-width:1160px;margin:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px;border-bottom:1px solid #ccd5e1;text-align:left;vertical-align:top}th{background:#edf3fa}img{max-width:100%;height:auto}pre{white-space:pre-wrap}</style>'
     body=body.replace('</head>',style+'</head>')

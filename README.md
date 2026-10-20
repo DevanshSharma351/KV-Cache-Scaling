@@ -15,7 +15,8 @@ original hardware acceptance remain unmeasured. No additional GPU run is planned
 ## Present the project
 
 [Open the clean presentation notebook in Colab](https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb).
-Choose a **CPU runtime** and **Run all**. It regenerates the saved-data results
+Scroll to the **final presentation board** to show all six saved graphs and tables
+without a runtime. For optional regeneration, choose a **CPU runtime** and **Run all**. It regenerates the saved-data results
 and presents each required deliverable; no GPU, model download or Drive mount
 is needed. Change usable VRAM/batch size for an analytical live demo, or run the
 temporary-filesystem checkpoint recovery demo. Downloads are optional.
