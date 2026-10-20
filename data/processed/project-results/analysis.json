@@ -12537,7 +12537,7 @@
     }
   ],
   "provenance": {
-    "created_at_utc": "2026-10-20T14:27:22.723076+00:00",
+    "created_at_utc": "2026-10-20T14:39:20.635296+00:00",
     "sources": [
       {
         "path": "/Users/devanshsharma/Documents/KV-Cache/KV-Cache-Scaling/artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",

@@ -1,7 +1,7 @@
 {
   "status": "FINAL_CPU_PRESENTATION_VERIFIED_WITH_MEASUREMENT_LIMITATIONS",
-  "executed_at_utc": "2026-10-20T14:27:25.185201+00:00",
-  "source_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
+  "executed_at_utc": "2026-10-20T14:39:23.053258+00:00",
+  "source_commit": "6363ac7ef21db69c8b02491a1e481977d9fb1f02",
   "source_tree_dirty": false,
   "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
   "executed_code_cells": 12,
@@ -17,7 +17,7 @@
     "One final deliberate boundary attempt"
   ],
   "files": {
-    "FINAL_PRESENTATION.ipynb": "4c3185207a8e6cbda6ac831cb6aba4fa8727fd08bbe0d1e6c174e77b6241e403",
-    "PROJECT_PRESENTATION.html": "4b12eafb021f555c989ab9f12dc8dd2ec53c619fd49de4924b5de416eaae16b5"
+    "FINAL_PRESENTATION.ipynb": "9ef8be6da3b1632d6c5ebea77a6833f119ec80bb80224aeef52e2bbe5fdabbc8",
+    "PROJECT_PRESENTATION.html": "55ca180fc39aac8b911fa03973866960d729261b64c7f8a51b6414fec27d0986"
   }
 }

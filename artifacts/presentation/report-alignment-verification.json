@@ -1,14 +1,14 @@
 {
   "status": "FINAL_RESOURCE_BOUNDED_DELIVERY_VERIFIED",
-  "verified_at_utc": "2026-10-20T14:30:30.658481+00:00",
-  "source_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
+  "verified_at_utc": "2026-10-20T14:40:54.172821+00:00",
+  "source_commit": "6363ac7ef21db69c8b02491a1e481977d9fb1f02",
   "pages": 17,
   "all_pages_rendered_and_visually_inspected": true,
   "original_prediction_git_timestamp": "2026-10-18T19:54:52+05:30",
   "original_prediction_unchanged": true,
   "unified_project_phases": 5,
   "deliverable_sections": 6,
-  "full_environment_tests_passed": 122,
+  "full_environment_tests_passed": 123,
   "executed_notebook_cells": 12,
   "embedded_scientific_figures": 6,
   "embedded_download_matches_published_pdf": true,
@@ -23,9 +23,9 @@
     "Registered final boundary attempt"
   ],
   "files": {
-    "artifacts/reports/project-report/report.pdf": "51a805696d54854506f376f59a0ec9279fc57f3da86e19518fbd5312586795e4",
+    "artifacts/reports/project-report/report.pdf": "1ba469cac670808615217816fb7daccd95e72e8f12c2de69540db9180f73d3ea",
     "artifacts/reports/project-report/report.md": "3915a77c86c0f404db045068adb8be3d6550f7308e18fba19957c4bbbce7b733",
-    "notebooks/FINAL_PRESENTATION.ipynb": "4c3185207a8e6cbda6ac831cb6aba4fa8727fd08bbe0d1e6c174e77b6241e403",
-    "artifacts/presentation/PROJECT_PRESENTATION.html": "4b12eafb021f555c989ab9f12dc8dd2ec53c619fd49de4924b5de416eaae16b5"
+    "notebooks/FINAL_PRESENTATION.ipynb": "9ef8be6da3b1632d6c5ebea77a6833f119ec80bb80224aeef52e2bbe5fdabbc8",
+    "artifacts/presentation/PROJECT_PRESENTATION.html": "55ca180fc39aac8b911fa03973866960d729261b64c7f8a51b6414fec27d0986"
   }
 }

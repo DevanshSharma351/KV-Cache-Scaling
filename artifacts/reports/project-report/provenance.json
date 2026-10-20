@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-20T14:27:24.375227+00:00",
+  "created_at_utc": "2026-10-20T14:39:22.219513+00:00",
   "python": "3.12.14",
   "packages": {
     "matplotlib": "3.10.1",
@@ -7,7 +7,7 @@
     "reportlab": "4.4.4",
     "pypdf": "5.9.0"
   },
-  "git_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
+  "git_commit": "6363ac7ef21db69c8b02491a1e481977d9fb1f02",
   "source_dirty": false,
   "source_sha256": {
     "src/kv_cache_scaling/reporting.py": "77f317706df022189f088ce3543f04321c34ad31fd9b3ac3d3c4f0241bf97358",
@@ -16,8 +16,8 @@
     "src/kv_cache_scaling/plotting.py": "872a6f4bb7047dc8466c8b7eb59b874e3c2f307ccd8cfe51963d2728e7585bc3"
   },
   "input_sha256": {
-    "/private/tmp/kv-final-scoped-release/reproduction/analysis/analysis.json": "608e55300c8ea20f2a9b14014eac73ad1b6e084815eb551f01330af00ea704ac",
-    "/private/tmp/kv-final-scoped-release/reproduction/transfer/transfer.json": "9fc2d50dbf1cf8b2ffb39e44189ed3c8b6759ae399472a030efaec00a1092015"
+    "/private/tmp/kv-final-static-board-release/reproduction/analysis/analysis.json": "9e505f3f90b5bbd323b04f9382c967e6f5c3fdfaf86ed1bb8130e2f5b89fda22",
+    "/private/tmp/kv-final-static-board-release/reproduction/transfer/transfer.json": "547ce3b0239e6e72bb793b116c636850f67f5ee36cbaae03a7d5d4cd9f3597e5"
   },
   "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
   "delivery_scope": {
