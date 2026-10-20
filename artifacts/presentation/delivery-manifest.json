@@ -90,7 +90,8 @@
     "scripts/execute_presentation.py": "84b41f343560ad8269fb149b1efb5320e63f83341b1234f6b55fb17b0d807360",
     "docs/OOM_BOUNDARY.md": "37e3ff8f72cb2f48bb7d83432a07b42548c4c5d24729a047cb60691e365b05e2",
     "artifacts/figures/project-results/06_observed_oom_boundary.png": "58bc332186447bea66b617553897206f484e7c247155f22d4a7aaf206ae13765",
-    "artifacts/figures/project-results/06_observed_oom_boundary.pdf": "4362dfc3806892940c2a464756d115bb74deb54d2acfba4b120010773020d163"
+    "artifacts/figures/project-results/06_observed_oom_boundary.pdf": "4362dfc3806892940c2a464756d115bb74deb54d2acfba4b120010773020d163",
+    "artifacts/presentation/colab-final-boundary-verification.json": "93c516dac2381e88052290b3ddd499efc8e08589909865f42372a0e6ec3c869f"
   },
   "browser_presentation_status": {
     "standalone_html": "Six scientific images and tables verified; no Google login required",
@@ -109,7 +110,7 @@
   "runtime_free_markdown_figures": 7,
   "presentation_requires_runtime": false,
   "static_board_cell_id": "a9d9306e",
-  "static_board_colab_url": "https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb#scrollTo=a9d9306e",
+  "static_board_colab_url": "https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/e0b545c/notebooks/FINAL_PRESENTATION.ipynb#scrollTo=a9d9306e",
   "source_ci": "https://github.com/DevanshSharma351/KV-Cache-Scaling/actions/runs/39441200743",
   "deliberate_oom_attempts": 1,
   "observed_boundary": {
@@ -167,10 +168,14 @@
     "sha256": "aa5ac338423d0d2f0595fbac3b662ffc10dacb12bbc44f9b097d5eb69450c18b"
   },
   "source_ci_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/actions/runs/39482690568",
-  "browser_presentation_verification": "CPU execution verified; public static board checked separately after publication",
+  "browser_presentation_verification": "artifacts/presentation/colab-final-boundary-verification.json",
   "remaining_evidence": [
     "Two original-allocation expandable held-out repeats",
     "Paired allocator hardware-limit gain",
     "Exact per-token threshold and causal threshold-error split"
-  ]
+  ],
+  "existing_colab_presentation_verified": true,
+  "runtime_free_markdown_table_count": 5,
+  "release_ci_url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/actions/runs/39483147451",
+  "release_ci_conclusion": "success"
 }

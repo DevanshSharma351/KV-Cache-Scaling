@@ -1,0 +1,19 @@
+{
+  "status": "PUBLISHED_COLAB_BOUNDARY_BOARD_VERIFIED",
+  "verified_at_utc": "2026-10-20T19:26:03.461200+00:00",
+  "published_artifact_commit": "e0b545c26f4298fd696c4c1993bbb67c5d274308",
+  "url": "https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/e0b545c/notebooks/FINAL_PRESENTATION.ipynb#scrollTo=a9d9306e",
+  "runtime_required_for_board": false,
+  "rendered_scientific_images": 7,
+  "all_images_loaded": true,
+  "success_and_oom_table_visible": true,
+  "audit_summary_cell": "JE1wY6s5xjY6",
+  "gpu_runs_after_deliberate_attempt": 0,
+  "note": "CPU source inspection, replay and audit summary only after the deliberate attempt; no model probes.",
+  "release_ci": {
+    "url": "https://github.com/DevanshSharma351/KV-Cache-Scaling/actions/runs/39483147451",
+    "conclusion": "success"
+  },
+  "pdf_sha256": "7a06ae9ef4b2043a88f84c4446d97a24fcd097c287bef9ac3b71b2726b72cd59",
+  "notebook_sha256": "af5225fa1d1f9fbbd9989602032bfb011efea61ad35c82eff92a91c47b307a83"
+}
