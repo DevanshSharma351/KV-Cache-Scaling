@@ -10,5 +10,8 @@ and includes a VRAM/batch explorer and temporary checkpoint recovery demo.
 
 Presentation verification records the pinned source commit, executed code-cell
 count, image count and file hashes. No model/CUDA calls run in the presentation.
-The saved data has 80 successful workers. Colab quota leaves the last two held-out
-repeats and the single boundary attempt unfinished; no OOM threshold is claimed.
+The core study has 80 successful workers and the separate allocation has two
+successful L=512 replication checks. The user closed further GPU probing on
+20 October. This is a final resource-bounded delivery with an unmeasured exact
+OOM threshold; the original full experiment is not claimed complete. See
+[final scope](../../docs/FINAL_SCOPE.md).

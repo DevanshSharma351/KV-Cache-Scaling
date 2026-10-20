@@ -40,6 +40,8 @@ class Presentation:
     """Render the six required deliverables independently of the report PDF."""
     def __init__(self,root,results):
         self.root=Path(root).resolve();self.results=Path(results).resolve()
+        from .delivery import verify_final_scope
+        self.delivery=verify_final_scope(self.root)
         if hashlib.sha256((self.root/CAPSULE).read_bytes()).hexdigest()!=CAPSULE_SHA:
             raise ValueError('Saved GPU capsule differs from the verified checkpoint')
         for name in ('analysis','analysis/figures','transfer','report'):
@@ -71,7 +73,10 @@ class Presentation:
         def image(name):blocks.append(('image',str(self.results/'analysis/figures'/name)))
         if section=='overview':
             md('# KV-Cache Scaling\n## Predicting the context limit before you hit it\nWe built an analytical predictor, a checkpointing GPU harness, and a reproducible evidence pipeline. This presentation exposes all six required deliverables separately from the PDF.')
-            html(['Evidence','Actual result'],[['Saved GPU workers',len(a['probes'])],['Primary model','Qwen2.5-1.5B, FP16, batch 1'],['Largest successful prefill','114,688 tokens with both allocators'],['KV storage slope','28,672 bytes/token; exact agreement with theory'],['Research status','Incomplete boundary evidence: Colab GPU usage limit'],['Demo mode','CPU replay of real saved measurements; no model load or OOM attempt']])
+            html(['Evidence','Actual result'],[['Core study / separate replication workers',str(len(a['probes']))+' / '+str(len(self.delivery['replication']))],['Primary model','Qwen2.5-1.5B, FP16, batch 1'],['Largest successful prefill','114,688 tokens with both allocators'],['KV storage slope','28,672 bytes/token; exact agreement with theory'],['Final scope','Resource-bounded delivery; exact OOM threshold unmeasured'],['Demo mode','CPU replay of real saved measurements; no model load or OOM attempt']])
+            md('The user closed further GPU work on **20 October 2026** to conserve resources. **82 successful workers** are preserved across two separate allocations. No additional GPU run is planned. The original full OOM experiment is not claimed complete.')
+            html(['Separate replication allocator','L','Repeat','Peak allocated bytes'],[[r['allocator'],r['length'],r['repeat'],r['peak_allocated_bytes']] for r in self.delivery['replication']])
+            md('The two new-allocation L=512 checks exactly match the core study. They are excluded from its curve, fit and repeat counts; GPU UUIDs are not pooled.')
             identity=next(g['identity'] for g in a['groups'] if g['identity']['measurement']=='primary')
             html(['Measured environment','Recorded value'],[['GPU UUID',identity['gpu_uuid']],['Driver',identity['driver']],['PyTorch / CUDA runtime',identity['torch']+' / '+identity['cuda']],['Transformers',identity['transformers']],['Context-adjusted usable bytes',identity['usable_bytes']],['Model revision',identity['policy']['model_revision']]])
             md('### Five phases followed\n1. Derive and preregister the prediction.\n2. Implement and verify the isolated probe.\n3. Add checkpointing, recovery and safe scheduling.\n4. Measure curves and account for discrepancies.\n5. Generalize, reproduce and present the results.')
@@ -89,8 +94,8 @@ class Presentation:
             html(['L tokens','KV bytes','Predicted tensor peak bytes','Predicted budget bytes incl. H0'],rows)
             md('Parametric prediction: `L_max(U,B) = max(0, floor((U − W − H0) / (B × (28,672 + a))))`, capped by the config when reported. Central `a = 78,336 bytes/token`. U is context-adjusted usable VRAM, not the GPU label. The range is sensitivity to assumptions, not a confidence interval.')
         elif section=='checkpointing':
-            md('## Deliverable 3 — Checkpointing sweep harness\nEach probe uses a new process. Allocator variables are set before CUDA initialization; load and forward peaks are measured separately with a peak reset. Worker output is saved, fsynced, mirrored and verified before another dispatch.\n\nThe immutable ZIP contains the real raw records, journals, command logs and external checksum acknowledgements. This is how the 80 measurements survived Colab runtime loss.')
-            html(['Scope','Saved workers','Journal state'],[['Primary paired sweep',48,'Finished'],['Diagnostics',28,'Finished'],['Held-out validation',4,'Interrupted: default 3, expandable 1'],['Final deliberate boundary attempt',0,'Not dispatched; allowance unused']])
+            md('## Deliverable 3 — Checkpointing sweep harness\nEach probe uses a new process. Allocator variables are set before CUDA initialization; load and forward peaks are measured separately with a peak reset. Worker output is saved, fsynced, mirrored and verified before another dispatch.\n\nThe immutable ZIP contains the real raw records, journals, command logs and external checksum acknowledgements. This is how the 80 core measurements survived Colab runtime loss. Two separate replication workers were also verified and saved before the user closed further GPU work.')
+            html(['Scope','Saved workers','Journal state'],[['Primary paired sweep',48,'Finished'],['Diagnostics',28,'Finished'],['Held-out validation',4,'Partial: default 3, expandable 1; further repeats deferred'],['Final deliberate boundary attempt',0,'Deferred under final scope; allowance unused']])
             md('**Saved checkpoint SHA-256:** `'+CAPSULE_SHA+'`\n\nLive CPU recovery demonstration below uses a temporary directory. Its events are explicitly demo events, never GPU measurements. No OOM token is consumed.')
         elif section=='curves':
             md('## Deliverable 4 — Measured curves with analytical overlays\nPoints are actual observations; bands are advance assumptions. Repeats use fresh workers. The total-peak slope includes transient memory and must not be called the KV slope.')
@@ -115,7 +120,7 @@ class Presentation:
             md((self.results/'transfer/transfer.md').read_text())
             md('The published serving-engine comparison verifies the compatible KV-block formula, with both MB interpretations reported. It does not independently verify HF peak context limits on the unrun GPUs.')
         elif section=='conclusions':
-            md('## What we can defend in a live demo\n- Unique weights and GQA-aware KV storage match the config equation.\n- Both allocators successfully processed 114,688 tokens.\n- All required short-length curves and diagnostic grids are saved.\n- Original prediction, later validation and transfer estimates remain separate.\n- CPU replay regenerates the plots, tables and report without a GPU.\n\n## Remaining research evidence\n'+ '\n'.join('- '+m for m in evidence_gaps(a))+'\n\nColab refused further GPU access because of its usage limit. Two expandable held-out repeats and the single registered boundary attempt remain. No OOM threshold, completed validation journal or independent human review is invented.')
+            md('## What we can defend in a live demo\n- Unique weights and GQA-aware KV storage match the config equation.\n- Both allocators successfully processed 114,688 tokens.\n- All required short-length curves and diagnostic grids are saved.\n- Original prediction, later validation and transfer estimates remain separate.\n- CPU replay regenerates the plots, tables and report without a GPU.\n\n## Measurement limitations under the final scope\n'+ '\n'.join('- '+m for m in evidence_gaps(a))+'\n\nThe original run lost GPU access; on 20 October the user closed further probing after two independent L=512 replication checks. The two original expandable held-out repeats and final boundary attempt were deferred. The resource-bounded delivery is complete, while these original research objectives remain unmet. No OOM threshold, completed validation journal or independent human review is invented.')
             md('### Presentation and reproduction\nUse **Runtime → Run all** in the clean presentation notebook on a CPU runtime. This replays saved measurements; it does not rerun the historical GPU sweep. For actual new GPU measurements, reconcile identity/runtime/usable memory and freeze a new prospective execution package first. Drive remains disconnected.')
         return blocks
 
@@ -135,7 +140,7 @@ class Presentation:
         from IPython.display import display,Markdown,HTML
         display(Markdown('### Separate deliverable files\nThe links embed their files for standalone HTML use. In Colab, the optional download cell below is the recommended way to retrieve a file or one complete ZIP.'))
         paths=[self.results/relative for relative in ['report/report.pdf','report/report.md','analysis/probes.csv','analysis/discrepancy.csv','analysis/hardware_brackets.csv','analysis/held_out_validation.csv','transfer/transfer.json','transfer/transfer.md']]
-        paths += [self.root/relative for relative in ['docs/DERIVATION.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','src/kv_cache_scaling/sweep.py','src/kv_cache_scaling/journal.py','src/kv_cache_scaling/coordinator_store.py']]
+        paths += [self.root/relative for relative in ['docs/DERIVATION.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','src/kv_cache_scaling/sweep.py','src/kv_cache_scaling/journal.py','src/kv_cache_scaling/coordinator_store.py','docs/FINAL_SCOPE.md','configs/delivery.json','artifacts/experiments/2026-10-20-continuation/verification.json']]
         for name in ('01_peak_vs_length','02_cache_scaling','03_allocator_slack','04_boundary_status','05_discrepancy_default','05_discrepancy_expandable'):
             paths += [self.results/'analysis/figures'/(name+suffix) for suffix in ('.png','.pdf')]
         links=[]

@@ -117,11 +117,12 @@ A later fit was frozen externally before held-out validation. Its error at
 This validates the later fit at that point; it does not replace the original
 prediction or identify the hardware OOM threshold.
 
-**What is unfinished:** Colab disconnected and then refused GPU access due to its
-usage limit. Two expandable repeats and the single registered boundary attempt
-remain unperformed/unverified. The next unsaved worker's outcome is unknown.
-The deliberate allowance was not consumed. We report 114,688 as a successful
-lower bound and leave the OOM-threshold error unmeasured.
+**Final measurement scope, 20 October:** the original run lost GPU access. A
+new T4 reproduced L=512 twice with the same allocated peak and exact KV bytes.
+The user then closed further GPU probing to conserve resources. These two checks
+remain separate from the core curve. The original missing repeats and boundary
+attempt are deferred; 114688 is a successful lower bound and exact OOM error is
+unmeasured. No deliberate allowance was consumed.
 
 ## Phase 5 — Generalize and make the result presentable
 
@@ -145,8 +146,10 @@ HTML export provides another presentation option.
 storage agrees exactly with the GQA-aware equation. Actual prefill peaks also
 include non-KV memory, which we quantify and investigate with separate controls.
 Both allocators reached 114,688 tokens. We preserve the original commitment and
-all uncertainty; Colab quota prevented the final failed upper-bound observation.”
+all uncertainty. After runtime loss and two new-allocation replication checks, we closed further probing at the agreed resource limit; the exact OOM threshold remains unmeasured.”
 
-The software and saved-data deliverables are integrated. Full research acceptance
-must wait for the remaining GPU evidence; the report and notebook say so openly.
-See [remaining work](REMAINING_WORK.md) for the valid continuation procedure.
+The five-phase software and saved-data delivery is finalized under the
+[resource-bounded scope](FINAL_SCOPE.md). No additional GPU work is planned.
+The report and presentation show all six artifact types and distinguish this
+completion from the unmet original hardware objectives. Future extensions are
+listed as [measurement limitations](REMAINING_WORK.md), not invented results.

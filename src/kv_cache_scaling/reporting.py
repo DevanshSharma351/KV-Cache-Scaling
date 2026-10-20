@@ -78,6 +78,10 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     if out.exists():raise ValueError("Refusing to overwrite a report")
     a=json.loads((analysis_dir/'analysis.json').read_text());t=json.loads((transfer_dir/'transfer.json').read_text())
     context=report_context()
+    from .delivery import verify_final_scope
+    delivery=verify_final_scope(ROOT)
+    if {source['sha256'] for source in a['provenance']['sources']}!={delivery['sources']['primary']['sha256']}:
+        raise ValueError('Final report must use the declared primary cohort without pooling replication')
     primary=[p for p in a['probes'] if p['measurement']=='primary']
     cohorts={json.dumps({k:v for k,v in g['identity'].items() if k!='allocator'},sort_keys=True)
              for g in a['groups'] if g['identity']['measurement']=='primary'}
@@ -103,7 +107,7 @@ def build_report(analysis_dir, transfer_dir, output_dir):
         ('FR7','PASS' if coverage and a['acceptance']['discrepancy_closure_pass'] else 'NOT_MET','Closed signed table; unsupported bytes remain unaccounted'),
         ('FR8','CONDITIONAL_KV_COMPARISON','Four unrun transfer cells; published KV block comparison with dtype/unit caveats'),
     ]
-    status='RESEARCH_CRITERIA_PENDING' if pending or any(v=='NOT_MET' for _,v,_ in criteria) else 'EVIDENCE_COMPLETE_WITH_LIMITATIONS'
+    status=delivery['status']
     md=['# KV-Cache Scaling: integrated evidence report','',f'Status: **{status}**. No missing experiment is presented as a successful result.','',
         '## What we built','',
         'A config-derived memory predictor, preregistration gate, fresh-process CUDA probes, checkpointed coordinator, immutable-data analysis, reproducible scientific plots, and config-only transfer predictions. The measurement coverage below is computed from verified records.','',
@@ -195,9 +199,16 @@ def build_report(analysis_dir, transfer_dir, output_dir):
     md+=['','## Presenting the deliverables','',
          'Open notebooks/FINAL_PRESENTATION.ipynb or artifacts/presentation/PROJECT_PRESENTATION.html to show all six deliverables, figures, tables and downloads. Run All in the clean notebook regenerates saved-data results on CPU. See docs/LIVE_DEMO.md and docs/DECISIONS_AND_PHASE_GUIDE.md.',
          'The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.','']
+    md[4:4]=['## Final resource-bounded scope','',
+         'On 20 October 2026 the user closed further GPU work to conserve resources. This final delivery presents 80 core-study workers and two separate new-allocation L=512 replication workers. The cohorts are not pooled. All six artifact types and five phases are delivered; the exact OOM boundary and two original held-out repeats remain unmeasured, so all original research objectives are not claimed complete.',
+         'See docs/FINAL_SCOPE.md and configs/delivery.json. No additional GPU run is planned.','',
+         '### Separate replication checks','',
+         '| Allocator | L | Repeat | Peak allocated bytes | Peak reserved bytes |','| --- | ---: | ---: | ---: | ---: |']+[
+         '| '+' | '.join(str(row[k]) for k in ('allocator','length','repeat','peak_allocated_bytes','peak_reserved_bytes'))+' |' for row in delivery['replication']]+['']
+    md=[line.replace('Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption.','The user deferred the two original expandable held-out repeats and final boundary attempt under the resource-bounded scope.').replace('The user authorized a delegated one-contributor review and kept Google Drive disconnected.','Technical review was delegated by the user; Google Drive stayed disconnected.') for line in md]
     (out/'report.md').write_text('\n'.join(md))
     (out/'requirements.json').write_text(json.dumps([dict(requirement=k,status=v,criterion=c) for k,v,c in criteria],indent=2)+'\n')
-    _build_pdf(out/'report.pdf',a,t,criteria,metric_rows,gap_rows,analysis_dir/'figures',status,evidence_summary,required,controlled,context)
+    _build_pdf(out/'report.pdf',a,t,criteria,metric_rows,gap_rows,analysis_dir/'figures',status,evidence_summary,required,controlled,context,delivery)
     deps={}
     for dist in ('matplotlib','numpy','reportlab','pypdf'):
         try:deps[dist]=version(dist)
@@ -209,13 +220,13 @@ def build_report(analysis_dir, transfer_dir, output_dir):
                 'source_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
                                  (Path(__file__),ROOT/'src/kv_cache_scaling/analysis.py',ROOT/'src/kv_cache_scaling/generalize.py',ROOT/'src/kv_cache_scaling/plotting.py')},
                 'input_sha256':{str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in (analysis_dir/'analysis.json',transfer_dir/'transfer.json')},
-                'status':status}
+                'status':status,'delivery_scope':delivery}
     (out/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     (out/'manifest.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(out.iterdir())},indent=2)+'\n')
     return {'status':status,'report':str(out/'report.pdf'),'requirements':criteria}
 
 
-def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_summary,required,controlled,context):
+def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_summary,required,controlled,context,delivery):
     from reportlab.lib import colors
     from reportlab.lib.enums import TA_LEFT
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -251,6 +262,7 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     p('Predicting the context limit before reaching it')
     p('Integrated scientific implementation and evidence report | '+report_date)
     p('Status: '+status.replace('_',' '))
+    p('Final scope: the user closed additional GPU work on 20 October 2026 to conserve resources. This report delivers the available evidence with explicit measurement limitations; it does not claim every original research objective is experimentally complete.')
     p('The analysis, plots and transfer calculations are integrated and reproducible. Verified coverage: '+evidence_summary+'. Requirement status below distinguishes completed measurements from unmet scientific criteria.')
     table(['Built capability','Evidence / limit'],[
         ('Memory model','Unique tied weights and GQA-aware KV equation; original numerical prediction preserved'),
@@ -259,7 +271,8 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
         ('Analysis','Validated immutable capsules; regressions require multiple lengths; unexplained bytes remain explicit'),
         ('Transfer','Four config-only model/GPU predictions; conditional published KV-only comparison')],[135,width-135])
     p('The project followed five phases: derivation and preregistration, isolated probes, checkpointing and safety, empirical analysis, and transfer with reproducible presentation. Drive remained disconnected; review provenance is preserved in the original frozen records.')
-    if evidence_gaps(a):p('Unmet evidence: '+' '.join(evidence_gaps(a)))
+    if evidence_gaps(a):p('Original experimental limits: '+' '.join(evidence_gaps(a)))
+    p('A separate new T4 allocation produced two successful L=512 replication workers. They match the core-study peaks and cache bytes but are excluded from its fitted curve and repeat counts. See the final appendix and docs/FINAL_SCOPE.md.')
     page();h('Project purpose and deliverable guide')
     p('The question is how much context fits before an LLM exhausts usable GPU memory, and why observed peaks differ from an advance equation. We built a predictor and a reproducible experiment: derive first, commit a numerical prediction, measure isolated peaks, and explain the difference.')
     table(['Required deliverable','Report and repository evidence'],DELIVERABLE_MAP,[150,width-150],padding=6)
@@ -378,9 +391,14 @@ def _build_pdf(path,a,t,criteria,metric_rows,gap_rows,figures,status,evidence_su
     p('Open notebooks/FINAL_PRESENTATION.ipynb in Colab and Run All. It replays the verified saved evidence on CPU, displays six scientific figures, the derivation, the original prediction and timestamp, harness/checkpointing evidence, discrepancy tables and all four transfer predictions. It also offers individual artifact downloads. No model download, CUDA allocation or Drive mount is needed for this presentation.')
     p('Use artifacts/presentation/PROJECT_PRESENTATION.html as the standalone presentation if Colab output scripts fail to load. It contains the same saved-data presentation and embedded graphs. The live-demo guide explains both routes; the decisions and phase guide explains the project in plain language.')
     h('What is established, and what remains')
-    p('There are 80 verified successful workers: 48 primary sweep points, 28 diagnostics and four held-out validation points. Both allocators successfully reached 114688 tokens. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified following the GPU quota interruption. No deliberate OOM attempt was dispatched; no hardware OOM upper bound or exact threshold error is claimed.')
+    p('The core cohort contains 80 successful workers: 48 primary sweep points, 28 diagnostics and four held-out checks. Both allocators reached 114688 tokens. Two new L=512 replication workers bring the preserved total to 82 across two separate allocations. Further repetitions and the final boundary attempt were deferred by the user on 20 October 2026. No deliberate OOM attempt was dispatched; no hardware OOM upper bound or exact threshold error is claimed.')
     p('The discrepancy tables explain fixed-length tracked tensor peak differences under stated accounting assumptions. They do not quantify an unmeasured OOM-threshold gap. The published comparison verifies KV block arithmetic, not the unrun target systems’ full context limits. These limitations are part of the deliverable, not hidden exceptions.')
-    h('Primary sources')
+    h('Separate 20 October replication')
+    table(['Allocator','L','Repeat','Peak allocated bytes','Peak reserved bytes'],[
+        tuple(row[k] for k in ('allocator','length','repeat','peak_allocated_bytes','peak_reserved_bytes')) for row in delivery['replication']],[75,45,45,170,width-335])
+    p('New allocation: '+delivery['sources']['replication']['gpu_uuid']+'. Both fresh workers match the original default L=512 allocated peak exactly. The coordinator was stopped while waiting in input() after both workers had exited and passed idle checks. No active GPU process remained at closure. The original partial journal was preserved rather than relabelled finished.')
+    p('Final resource-bounded verification passes for the delivered scope. The original full-experiment verifier remains strict and is not claimed to pass. No more GPU runs are planned under this scope. Transfer thresholds and the exact OOM threshold remain experimental limitations, not hidden completed results.')
+    page();h('Primary sources and evidence links')
     for title,url in [('Clean presentation notebook','https://colab.research.google.com/github/DevanshSharma351/KV-Cache-Scaling/blob/main/notebooks/FINAL_PRESENTATION.ipynb'),('Five-phase decisions guide','https://github.com/DevanshSharma351/KV-Cache-Scaling/blob/main/docs/DECISIONS_AND_PHASE_GUIDE.md'),('Original prediction commit','https://github.com/DevanshSharma351/KV-Cache-Scaling/commit/'+PREDICTION_COMMIT),('Executed audit notebook','https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS'),('Official vLLM KV block table','https://vllm-project.github.io/2026/01/08/kv-offloading-connector.html'),('PyTorch v2.6.0 workspace source','https://github.com/pytorch/pytorch/blob/v2.6.0/aten/src/ATen/cuda/CublasHandlePool.cpp'),('Pinned HF 4.51.3 Qwen2 masking source','https://github.com/huggingface/transformers/blob/v4.51.3/src/transformers/models/qwen2/modeling_qwen2.py')]:
         story.append(Paragraph(f'<link href="{escape(url)}" color="#2563a6">{escape(title)}</link>',styles['SmallKV']))
     p('Official transfer config URLs/revisions/hashes: configs/transfer/provenance.json. Source capsule hashes, analysis code hashes and report package versions are in provenance and manifest files.')

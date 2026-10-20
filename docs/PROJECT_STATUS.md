@@ -1,40 +1,36 @@
-# Project status
+# Final project status
 
-The project is organized into [five phases](../PHASES.md). Implementation,
-saved-data analysis, report generation and presentation are integrated.
-**Research acceptance remains incomplete because Colab GPU access is quota-blocked.**
+**20 October 2026: final resource-bounded delivery with measurement limitations.**
+The user closed further GPU probing to conserve resources. Implementation,
+saved-data analysis, report generation and the six-deliverable presentation work
+together. No additional GPU run is planned. This does not claim that every
+original research objective was experimentally completed.
 
-| Phase | Verified result | Remaining criterion |
+| Phase | Delivered result | Scientific limit |
 | --- | --- | --- |
-| 1 — Derive and preregister | Unique weights/GQA math; original prediction and timestamped receipt preserved | None for original analytical commitment |
-| 2 — Isolated probe | Real weight/cache/logits checks, peak/reset lifecycle, both allocators and SM75 efficient-SDPA trace | Reconcile any new GPU before new measurements |
-| 3 — Checkpointing and safety | Shared journal API, mirrored fsync, locks/recovery tests, result schema and external per-worker acknowledgements | Do not mark the interrupted validation journal finished |
-| 4 — Curves and discrepancy | 48 sweep + 28 diagnostic + 4 held-out workers; exact KV slope; all four curve/accounting checks pass | Two expandable validation repeats and final deliberate boundary attempt; hardware allocator delta remains unidentified |
-| 5 — Transfer and presentation | Four transfer cells, compatible published comparison, report, figures, tables, CPU reproduction and clean demo | Final research signoff waits on the missing hardware evidence |
+| 1 - Derive and preregister | Unique tied weights/GQA formula; original prediction and timestamp | Original assumptions are preserved, not relabelled fitted results |
+| 2 - Isolated probe | Fresh workers, exact storage, peak counters and SM75 trace | Primary workload is single prefill; diagnostics change semantics |
+| 3 - Checkpoint and recover | Journals, fsync/mirroring, raw schemas and verified external capsules | Original interrupted sweep journals are not fabricated as finished |
+| 4 - Measure and explain | 80 core workers; six figures; exact KV slope; byte-level discrepancy accounting | Exact hardware OOM and allocator-context gain were not measured |
+| 5 - Generalize and present | Four transfer cases, KV publication check, PDF, CPU notebook and HTML | Published comparison validates KV bytes, not unrun HF peak limits |
 
-Both allocators succeeded at 114,688 tokens. The original prediction remains
-111,232 tokens, with assumption range 76,024–131,072. The successful length is
-a lower bound, not a measured OOM threshold. The later fit was frozen before
-held-out measurements and does not replace the original commitment.
+Two new L=512 default-allocator workers on 20 October reproduce the core peak
+and cache bytes exactly. They are a separate cohort, not two extra points in
+the old curve. Total preserved successful workers: **82 across two allocations**.
+The bulk loop stopped at its input prompt after both workers exited and passed
+idle checks; the final closure verified no live GPU process. No deliberate OOM
+attempt was dispatched or consumed. Drive stayed disconnected.
 
-[Saved evidence](../artifacts/experiments/2026-10-19-t4-final/README.md) ·
+The [final scope](FINAL_SCOPE.md) records the user's change and all limitations.
+The strict original full-experiment verifier is preserved and is not claimed to
+pass. `python scripts/verify_final_delivery.py` verifies the agreed final evidence
+scope and explicitly reports that all original research objectives are not met.
+
+[Five phases](../PHASES.md) · [Decision guide](DECISIONS_AND_PHASE_GUIDE.md) ·
 [Presentation notebook](../notebooks/FINAL_PRESENTATION.ipynb) ·
-[Decision guide](DECISIONS_AND_PHASE_GUIDE.md) · [Remaining work](REMAINING_WORK.md).
+[Report](../artifacts/reports/project-report/report.pdf) · [Live demo](LIVE_DEMO.md).
 
-Different GPU UUIDs are not pooled. The user authorized a delegated technical
-review and one contributor review; no independent human approval is invented.
-Drive remained disconnected. No deliberate attempt was dispatched or consumed.
-Historical review labels survive only in immutable evidence and Git history.
-
-## Verified presentation delivery
-
-The expanded full-environment suite passes **118 tests** locally, in the supplied
-Colab runtime and in presentation CI. The clean notebook executes all **12 code
-cells** and embeds all **six scientific figures**. Its standalone HTML embeds
-individual downloadable deliverables. The existing Drive audit now has a final
-presentation header and an executed six-deliverable section. These are CPU
-replays, not additional GPU measurements.
-
-The final browser check also encountered Colab's Google login/cookie-related
-output-renderer error. Backend execution and saved outputs passed; the standalone
-HTML is the independent presentation fallback. See [live demo](LIVE_DEMO.md).
+The clean notebook executes 12 CPU code cells and embeds six scientific figures.
+The standalone HTML is the fallback for Colab's intermittent output-renderer
+login/cookie error. A CPU replay demonstrates saved-data reproducibility and
+requires no model load, CUDA allocation or Drive mount.

@@ -16,7 +16,7 @@ def build(source_commit):
         cells.append(cell)
     def md(text):add('markdown',text)
     def code(text):add('code',text)
-    md('# KV-Cache Scaling — final deliverables and live presentation\n\n**Run all on a CPU runtime.** This notebook regenerates and presents real saved GPU evidence. It never loads model weights, allocates CUDA memory or consumes an OOM attempt. All six requested deliverables appear as separate sections.\n\n**Research status:** 80 successful workers are saved. Colab GPU quota blocked two validation repeats and the final boundary attempt. Successful context is a lower bound; no OOM threshold is claimed.\n\nThe five-phase implementation and decision guide is `docs/DECISIONS_AND_PHASE_GUIDE.md`. Historical raw evidence and the original prediction remain unchanged.')
+    md('# KV-Cache Scaling — final deliverables and live presentation\n\n**Run all on a CPU runtime.** This notebook regenerates and presents real saved GPU evidence. It never loads model weights, allocates CUDA memory or consumes an OOM attempt. All six requested deliverables appear as separate sections.\n\n**Final scope:** 80 core-study workers and two independent replication checks are saved. On 20 October the user closed further GPU probing to conserve resources. This resource-bounded delivery includes all six artifact types; successful context is a lower bound and the exact OOM threshold is unmeasured. No additional GPU run is planned.\n\nThe five-phase implementation and decision guide is `docs/DECISIONS_AND_PHASE_GUIDE.md`. Historical raw evidence and the original prediction remain unchanged.')
     code(f'''# Reproducible setup: no GPU package imports or Google Drive mount.
 import os, sys, json, subprocess, tempfile, hashlib, shutil
 from pathlib import Path
@@ -65,7 +65,7 @@ BATCH_SIZE = 1 #@param {type:"integer"}
 presentation.show_explorer(USABLE_VRAM_GIB,BATCH_SIZE)
 ''')
         if section=='checkpointing':code("demonstration=checkpoint_demo()\ndisplay(HTML(table(['Temporary CPU recovery check','Result'],list(demonstration.items()))))\n")
-    md('## Conclusions and separate downloads\nA CPU replay demonstrates reproducibility of saved measurements. It does not claim new GPU observations or finish the quota-blocked experiment.')
+    md('## Conclusions and separate downloads\nA CPU replay demonstrates reproducibility of saved measurements. It does not claim new GPU observations or claim completion of the deferred original OOM experiment.')
     code("presentation.show('conclusions')\npresentation.show_downloads()\n")
     code('''# Optional download: default does not download anything.
 DOWNLOAD_ARTIFACT = "none" #@param ["none", "report", "discrepancy_csv", "all_deliverables_zip"]
@@ -77,11 +77,12 @@ else:
     elif DOWNLOAD_ARTIFACT=='all_deliverables_zip':
         export_root=RESULTS.parent/'all-deliverables'
         shutil.copytree(RESULTS,export_root,dirs_exist_ok=True)
-        for relative in ['docs/DERIVATION.md','docs/DECISIONS_AND_PHASE_GUIDE.md','PHASES.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','prereg/formal-2026-10-18-t4/receipt.json','requirements-analysis.txt']:
+        for relative in ['docs/DERIVATION.md','docs/DECISIONS_AND_PHASE_GUIDE.md','PHASES.md','prereg/formal-2026-10-18-t4/prediction.json','prereg/formal-2026-10-18-t4/prediction.md','prereg/formal-2026-10-18-t4/receipt.json','requirements-analysis.txt','docs/FINAL_SCOPE.md','configs/delivery.json','artifacts/experiments/2026-10-20-continuation/verification.json']:
             target=export_root/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/relative,target)
         shutil.copytree(ROOT/'src',export_root/'src',dirs_exist_ok=True)
         shutil.copytree(ROOT/'configs',export_root/'configs',dirs_exist_ok=True)
         shutil.copyfile(ROOT/'artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip',export_root/'gpu-checkpoint-080.zip')
+        shutil.copyfile(ROOT/'artifacts/experiments/2026-10-20-continuation/closed-scope-checkpoint.zip',export_root/'replication-checkpoint.zip')
         (export_root/'ORIGINAL_COMMIT.json').write_text(json.dumps({'commit':presentation.receipt['prediction_commit_sha'],'original_git_timestamp':presentation.commit_timestamp,'prediction_sha256':presentation.receipt['prediction_sha256']},indent=2))
         selected=Path(shutil.make_archive(str(RESULTS.parent/'kv-cache-deliverables'),'zip',export_root))
     else:raise ValueError('Unknown download choice')

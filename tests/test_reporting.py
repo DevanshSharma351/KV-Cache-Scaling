@@ -68,7 +68,7 @@ class ReportAlignmentTests(unittest.TestCase):
             (staging/'figures').symlink_to(ROOT/'artifacts/figures/project-results',target_is_directory=True)
             output=Path(temporary)/'report'
             result=build_report(staging,source/'transfer',output)
-            self.assertEqual(result['status'],'RESEARCH_CRITERIA_PENDING')
+            self.assertEqual(result['status'],'FINAL_WITH_MEASUREMENT_LIMITATIONS')
             text=' '.join(' '.join(page.extract_text() for page in PdfReader(output/'report.pdf').pages).split())
             for title,_ in DELIVERABLE_MAP+PHASE_FLOW:
                 self.assertIn(title,text)

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
+  "scope_decision": "docs/FINAL_SCOPE.md",
+  "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+  "primary_capsule": "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+  "primary_sha256": "cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389",
+  "replication_capsule": "artifacts/experiments/2026-10-20-continuation/closed-scope-checkpoint.zip",
+  "replication_sha256": "080f8b7df8347753636c5a3f5bf0bf413cfef4850305511e4816832937f96fa5",
+  "expected_primary_workers": 80,
+  "expected_replication_workers": 2,
+  "pool_cohorts": false,
+  "additional_gpu_runs_planned": false,
+  "exact_oom_threshold_measured": false,
+  "all_original_research_objectives_met": false
+}

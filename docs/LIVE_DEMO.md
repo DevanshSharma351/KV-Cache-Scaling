@@ -28,7 +28,7 @@ saved data; it is not a new GPU benchmark.
 | 4 — Curves | Peak vs original analytical envelope, direct KV slope, allocator slack and boundary chart | Peak slope is not KV slope; successful lower bound is not OOM |
 | 5 — Discrepancy | Byte/MiB component rows plus both waterfalls | Closure, explanatory support and causal claims are different |
 | 6 — Transfer | Four model/GPU cases, published comparison and percentage errors | The compatible comparison verifies KV blocks, not unrun HF peak limits |
-| Conclusions | Observed facts and open hardware criteria | State the quota limitation clearly; do not improvise a threshold |
+| Conclusions | Observed facts and open hardware criteria | Explain the final resource limit; do not improvise a threshold |
 
 ## Easy questions and answers
 
@@ -43,17 +43,17 @@ inputs, output/workspace and temporary copies. StaticCache diagnostics additiona
 include this HF version's explicit causal mask. We measure KV storage directly.
 
 **Did you find the exact context limit?** No. Both allocators succeeded at
-114,688. GPU quota prevented a failed upper-bound observation. This is explicitly
-incomplete hardware evidence, despite a working prediction/replay pipeline.
+114,688. The original allocation was lost and the user later closed further
+probing to conserve resources. Exact OOM evidence is unmeasured; this limitation
+is explicit in the final resource-bounded delivery.
 
 **What happens if Colab has no GPU during the demo?** Nothing essential breaks:
 the clean demo runs on CPU from the immutable saved measurements. Use the cached
 notebook outputs or standalone HTML if a runtime/network is unavailable.
 
-**Can we run a GPU example live?** Only after a valid allocation has been
-reconciled and prospectively registered. An ad-hoc model forward would violate
-the original workflow and could consume the remaining resources or contaminate
-an experiment. The presentation's live calculations and checkpoint demo are safe
+**Can we run a GPU example live?** The final demo is deliberately CPU-only.
+The user closed further GPU probing. Any future GPU experiment requires a new
+explicitly authorized, prospectively registered continuation. The presentation's live calculations and checkpoint demo are safe
 CPU operations; the historical GPU audit is the measurement trail.
 
 ## Historical audit versus presentation
@@ -75,7 +75,7 @@ treating that artifact ZIP as a replacement Git history.
 During the final browser check, Colab reported “Could not load the JavaScript
 files needed to display output” and referenced Google login access or third-party
 cookies. The backend run still completed: its downloaded notebook verifies all
-118 tests and six scientific image outputs. This browser-rendering problem is
+the then-current test suite and six scientific image outputs. This browser-rendering problem is
 separate from the GPU quota limit.
 
 Use the standalone HTML immediately for presentation: it embeds the graphs,

@@ -1,6 +1,10 @@
 # Five-phase project plan and execution record
 
 The project follows one scientific flow over an intensive seven-day plan.
+**Final scope, 20 October 2026:** the user closed additional GPU probing to
+conserve resources. All five phases deliver their software and saved-evidence
+outputs; exact OOM-boundary acceptance remains unmeasured. See
+[final scope](docs/FINAL_SCOPE.md).
 The phase division remains the organizing structure for implementation,
 measurements, validation and presentation. This document replaces the earlier
 contributor allocation. Frozen predictions and historical evidence are preserved.
@@ -90,7 +94,7 @@ pairs regenerate from the raw capsule.
 **Still blocked:** two expandable held-out repeats and the final boundary attempt
 because Colab refused GPU access after runtime loss. The unknown next worker is
 not labelled successful. Hardware OOM and a hardware allocator-limit delta remain
-unobserved. This phase's research acceptance is **incomplete**.
+unobserved. The original full research acceptance is **incomplete**; the user finalized the resource-bounded evidence scope with this limitation explicit.
 
 ## Phase 5 — Generalize, reproduce and present
 

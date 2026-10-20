@@ -4,11 +4,13 @@
 We built a config-derived memory model, a checkpointing GPU harness and a
 reproducible analysis/presentation pipeline in [five phases](PHASES.md).
 
-**Measured evidence:** 80 successful T4 workers; both allocators reached
-114,688 tokens; inspected KV storage grows by exactly 28,672 bytes/token.
-**Research acceptance remains incomplete:** Colab's GPU quota blocked two final
-validation repeats and the single boundary attempt. No hardware OOM threshold
-is claimed. [Current status](docs/PROJECT_STATUS.md) · [Remaining work](docs/REMAINING_WORK.md).
+**Final resource-bounded delivery:** 80 core-study workers plus two separate
+replication checks are preserved. Both allocators reached 114,688 tokens in the
+core study; inspected KV grows by exactly 28,672 bytes/token. On 20 October the
+user closed further GPU probing to conserve resources. The six artifact types
+and five-phase implementation are delivered; the exact OOM threshold and full
+original hardware acceptance remain unmeasured. No additional GPU run is planned.
+[Final scope and limits](docs/FINAL_SCOPE.md) · [Current status](docs/PROJECT_STATUS.md).
 
 ## Present the project
 
