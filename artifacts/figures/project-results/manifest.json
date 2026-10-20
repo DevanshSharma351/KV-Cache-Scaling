@@ -1,14 +1,14 @@
 {
   "01_peak_vs_length.png": "f5106c19d45bb0df1be058f55c3856a6ea3a75ba1a0172b99d08b5a62776dc60",
-  "01_peak_vs_length.pdf": "78ed2a58ddaf98976a6817066e96b5aa41b1d99aa819f6402a18d8443b735e3e",
+  "01_peak_vs_length.pdf": "541f83d72e8f693a6915cdba13fa2169417d50b59d7f34a169eed5b38a8dec50",
   "02_cache_scaling.png": "6706220fa125db0f0ac342e2d0a2da14fc2e0f2c020eb42a7dd32d49b250c2f0",
-  "02_cache_scaling.pdf": "d8a934fb92e58d1b9cb591df92531901f169b5a15b974ffce8f5d5e25d7dacee",
+  "02_cache_scaling.pdf": "a7a60642827fa84415f944a35189e486dfde3d28aeb152b7b5a98a2ec5675a69",
   "03_allocator_slack.png": "d4bfe8a53029c0e8a21030db7828516aa171a06e4579186577ddfb3ebc57db13",
-  "03_allocator_slack.pdf": "6c016261cbc4eacf885d2326185a00ced8f74e48c28684a0bbde9365f7c3394c",
+  "03_allocator_slack.pdf": "10d64aefdb5470b7e3c0b60554ffe768acade342b0bf1c6356e3acd4df04d49d",
   "04_boundary_status.png": "8e3fd1b4df84201d0a59f25d27919886c6cdb60161ef0bb9aaf9fcf70be7a737",
-  "04_boundary_status.pdf": "ca78988f1e9d21cf5e3756982d20e0f26f2074ffd37d7c64fcc7c6d62c891cef",
+  "04_boundary_status.pdf": "f806d029b71a590ead71397b7ed65ae3cf168668a3236922b70d4d8ebdd372d9",
   "05_discrepancy_default.png": "8d7b9d002180842252d7c3758e1e0962f3dc4e02d21f6d31f841fd40677c5523",
-  "05_discrepancy_default.pdf": "5dbd4357a1a59cc346d6ef3733c6f8b2467f5f75145c02015fc8b0154180c724",
+  "05_discrepancy_default.pdf": "a68135e6255ca7d5acc40c5188d41b962021f4a063c1cb87870beeb32ed84914",
   "05_discrepancy_expandable.png": "998198e4d66d33587123a226141d0e4c64a12122ce19eed1c9cfb54756db28bd",
-  "05_discrepancy_expandable.pdf": "1f7e018ddeffde7bf4cc98babd1139737739b570ffa7439d997bf36a401e9376"
+  "05_discrepancy_expandable.pdf": "26be34ac59666d3b726232d270933ff5ad7e0a68cbc5a4005bde57e95dde692d"
 }

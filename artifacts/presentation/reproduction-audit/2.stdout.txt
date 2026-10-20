@@ -1,6 +1,6 @@
 {
   "status": "UNRUN_CONFIG_DERIVED_TRANSFERS",
-  "output": "/private/tmp/kv-report-aligned-published/reproduction/transfer",
+  "output": "/private/tmp/kv-final-scoped-release/reproduction/transfer",
   "prediction_count": 4,
   "executes_gpu_work": false
 }

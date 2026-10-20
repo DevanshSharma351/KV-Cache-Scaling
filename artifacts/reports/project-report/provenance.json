@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-10-19T12:06:22.553541+00:00",
+  "created_at_utc": "2026-10-20T14:27:24.375227+00:00",
   "python": "3.12.14",
   "packages": {
     "matplotlib": "3.10.1",
@@ -7,17 +7,76 @@
     "reportlab": "4.4.4",
     "pypdf": "5.9.0"
   },
-  "git_commit": "bbbb6163c4f4c1622a9bd63ff964063339e9e367",
+  "git_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
   "source_dirty": false,
   "source_sha256": {
-    "src/kv_cache_scaling/reporting.py": "b3d66ae7c3163827db8bd3d86fc6811fdd57b5d9879a87fcff5f99df302aca44",
+    "src/kv_cache_scaling/reporting.py": "77f317706df022189f088ce3543f04321c34ad31fd9b3ac3d3c4f0241bf97358",
     "src/kv_cache_scaling/analysis.py": "164fc8e19d72be54a605c07dbc18db78a8f6f7005e2f922d5f50e43e1cacddbe",
     "src/kv_cache_scaling/generalize.py": "f715f4c494f6c0a181be2df2f10dd6d7038a1e7650b1423a28aac404df4f46e2",
     "src/kv_cache_scaling/plotting.py": "872a6f4bb7047dc8466c8b7eb59b874e3c2f307ccd8cfe51963d2728e7585bc3"
   },
   "input_sha256": {
-    "/private/tmp/kv-report-aligned-published/reproduction/analysis/analysis.json": "5fed4a908d2467ad1f4426b0b54c0f9f9122daa616f7d82b65512f9979bed531",
-    "/private/tmp/kv-report-aligned-published/reproduction/transfer/transfer.json": "83f469b89a6f2b5d73e88b4ad74a42817bfdbe251b0da2255de965e4e0391f66"
+    "/private/tmp/kv-final-scoped-release/reproduction/analysis/analysis.json": "608e55300c8ea20f2a9b14014eac73ad1b6e084815eb551f01330af00ea704ac",
+    "/private/tmp/kv-final-scoped-release/reproduction/transfer/transfer.json": "9fc2d50dbf1cf8b2ffb39e44189ed3c8b6759ae399472a030efaec00a1092015"
   },
-  "status": "RESEARCH_CRITERIA_PENDING"
+  "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
+  "delivery_scope": {
+    "status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
+    "bounded_delivery_complete": true,
+    "all_original_research_objectives_met": false,
+    "sources": {
+      "primary": {
+        "path": "artifacts/experiments/2026-10-19-t4-final/gpu-checkpoint-080.zip",
+        "sha256": "cd0dedd8185a876e1a600b2c3ec8a1b95ac3701f8e22be57d2bab82f51c9c389",
+        "workers": 80,
+        "gpu_uuid": "GPU-89f781af-1ec0-992b-3dc3-46ef2d0941de"
+      },
+      "replication": {
+        "path": "artifacts/experiments/2026-10-20-continuation/closed-scope-checkpoint.zip",
+        "sha256": "080f8b7df8347753636c5a3f5bf0bf413cfef4850305511e4816832937f96fa5",
+        "workers": 2,
+        "gpu_uuid": "GPU-440a7ac2-62c4-253c-ba99-111c2f1e8466"
+      }
+    },
+    "total_successful_workers": 82,
+    "cohorts_pooled": false,
+    "replication": [
+      {
+        "probe_id": "d83bc724-309f-4d4e-8567-196f077ca991",
+        "length": 512,
+        "allocator": "default",
+        "repeat": 1,
+        "peak_allocated_bytes": 3146681856,
+        "peak_reserved_bytes": 3330277376
+      },
+      {
+        "probe_id": "55dd761f-e57d-411f-96b4-3e7a667e1e88",
+        "length": 512,
+        "allocator": "default",
+        "repeat": 2,
+        "peak_allocated_bytes": 3146681856,
+        "peak_reserved_bytes": 3330277376
+      }
+    ],
+    "closure": {
+      "status": "CLOSED_AT_USER_RESOURCE_LIMIT",
+      "closed_at_utc": "2026-10-20T14:21:19.485462+00:00",
+      "new_successful_gpu_workers": 2,
+      "new_gpu_uuid": "GPU-440a7ac2-62c4-253c-ba99-111c2f1e8466",
+      "primary_study_workers": 80,
+      "cohorts_pooled": false,
+      "deliberate_attempt_consumed": false,
+      "live_gpu_processes": [],
+      "stop_location": "Notebook control input() after primary-002; no worker interrupted",
+      "scope": "User requested no full repeat sweep; finalize saved evidence and retain unmeasured hardware-boundary limitations"
+    },
+    "additional_gpu_runs_planned": false,
+    "exact_oom_threshold_measured": false,
+    "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
+    "limitations": [
+      "Hardware OOM threshold and its exact prediction error are unobserved.",
+      "Original L=114688 validation remains default n=3, expandable n=1.",
+      "Published transfer verification checks KV bytes, not unrun HF context limits."
+    ]
+  }
 }

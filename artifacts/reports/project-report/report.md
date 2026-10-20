@@ -1,6 +1,18 @@
 # KV-Cache Scaling: integrated evidence report
 
-Status: **RESEARCH_CRITERIA_PENDING**. No missing experiment is presented as a successful result.
+Status: **FINAL_WITH_MEASUREMENT_LIMITATIONS**. No missing experiment is presented as a successful result.
+
+## Final resource-bounded scope
+
+On 20 October 2026 the user closed further GPU work to conserve resources. This final delivery presents 80 core-study workers and two separate new-allocation L=512 replication workers. The cohorts are not pooled. All six artifact types and five phases are delivered; the exact OOM boundary and two original held-out repeats remain unmeasured, so all original research objectives are not claimed complete.
+See docs/FINAL_SCOPE.md and configs/delivery.json. No additional GPU run is planned.
+
+### Separate replication checks
+
+| Allocator | L | Repeat | Peak allocated bytes | Peak reserved bytes |
+| --- | ---: | ---: | ---: | ---: |
+| default | 512 | 1 | 3146681856 | 3330277376 |
+| default | 512 | 2 | 3146681856 | 3330277376 |
 
 ## What we built
 
@@ -201,7 +213,7 @@ In pinned HF 4.51.3, the static-cache path builds an explicit query-by-capacity 
 - Actual OOM boundary unobserved; conservative safe-budget censoring is not an OOM threshold.
 - Transferred HF peak thresholds remain unvalidated; published comparison checks KV bytes only.
 
-The user authorized a delegated one-contributor review and kept Google Drive disconnected. No independent second-person reproduction or full cloud-session restart is claimed.
+Technical review was delegated by the user; Google Drive stayed disconnected. No independent second-person reproduction or full cloud-session restart is claimed.
 
 ## Sources
 
@@ -265,4 +277,4 @@ Default allocator, L=114688, repeat=1. Signed peak gap=-1339293184 bytes; closur
 ## Presenting the deliverables
 
 Open notebooks/FINAL_PRESENTATION.ipynb or artifacts/presentation/PROJECT_PRESENTATION.html to show all six deliverables, figures, tables and downloads. Run All in the clean notebook regenerates saved-data results on CPU. See docs/LIVE_DEMO.md and docs/DECISIONS_AND_PHASE_GUIDE.md.
-The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. Two compatible expandable held-out repeats and the registered final boundary attempt remain unverified after the GPU quota interruption. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.
+The saved cohort contains 80 successful workers: 48 primary sweep, 28 diagnostics and four held-out validations. The user deferred the two original expandable held-out repeats and final boundary attempt under the resource-bounded scope. No deliberate OOM attempt was dispatched. The maximum successful context is a lower bound, not a completed OOM threshold.

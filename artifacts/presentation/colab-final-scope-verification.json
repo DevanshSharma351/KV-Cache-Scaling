@@ -1,0 +1,17 @@
+{
+  "status": "FINAL_SOURCE_RECORDED_COLAB_RENDERER_BLOCKED",
+  "source_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
+  "recorded_at_utc": "2026-10-20T14:32:44.844218+00:00",
+  "notebook_url": "https://colab.research.google.com/drive/1GEytpHAffBJog7yi77FJjk-A9t4PedLS",
+  "final_cell_id": "1ElnF2zdt7w4",
+  "scope_closure_cell_id": "_8xMNq7xr7dZ",
+  "gpu_work_closed": true,
+  "live_gpu_processes_at_closure": [],
+  "new_successful_gpu_workers": 2,
+  "raw_capsule_sha256": "080f8b7df8347753636c5a3f5bf0bf413cfef4850305511e4816832937f96fa5",
+  "clean_notebook_code_cells_executed_locally": 12,
+  "clean_notebook_figures": 6,
+  "local_and_ci_replay_passed": true,
+  "fresh_colab_backend_completion_independently_verified": false,
+  "limitation": "Colab Google login/cookie-related output-script error; use executed clean notebook or standalone HTML. Security/cookie settings were not changed."
+}

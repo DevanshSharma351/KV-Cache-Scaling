@@ -1,2 +1,2 @@
-RESEARCH_CRITERIA_PENDING
-/private/tmp/kv-report-aligned-published/reproduction/report/report.pdf
+FINAL_WITH_MEASUREMENT_LIMITATIONS
+/private/tmp/kv-final-scoped-release/reproduction/report/report.pdf

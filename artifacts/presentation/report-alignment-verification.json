@@ -1,26 +1,31 @@
 {
-  "status": "REPORT_ALIGNED_WITH_PROJECT_AND_SIX_DELIVERABLES",
-  "verified_at_utc": "2026-10-19T12:06:44.279915+00:00",
-  "source_commit": "bbbb6163c4f4c1622a9bd63ff964063339e9e367",
-  "pages": 16,
+  "status": "FINAL_RESOURCE_BOUNDED_DELIVERY_VERIFIED",
+  "verified_at_utc": "2026-10-20T14:30:30.658481+00:00",
+  "source_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
+  "pages": 17,
   "all_pages_rendered_and_visually_inspected": true,
   "original_prediction_git_timestamp": "2026-10-18T19:54:52+05:30",
   "original_prediction_unchanged": true,
   "unified_project_phases": 5,
   "deliverable_sections": 6,
-  "full_environment_tests_passed": 120,
+  "full_environment_tests_passed": 122,
   "executed_notebook_cells": 12,
   "embedded_scientific_figures": 6,
   "embedded_download_matches_published_pdf": true,
-  "research_status": "RESEARCH_CRITERIA_PENDING",
+  "research_status": "FINAL_WITH_MEASUREMENT_LIMITATIONS",
+  "all_original_research_objectives_met": false,
+  "additional_gpu_runs_planned": false,
+  "total_successful_gpu_workers": 82,
+  "primary_study_workers": 80,
+  "separate_replication_workers": 2,
   "remaining_evidence": [
     "Two compatible expandable held-out repeats",
     "Registered final boundary attempt"
   ],
   "files": {
-    "artifacts/reports/project-report/report.pdf": "fe14930f92498086f97cfb4a579f247f67686db926a3eb9e16211b82e3593ee4",
-    "artifacts/reports/project-report/report.md": "1b38972566d1fb34fc4dbdd9ab95ee7967c89467dc240237c3773c5ba268feac",
-    "notebooks/FINAL_PRESENTATION.ipynb": "2302b9385c9bdbb4c497427fc837aa2513567eca4c0fb96169a8199850aa5bfa",
-    "artifacts/presentation/PROJECT_PRESENTATION.html": "acbcb984d2cec8495ea05c736cd03b88d044da22aa9fb075c9091e95cb8bf741"
+    "artifacts/reports/project-report/report.pdf": "51a805696d54854506f376f59a0ec9279fc57f3da86e19518fbd5312586795e4",
+    "artifacts/reports/project-report/report.md": "3915a77c86c0f404db045068adb8be3d6550f7308e18fba19957c4bbbce7b733",
+    "notebooks/FINAL_PRESENTATION.ipynb": "4c3185207a8e6cbda6ac831cb6aba4fa8727fd08bbe0d1e6c174e77b6241e403",
+    "artifacts/presentation/PROJECT_PRESENTATION.html": "4b12eafb021f555c989ab9f12dc8dd2ec53c619fd49de4924b5de416eaae16b5"
   }
 }

@@ -1,20 +1,23 @@
 {
-  "status": "CPU_PRESENTATION_EXECUTED_RESEARCH_BOUNDARY_PENDING",
-  "executed_at_utc": "2026-10-19T12:06:23.032034+00:00",
-  "source_commit": "bbbb6163c4f4c1622a9bd63ff964063339e9e367",
+  "status": "FINAL_CPU_PRESENTATION_VERIFIED_WITH_MEASUREMENT_LIMITATIONS",
+  "executed_at_utc": "2026-10-20T14:27:25.185201+00:00",
+  "source_commit": "7b36deb031648aa7a68f9720e8c26742dd8808ba",
   "source_tree_dirty": false,
   "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
   "executed_code_cells": 12,
   "embedded_scientific_figures": 6,
   "model_or_cuda_calls": false,
   "original_prediction_commit": "7baff5121ed643f27ba06959065855a8913f8e8c",
-  "saved_gpu_workers": 80,
+  "saved_gpu_workers": 82,
+  "primary_study_workers": 80,
+  "separate_replication_workers": 2,
+  "additional_gpu_runs_planned": false,
   "missing_gpu_evidence": [
     "Two expandable held-out repeats",
     "One final deliberate boundary attempt"
   ],
   "files": {
-    "FINAL_PRESENTATION.ipynb": "2302b9385c9bdbb4c497427fc837aa2513567eca4c0fb96169a8199850aa5bfa",
-    "PROJECT_PRESENTATION.html": "acbcb984d2cec8495ea05c736cd03b88d044da22aa9fb075c9091e95cb8bf741"
+    "FINAL_PRESENTATION.ipynb": "4c3185207a8e6cbda6ac831cb6aba4fa8727fd08bbe0d1e6c174e77b6241e403",
+    "PROJECT_PRESENTATION.html": "4b12eafb021f555c989ab9f12dc8dd2ec53c619fd49de4924b5de416eaae16b5"
   }
 }
